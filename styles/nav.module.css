@@ -1,0 +1,27 @@
+.list{
+	display: flex;
+	gap:2em;
+}
+
+.list a:hover{
+	color:var(--accent);
+}
+
+/* ホバー出来る環境（PC時） */
+@media(hover:hover){
+	.list a:hover{
+		color:var(--accent);
+	}
+}
+
+/* ホバー出来ない環境（SP時） */
+@media(hover:none){
+	.list a{
+		/* デバイス標準のハイライトカラーを削除 */
+		-webkit-tap-highlight-color: transparent;
+	}
+	.list a:active{
+		/* タップ時にアクセントカラーを表示 */
+		color: var(--accent);
+	}
+}
