@@ -58,6 +58,9 @@ export default function cars({ data }) {
 		.then((res) => {
 			window.location.reload()
 		})
+		.catch((err) => {
+			console.log(err)
+		}) 
 	}
 
 	return (
