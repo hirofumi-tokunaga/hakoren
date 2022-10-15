@@ -16,7 +16,7 @@ const selectAll = (db, query) => {
 	});
 };
 export async function getStaticProps() {
-	const db = new sqlite3.Database('database/cars.db');
+	const db = new sqlite3.Database('../database/cars.db');
 	const data = await selectAll(db, "select * from cars;")
 	db.close();
 	return { props: { data } }
