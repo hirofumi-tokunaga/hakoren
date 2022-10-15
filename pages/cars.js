@@ -48,7 +48,6 @@ export default function cars({ data }) {
 		// 		window.location.reload()
 		// 	})
 		let postingData = JSON.stringify({
-			id:44,
 			number: data.get('numberInput'),
 			name: data.get('nameInput')
 		})
