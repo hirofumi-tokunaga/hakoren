@@ -15,7 +15,11 @@ export default function Nav() {
 						<a>CARS</a>
 					</Link>
 				</li>
-
+				<li>
+					<Link href="/pay">
+						<a>PAY</a>
+					</Link>
+				</li>
 			</ul>
 		</nav>
 	)
