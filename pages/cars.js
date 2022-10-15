@@ -21,12 +21,23 @@ export async function getStaticProps() {
 	db.close();
 	return { props: { data } }
 }
-
+export async function postCars(){
+	// const db = new sqlite3.Database("database/cars.db");
+	// const number = data.get('numberInput')
+	// const name = data.get('nameInput')
+	// db.run(
+	// 	"insert into cars(number,name) values(?,?);",
+	// 	number,
+	// 	name,
+	// );
+	// db.close();
+	
+}
 export default function cars({ data }) {
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 		let data = new FormData(event.currentTarget);
-		axios.post("/api/put", {
+		axios.post("/api/postcars", {
 			number: data.get('numberInput'),
 			name: data.get('nameInput'),
 		}).then((res) => {
