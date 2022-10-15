@@ -53,7 +53,7 @@ export default function cars({ data }) {
 			name: data.get('nameInput')
 		})
 	
-		const respons = axios.post("pages/api/postcars",postingData,
+		const respons = axios.post("/api/postcars",postingData,
 		{headers:{"Content-Type" : "application/json"}}
 		)
 		.then((respons) => {
