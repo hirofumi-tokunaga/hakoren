@@ -53,7 +53,7 @@ export default function cars({ data }) {
 			name: data.get('nameInput')
 		})
 	
-		const respons = axios.post("https://hakoren.vercel.app/api/postcars.ts",postingData,
+		const respons = axios.post("pages/api/postcars",postingData,
 		{headers:{"Content-Type" : "application/json"}}
 		)
 		.then((respons) => {
