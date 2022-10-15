@@ -21,3 +21,8 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 		}
 	}
 };
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
