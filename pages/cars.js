@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 
-
 const selectAll = (db, query) => {
 	return new Promise((resolve, reject) => {
 		db.all(query, (err, rows) => {
