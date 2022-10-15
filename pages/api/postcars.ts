@@ -6,12 +6,11 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 
 	switch (method) {
 		case "POST": {
-			const {id, number, name } = req.body;
+			const {number, name } = req.body;
 			const sqlite3 = require("sqlite3");
-			const db = new sqlite3.Database("https://hakoren.vercel.app/database/cars.db");
+			const db = new sqlite3.Database("database/cars.db");
 			const result = db.run(
-				"insert into cars(number,name) values(?,?,?)",
-				id,
+				"insert into cars(number,name) values(?,?)",
 				number,
 				name,
 			);
