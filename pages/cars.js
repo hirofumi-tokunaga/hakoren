@@ -15,7 +15,7 @@ const selectAll = (db, query) => {
 		});
 	});
 };
-export async function getStaticProps() {
+export async function getServerSideProps() {
 	const db = new sqlite3.Database('../database/cars.db');
 	const data = await selectAll(db, "select * from cars;")
 	db.close();
