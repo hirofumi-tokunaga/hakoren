@@ -52,15 +52,26 @@ export default function cars({ data }) {
 			name: data.get('nameInput')
 		})
 	
-		const respons = axios.post("/api/postcars",postingData,
+		const respons = axios.post("https://hakoren.vercel.app/api/postcars",postingData,
 		{headers:{"Content-Type" : "application/json"}}
 		)
 		.then((respons) => {
 			window.location.reload()
 		})
 		.catch((err) => {
-			console.log(err)
-		}) 
+			if (err.response){
+				console.log(err.response.data)
+				console.log(err.response.status)
+				console.log(err.response.statusText)
+				console.log(err.response.headers)
+
+			}else if(err.request){
+				console.log(err.request)
+
+			}else{
+				console.log('error',error.message)
+			}
+		})
 	}
 
 	return (
