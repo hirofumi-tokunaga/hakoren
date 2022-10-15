@@ -16,7 +16,7 @@ const selectAll = (db, query) => {
 	});
 };
 export async function getStaticProps() {
-	const db = new sqlite3.Database('pages/api/database/cars.db');
+	const db = new sqlite3.Database('database/cars.db');
 	const data = await selectAll(db, "select * from cars;")
 	db.close();
 	return { props: { data } }
@@ -37,12 +37,24 @@ export default function cars({ data }) {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		let data = new FormData(event.currentTarget);
-		axios.post("/api/postcars", {
-			number: data.get('numberInput'),
-			name: data.get('nameInput'),
-		}).then((res) => {
-			window.location.reload()
-		})
+		let number = data.get('numberInput')
+		let name = data.get('nameInput')
+
+		var params = new URLSearchParams()
+		params.append('number', number)
+		params.append('name', name)
+		const res = await axios.post('/api/postcars', params)
+			.then((res) => {
+				window.location.reload()
+			})
+
+		console.log(res)
+		// axios.post("/api/postcars", {
+		// 	number: data.get('numberInput'),
+		// 	name: data.get('nameInput'),
+		// }).then((res) => {
+		// 	window.location.reload()
+		// })
 	}
 
 	return (
