@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 
+
 const selectAll = (db, query) => {
 	return new Promise((resolve, reject) => {
 		db.all(query, (err, rows) => {
@@ -14,8 +15,8 @@ const selectAll = (db, query) => {
 		});
 	});
 };
-export async function getServerSideProps() {
-	const db = new sqlite3.Database('../database/cars.db');
+export async function getStaticProps() {
+	const db = new sqlite3.Database('database/cars.db');
 	const data = await selectAll(db, "select * from cars;")
 	db.close();
 	return { props: { data } }
