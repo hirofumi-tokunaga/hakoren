@@ -40,21 +40,24 @@ export default function cars({ data }) {
 		let number = data.get('numberInput')
 		let name = data.get('nameInput')
 
-		var params = new URLSearchParams()
-		params.append('number', number)
-		params.append('name', name)
-		const res = await axios.post('/api/postcars', params)
-			.then((res) => {
-				window.location.reload()
-			})
-
-		console.log(res)
-		// axios.post("/api/postcars", {
-		// 	number: data.get('numberInput'),
-		// 	name: data.get('nameInput'),
-		// }).then((res) => {
-		// 	window.location.reload()
-		// })
+		// var params = new URLSearchParams()
+		// params.append('number', number)
+		// params.append('name', name)
+		// const res = await axios.post('/api/postcars', params)
+		// 	.then((res) => {
+		// 		window.location.reload()
+		// 	})
+		let postingData = JSON.stringify({
+			number: data.get('numberInput'),
+			name: data.get('nameInput')
+		})
+	
+		const respons = axios.post("/api/postcars",postingData,
+		{headers:{"Content-Type" : "application/json"}}
+		)
+		.then((res) => {
+			window.location.reload()
+		})
 	}
 
 	return (
