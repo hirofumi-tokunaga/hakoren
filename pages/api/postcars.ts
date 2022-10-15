@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next"
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
 	const method = req.method;
-
 	switch (method) {
 		case "POST": {
 			const {number, name } = req.body;
@@ -13,8 +12,9 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 				"insert into cars(number,name) values(?,?)",
 				number,
 				name,
-			);
-			res.status(200).json({ result });
+				);
+				res.status(200).json({ result });
+				console.log(res)
 			break;
 		}
 		default: {
