@@ -56,6 +56,7 @@ export default function cars({ data }) {
 		{headers:{"Content-Type" : "application/json"}}
 		)
 		.then((res) => {
+			console.log(res)
 			window.location.reload()
 		})
 		.catch((err) => {
