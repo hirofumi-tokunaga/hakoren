@@ -31,7 +31,7 @@ export async function postCars(){
 	// 	name,
 	// );
 	// db.close();
-	
+
 }
 export default function cars({ data }) {
 	const handleSubmit = async (event) => {
@@ -51,27 +51,37 @@ export default function cars({ data }) {
 			number: data.get('numberInput'),
 			name: data.get('nameInput')
 		})
-	
-		const respons = await axios.post("/api/postcars",postingData,
-		{headers:{"Content-Type" : "application/json"}}
-		)
-		.then((respons) => {
-			window.location.reload()
-		})
-		.catch((err) => {
-			if (err.response){
-				console.log(err.response.data)
-				console.log(err.response.status)
-				console.log(err.response.statusText)
-				console.log(err.response.headers)
 
-			}else if(err.request){
-				console.log(err.request)
+		const postData = async () => {
+			await fetch('/api/postcars', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: postingData,
+			})
+		}
+		postData();
+		// const respons = await axios.post("/api/postcars",postingData,
+		// {headers:{"Content-Type" : "application/json"}}
+		// )
+		// .then((respons) => {
+		// 	window.location.reload()
+		// })
+		// .catch((err) => {
+		// 	if (err.response){
+		// 		console.log(err.response.data)
+		// 		console.log(err.response.status)
+		// 		console.log(err.response.statusText)
+		// 		console.log(err.response.headers)
 
-			}else{
-				console.log('error',error.message)
-			}
-		})
+		// 	}else if(err.request){
+		// 		console.log(err.request)
+
+		// 	}else{
+		// 		console.log('error',error.message)
+		// 	}
+		// })
 	}
 
 	return (
