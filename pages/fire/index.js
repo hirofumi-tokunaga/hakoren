@@ -1,4 +1,4 @@
-import {useState,useEffect} from 'react'
+import {useEffect} from 'react'
 import Layout from 'components/layout'
 // import 'components/fire'
 import {initializeApp} from 'firebase/app'
