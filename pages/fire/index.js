@@ -31,7 +31,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 
-export default function home() {
+export default function Home() {
 	// async function getCities(db) {
 	// 	const citiesCol = collection(db, 'mydata');
 	// 	const citySnapshot = await getDocs(citiesCol);
