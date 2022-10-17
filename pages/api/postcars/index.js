@@ -13,7 +13,6 @@ export default async function handler(req, res) {
 				name,
 			);
 			res.status(200).json({ result });
-			console.log(res.statusMessage);
 			break;
 		}
 		default: {
