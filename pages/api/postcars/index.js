@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 				number,
 				name,
 			);
-			res.status(200).json({ result });
+			res.status(777).json({ result });
 			break;
 		}
 		default: {
