@@ -12,11 +12,13 @@ export default async function handler(req, res) {
 				number,
 				name,
 			);
-			res.status(777).json({ result });
+			res.status(200).json({ result });
+			console.log(res.statusMessage);
 			break;
 		}
 		default: {
 			res.status(403).end();
 		}
 	}
+	return <p>aaaaaaaaaaaa</p>
 }

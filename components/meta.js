@@ -28,8 +28,8 @@ export default function Meta({ pageTitle, pageDesc, pageImg, pageImgW, pageImgH 
 			<meta property="og:type" content={siteType} />
 			<meta property="og:locale" content={siteLocale} />
 
-			<link rel="icon" href={siteIcon} />
-			<link rel="apple-touch-icon" href={siteIcon} />
+			{/* <link rel="icon" href={siteIcon} /> */}
+			{/* <link rel="apple-touch-icon" href={siteIcon} /> */}
 
 			{/* <meta property="og:image" content={imgUrl} />
 			<meta property="og:image:width" content={imgW} />
