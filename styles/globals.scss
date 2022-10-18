@@ -8,7 +8,7 @@
 	--modal:#444444;
 	/* タイポグラフィ（フォントサイズ） */
 	--small: 11px;
-	--body: clamp(0.875rem, 0.7188rem + 0.5vw, 1rem);
+	--body: 14px;
 	--display:clamp(4.5rem,1.83rem + 11.34vw,10rem ); /* 72-160 */
 	--heading1:clamp(2rem,1.3rem + 3vw , 4rem   ); /* 32-64 */
 	--heading2:calc(var(--body) * 1.5); /* 24-27 */
@@ -56,4 +56,7 @@ a{
 }
 .shadow{
 	box-shadow:1px 1px 1px #ccc;
+}
+.btn{
+	font-size: var(--small);
 }

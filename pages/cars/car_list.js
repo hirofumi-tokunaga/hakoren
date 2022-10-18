@@ -19,17 +19,27 @@ export default function CarList() {
 	const [classList, setClassList] = useState([])
 	const [selectClass, setSelectClass] = useState("")
 	const [selectId, setSelectId] = useState()
-
+	const [open,setOpen] = useState(false)
+	const [carId,setCarId] = useState([])
 	useEffect(() => {
 		async function fetchCar() {
 			const collect = await collection(db(), 'carlist')
 			const docSet = await getDocs(collect)
+			let posts = []
+			docSet.docs.forEach(doc => {
+				posts.push({
+					id:doc.id
+				})
+			})
+			setCarId(posts)
+		
 			const docList = docSet.docs.map(doc => doc.data())
 			setCarList(docList)
 		}
 		async function fetchClass() {
 			const collect = await collection(db(), 'class')
 			const docSet = await getDocs(collect)
+			
 			const docList = docSet.docs.map(doc => doc.data())
 			setClassList(docList)
 			setSelectClass(docList[0]?.name)
@@ -109,6 +119,10 @@ export default function CarList() {
 									<Button
 										variant="contained"
 										className={styles.btn}
+										onClick={() => {
+											setOpen(true)
+											setSelectId(carId[index])
+										}}
 									>
 									削除
 								</Button>
@@ -161,7 +175,7 @@ export default function CarList() {
 					sx={{ mb: 2 }}
 				>登録</Button>
 			</Box>
-			<DeleteModal collectionName="carlist" id={ selectId} />
+			<DeleteModal collectionName="carlist" id={selectId} open={open} setOpen={setOpen}/>
 		</>
 	)
 }

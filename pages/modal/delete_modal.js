@@ -1,22 +1,28 @@
 import { useEffect, useState } from 'react'
+import {doc, deleteDoc,collection} from "firebase/firestore"
+import db from 'components/firebase'
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import styles from "styles/modal.module.scss"
-import styleFunctionSx from '@mui/system/styleFunctionSx';
 
-export default function DeleteModal({ collectionName,id }) {
-	const [open, setOpen] = useState(false);
-	const handleOpen = () => {
-		setOpen(true);
-	};
+export default function DeleteModal({ 
+	collectionName,
+	id ,
+	open,
+	setOpen,
+}) {
 	const handleClose = () => {
 		setOpen(false);
-	};
-	console.log(open)
+	}
+	async function handleDelete(){
+		deleteDoc(doc(db(), "carlist", id?.id))
+		// .then((res) => {window.location.reload()});
+	}
+	console.log()
 	return (
 		<div>
-			<Button onClick={handleOpen}>Open modal</Button>
+			{/* <Button onClick={handleOpen}>Open modal</Button> */}
 			<Modal
 				open={open}
 				onClose={handleClose}
@@ -24,11 +30,14 @@ export default function DeleteModal({ collectionName,id }) {
 				aria-describedby="modal-modal-description"
 			>
 				<Box className={styles.box}>
-					<h2 id="child-modal-title">Text in a child modal</h2>
+					<h2 id="child-modal-title">{id?.id}</h2>
 					<p id="child-modal-description">
-						Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+						削除しますか？
 					</p>
-					<Button onClick={handleClose}>Close Child Modal</Button>
+					<Box className={styles.btns}>
+						<Button className="btn" onClick={handleClose} variant="outlined">Cancel</Button>
+						<Button className="btn" onClick={handleDelete} variant="contained">OK</Button>
+					</Box>
 				</Box>
 			</Modal>
 		</div>
