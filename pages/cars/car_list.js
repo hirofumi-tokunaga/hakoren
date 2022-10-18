@@ -1,6 +1,5 @@
-import { useEffect ,useState} from 'react'
+import { useEffect, useState } from 'react'
 import { collection, getDocs, setDoc, doc, addDoc } from 'firebase/firestore/lite';
-
 import db from 'components/firebase'
 
 import TextField from '@mui/material/TextField';
@@ -11,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MainHead from 'components/mainhead'
+import DeleteModal from 'pages/modal/delete_modal'
 
 import styles from 'styles/car_list.module.scss'
 
@@ -18,6 +18,7 @@ export default function CarList() {
 	const [carList, setCarList] = useState([{}])
 	const [classList, setClassList] = useState([])
 	const [selectClass, setSelectClass] = useState("")
+	const [selectId, setSelectId] = useState()
 
 	useEffect(() => {
 		async function fetchCar() {
@@ -48,13 +49,13 @@ export default function CarList() {
 		let number = data.get('numberInput')
 		let cl = data.get('classInput')
 
-		const ref = await addDoc(collection(db(), "carlist"), {
+		await addDoc(collection(db(), "carlist"), {
 			name: name,
 			number: number,
 			class:cl
+		}).then(ref => {
+			window.location.reload()
 		})
-		console.log(ref)
-		window.location.reload()
 	}
 
 	const handleChange = (event) => {
@@ -84,22 +85,35 @@ export default function CarList() {
 					</div>
 				</div>
 				<div className={styles.tbody}>
-					{carList && (carList.map((item, index) => {
+					{carList.map((item, index) => {
 						return (
 						<div key={index}  className={styles.tr}>
-							{ console.log("loop",item?.name)}
 							<div className={styles.td}>
-								{ item?.class}
+								{ item.class}
 							</div>
 							<div className={styles.td}>
-								{item?.name}
+								{item.name}
 							</div>
 							<div className={styles.td}>
-								{item?.number}
+								{item.number}
+								</div>
+							<div className={styles.td}>
+								<Button
+									variant="outlined"
+								>
+									編集
+								</Button>
+							</div>
+							<div className={styles.td}>
+									<Button
+										variant="contained"
+									>
+									削除
+								</Button>
 							</div>
 						</div>
 						)
-					}))}
+					})}
 				</div>
 			</div>
 			<Box className={styles.inputbox} component="form" noValidate onSubmit={handleSubmit} >
@@ -145,6 +159,7 @@ export default function CarList() {
 					sx={{ mb: 2 }}
 				>登録</Button>
 			</Box>
+			<DeleteModal collectionName="carlist" id={ selectId} />
 		</>
 	)
 }
