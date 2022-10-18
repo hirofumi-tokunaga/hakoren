@@ -1,0 +1,76 @@
+.inputbox{
+	display: flex;
+	align-items: center;
+}
+.table{
+	width: 100%;
+}
+.table {
+	.thead{
+		background-color: var(--secondary);
+		.tr{
+			display: flex;
+			width:100%;
+			padding:10px;
+			.th{
+				text-align: center;
+				&:nth-child(1){
+					width:20%;
+				}
+				&:nth-child(2){
+					width:30%;
+				}
+				&:nth-child(3){
+					width:30%;
+				}
+				&:nth-child(4){
+					width:10%;
+				}
+				&:nth-child(5){
+					width:10%;
+				}
+			}
+		}
+	}
+	.tbody{
+		.tr{
+			display: flex;
+			width:100%;
+			padding:10px;
+			&:nth-child(even){
+				background-color: #f4f4f4;
+			}
+			.td{
+				text-align: center;
+				&:nth-child(1){
+					width:20%;
+				}
+				&:nth-child(2){
+					width:30%;
+				}
+				&:nth-child(3){
+					width:30%;
+				}
+				&:nth-child(4){
+					width:10%;
+				}
+				&:nth-child(5){
+					width:10%;
+				}
+			}
+		}
+	}
+}
+.inputbox{
+	margin-top:50px;
+	width:100%;
+	.classinput{
+		width:20%;
+	}
+	.nameinput{
+		width:30%;
+	}
+	.numberinput{
+		width:30%;
+	}
+}

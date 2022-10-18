@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import styles from 'styles/nav.module.css'
+import styles from 'styles/nav.module.scss'
 
 export default function Nav() {
 	return (
-		<nav className={styles.list}>
+		<nav className={`shadow ${styles.list}`}>
 			<ul>
 				<li>
 					<Link href="/">
@@ -11,13 +11,13 @@ export default function Nav() {
 					</Link>
 				</li>
 				<li>
-					<Link href="/cars">
-						<a>CARS</a>
+					<Link href="/cars/car_list">
+						<a>CAR_LIST</a>
 					</Link>
 				</li>
 				<li>
-					<Link href="/pay">
-						<a>PAY</a>
+					<Link href="/msts/car_class_list">
+						<a>クラスマスタ</a>
 					</Link>
 				</li>
 			</ul>

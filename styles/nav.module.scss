@@ -1,8 +1,15 @@
 .list{
-	display: flex;
 	gap:2em;
+	width:230px;
+	height:calc(100vh -  50px);
+	padding:10px 0;
 }
-
+.list li a{
+	width:100%;
+  padding: 12px 5px 12px 15px;
+  display: block;
+	color:var(--font-primary);
+}
 .list a:hover{
 	color:var(--accent);
 }

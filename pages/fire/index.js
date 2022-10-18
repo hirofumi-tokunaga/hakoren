@@ -1,22 +1,11 @@
 import {useEffect} from 'react'
-import Layout from 'components/layout'
-// import 'components/fire'
 import {initializeApp} from 'firebase/app'
 import { getFirestore, collection, getDocs ,setDoc,doc,addDoc} from 'firebase/firestore/lite';
-// import { listClasses } from '@mui/material';
 
-
-// async function getCities(db) {
-// 	const citiesCol = collection(db, 'mydata');
-// 	const citySnapshot = await getDocs(citiesCol);
-// 	const cityList = citySnapshot.docs.map(doc => doc.data());
-// 	return cityList;
-// }
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { Router } from 'next/router';
 
 const firebaseConfig = {
 	apiKey: "AIzaSyB9HqsJZVXqE3-JygdZ1wlHOgG_zVTbB5E",
@@ -38,7 +27,7 @@ export default function Home() {
 	// 	const cityList = citySnapshot.docs.map(doc => doc.data());
 	// 	return cityList;
 	// }
-	
+
 	useEffect (async () => {
 		const citiesCol = collection(db, 'mydata');
 		const citySnapshot = await getDocs(citiesCol);
@@ -59,7 +48,6 @@ export default function Home() {
 	}
 	return (
 		<div>
-			<Layout>
 			<Box component="form" noValidate onSubmit={handleSubmit} >
 					<TextField
 						required
@@ -80,8 +68,7 @@ export default function Home() {
 					variant="contained"
 					sx={{ mb: 2 }}
 				>登録</Button>
-			</Box>	
-			</Layout>
+			</Box>
 		</div>
 	)
 }

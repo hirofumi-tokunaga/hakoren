@@ -1,11 +1,10 @@
 import Logo from './logo'
-import Nav from 'components/nav'
+import styles from 'styles/header.module.scss'
 
 export default function Header() {
 	return (
-		<header>
+		<header className={styles.wrapper}>
 			<Logo />
-			<Nav />
 		</header>
 	)
 }

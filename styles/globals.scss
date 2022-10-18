@@ -1,15 +1,12 @@
 :root{
 	/* カラー */
-	--white: #ffffff;
-	--gray-10: #eeeeee;
-	--gray-25: #aaaaaa;
-	--gray-50: #707070;
-	--gray-75: #444444;
-	--black: #222222;
-	--accent: #0d87e0;
-
+	--primary: #3c8dbc;
+	--secondary: #d9edf7;
+	--red:#dd4b39;
+	--green:#00a65a;
+	--font-primary:#444444;
 	/* タイポグラフィ（フォントサイズ） */
-	--body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem); /* 16-18px */
+	--body: clamp(0.875rem, 0.7188rem + 0.5vw, 1rem);
 	--display:clamp(4.5rem,1.83rem + 11.34vw,10rem ); /* 72-160 */
 	--heading1:clamp(2rem,1.3rem + 3vw , 4rem   ); /* 32-64 */
 	--heading2:calc(var(--body) * 1.5); /* 24-27 */
@@ -54,4 +51,7 @@ body,h1,h2,h3,p,figure,ul{
 a{
 	color:inherit;
 	text-decoration: none;
+}
+.shadow{
+	box-shadow:1px 1px 1px #ccc;
 }
