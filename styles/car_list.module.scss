@@ -38,10 +38,14 @@
 			width:100%;
 			padding:10px;
 			&:nth-child(even){
-				background-color: #f4f4f4;
+				background-color: #fafafa;
 			}
 			.td{
 				text-align: center;
+				align-self: center;
+				.btn{
+					font-size: var(--small);
+				}
 				&:nth-child(1){
 					width:20%;
 				}

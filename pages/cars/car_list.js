@@ -100,6 +100,7 @@ export default function CarList() {
 							<div className={styles.td}>
 								<Button
 									variant="outlined"
+									className={styles.btn}
 								>
 									編集
 								</Button>
@@ -107,6 +108,7 @@ export default function CarList() {
 							<div className={styles.td}>
 									<Button
 										variant="contained"
+										className={styles.btn}
 									>
 									削除
 								</Button>
