@@ -108,6 +108,8 @@ export default function CarList() {
 		setEditClass(event.target.value)
 	}
 
+
+	
 	const handleChange = (event) => {
 		setSelectClass(event.target.value)
 	}
