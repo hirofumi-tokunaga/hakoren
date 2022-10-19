@@ -5,7 +5,6 @@ import styles from "styles/modal.module.scss"
 
 export default function DeleteModal({
 	name,
-	id ,
 	open,
 	setOpen,
 	submit
