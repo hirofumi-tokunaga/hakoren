@@ -15,11 +15,7 @@ export default function Nav() {
 						<a>CAR_LIST</a>
 					</Link>
 				</li>
-				<li>
-					<Link href="/msts/car_class_list">
-						<a>クラスマスタ</a>
-					</Link>
-				</li>
+				
 			</ul>
 		</nav>
 	)
