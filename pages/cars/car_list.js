@@ -40,7 +40,8 @@ export default function CarList() {
 	const [editClass, setEditClass] = useState()
 	const [sortSw, setSortSw] = useState([false, false, false, false, false])
 	const [newPost,setNewPost] = useState(false)
-
+	const [order, setOrder] = useState("")
+	const [switchId,setSwitchId] = useState()
 	// 読み込み ----------------------
 	async function fetchCar() {
 		const collect = await collection(db, 'carlist')
@@ -81,6 +82,7 @@ export default function CarList() {
 			class: cl
 		}).then(ref => {
 			fetchCar()
+			sort()
 		})
 	}
 	const handleChange = (event) => {
@@ -97,6 +99,7 @@ export default function CarList() {
 				setSelectId("")
 				setEdit(false)
 				fetchCar()
+				sort()
 			}
 			);
 	}
@@ -117,21 +120,22 @@ export default function CarList() {
 				setSelectId("")
 				setSelectName("")
 				fetchCar()
+				sort()
 			});
 	}
 	// ソート ----------------------
-	async function sort(order, swid) {
-		setSortSw((prevState) =>
-			prevState.map((value, index) => (index === swid ? !value : value))
-		)
+	async function sort() {
+
 		const collect = await collection(db, 'carlist')
-		await getDocs(query(collect, orderBy(order,sortSw[swid] ? "desc":"")))
+		await getDocs(query(collect, orderBy(order,sortSw[switchId] ? "desc":"")))
 			.then(set => {
 				const docList = set.docs.map(doc => doc.data())
 				setCarList(docList)
-			})
+		})
 	}
-
+	useEffect(() => {
+		sort()
+	}, [switchId,sortSw,order])
 	return (
 		<>
 			<ThemeProvider theme={theme}>
@@ -141,13 +145,31 @@ export default function CarList() {
 					<div className={styles.thead}>
 						<div className={styles.tr}>
 							<div className={styles.th}>
-								クラス<Button className={styles.btn} onClick={() => {sort("class",0)}}>ソート</Button>
+								クラス<Button className={styles.btn} onClick={() => {
+									setOrder("class")
+									setSortSw((prevState) =>
+										prevState.map((value, index) => (index === 0 ? !value : value))
+									)
+									setSwitchId(0)
+								}}>ソート</Button>
 							</div>
 							<div className={styles.th}>
-								車種<Button className={styles.btn} onClick={() => { sort("name", 1) }}>ソート</Button>
+								車種<Button className={styles.btn} onClick={() => {
+									setOrder("name")
+									setSortSw((prevState) =>
+										prevState.map((value, index) => (index === 1 ? !value : value))
+									)
+									setSwitchId(1)
+								}}>ソート</Button>
 							</div>
 							<div className={styles.th}>
-								ナンバー<Button className={styles.btn} onClick={() => { sort("number", 2) }}>ソート</Button>
+								ナンバー<Button className={styles.btn} onClick={() => {
+									setOrder("number")
+									setSortSw((prevState) =>
+										prevState.map((value, index) => (index === 2 ? !value : value))
+									)
+									setSwitchId(2)
+								}}>ソート</Button>
 							</div>
 							<div className={styles.th}>
 								編集
