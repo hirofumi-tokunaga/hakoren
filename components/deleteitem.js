@@ -1,5 +1,5 @@
 import { collection, getDocs, setDoc, doc, addDoc } from 'firebase/firestore/lite';
-import db from 'components/firebase'
+import { db } from 'components/firebase'
 import { useEffect } from 'react';
 
 export default function Delete({ collectionName, id }) {

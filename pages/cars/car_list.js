@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { collection, getDocs, setDoc, doc, addDoc } from 'firebase/firestore/lite';
-import db from 'components/firebase'
+import { collection, getDocs, setDoc, doc, addDoc, deleteDoc } from 'firebase/firestore/lite';
+// import db from 'components/firebase'
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -14,32 +14,42 @@ import DeleteModal from 'pages/modal/delete_modal'
 
 import styles from 'styles/car_list.module.scss'
 
+// const database = db()
+// console.log(db);
+import { db } from 'components/firebase'
+
 export default function CarList() {
 	const [carList, setCarList] = useState([{}])
 	const [classList, setClassList] = useState([])
 	const [selectClass, setSelectClass] = useState("")
 	const [selectId, setSelectId] = useState()
+	const [selectName, setSelectName] = useState()
 	const [open,setOpen] = useState(false)
-	const [carId,setCarId] = useState([])
+	const [carId, setCarId] = useState([])
+	const [edit, setEdit] = useState(false)
+	const [editName, setEditName] = useState()
+	const [editNumber, setEditNumber] = useState()
+	const [editClass, setEditClass] = useState()
+
+	// 読み込み ----------------------
 	useEffect(() => {
 		async function fetchCar() {
-			const collect = await collection(db(), 'carlist')
+			const collect = await collection(db, 'carlist')
 			const docSet = await getDocs(collect)
 			let posts = []
-			docSet.docs.forEach(doc => {
-				posts.push({
-					id:doc.id
-				})
-			})
-			setCarId(posts)
-		
 			const docList = docSet.docs.map(doc => doc.data())
 			setCarList(docList)
+			docSet.docs.forEach(doc => {
+				posts.push(
+					doc.id
+				)
+			})
+			setCarId(posts)
 		}
 		async function fetchClass() {
-			const collect = await collection(db(), 'class')
+			const collect = await collection(db, 'class')
 			const docSet = await getDocs(collect)
-			
+
 			const docList = docSet.docs.map(doc => doc.data())
 			setClassList(docList)
 			setSelectClass(docList[0]?.name)
@@ -48,10 +58,8 @@ export default function CarList() {
 		fetchClass()
 
 	}, [])
-	useEffect(() => {
 
-	}, [carList, classList])
-
+	// 追加 ----------------------
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		let data = new FormData(event.currentTarget);
@@ -59,7 +67,7 @@ export default function CarList() {
 		let number = data.get('numberInput')
 		let cl = data.get('classInput')
 
-		await addDoc(collection(db(), "carlist"), {
+		await addDoc(collection(db, "carlist"), {
 			name: name,
 			number: number,
 			class:cl
@@ -67,7 +75,36 @@ export default function CarList() {
 			window.location.reload()
 		})
 	}
-
+	// 編集 ----------------------
+	async function handleEdit(id) {
+		await setDoc(doc(db, "carlist", id), {
+				name: editName,
+				number: editNumber,
+				class: editClass
+			})
+			.then((res) => {
+				setSelectId("")
+				setEdit(false)
+				window.location.reload()
+			}
+			);
+	}
+	// 削除 ----------------------
+  async function handleDelete() {
+		await deleteDoc(doc(db, "carlist", selectId ))
+		.then((res) => {
+			setSelectId("")
+			setSelectName("")
+			window.location.reload()
+		}
+		);
+	}
+	const handleNameChange = (event) => {
+		setEditName(event.target.value)
+	}
+	const handleNumberChange = (event) => {
+		setEditNumber(event.target.value)
+	}
 	const handleChange = (event) => {
 		setSelectClass(event.target.value)
 	}
@@ -97,22 +134,90 @@ export default function CarList() {
 				<div className={styles.tbody}>
 					{carList.map((item, index) => {
 						return (
-						<div key={index}  className={styles.tr}>
-							<div className={styles.td}>
-								{ item.class}
-							</div>
-							<div className={styles.td}>
-								{item.name}
-							</div>
-							<div className={styles.td}>
-								{item.number}
-								</div>
+							<div key={index} className={styles.tr}>
+								{edit === index ? (
+									<>
+										<FormControl className={styles.td}>
+											<InputLabel id="demo-multiple-name-label">クラス</InputLabel>
+											<Select
+												id=""
+												value={editClass}
+												label="クラス"
+												onChange={handleChange}
+												name='classInput'
+												defaultValue={item.class }
+											>
+												{classList.map((name, index) => (
+													<MenuItem
+														key={index}
+														value={name.name}
+													>
+														{name.name}
+													</MenuItem>
+												))}
+											</Select>
+										</FormControl>
+										<TextField
+											required
+											name="nameInput"
+											label="名称"
+											type="text"
+											id=""
+											defaultValue={item.name}
+											value={editName}
+											onChange={handleNameChange}
+											className={styles.td}
+										/>
+										<TextField
+											required
+											name="numberInput"
+											label="ナンバー"
+											type="text"
+											id=""
+											defaultValue={item.number}
+											onChange={handleNumberChange}
+											className={styles.td}
+											value={editNumber}
+										/>
+									</>
+								): (
+									<>
+										<div className={styles.td}>
+											{item.class}
+										</div>
+										<div className={styles.td}>
+											{item.name}
+										</div>
+										<div className={styles.td}>
+											{item.number}
+										</div>
+									</>
+								)}
 							<div className={styles.td}>
 								<Button
 									variant="outlined"
 									className={styles.btn}
+									onClick={() => {
+										edit === index ? (
+											<>
+												{setEdit(false)}
+												{setEditName(item.name)}
+												{setEditNumber(item.number)}
+												{setEditClass(item.class)}
+											</>
+										) : (
+												<>
+													{setSelectClass(item.class) }
+													{setEdit(index)}
+													{setSelectId(carId[index])}
+													{setEditName(item.name)}
+													{setEditNumber(item.number)}
+													{setEditClass(item.class)}
+												</>
+										)
+									}}
 								>
-									編集
+										{edit === index ? "取消" : "編集"}
 								</Button>
 							</div>
 							<div className={styles.td}>
@@ -120,11 +225,18 @@ export default function CarList() {
 										variant="contained"
 										className={styles.btn}
 										onClick={() => {
-											setOpen(true)
-											setSelectId(carId[index])
+											edit === index ? (
+												handleEdit(carId[index])
+											): (
+												<>
+													{ setSelectId(carId[index]) }
+													{ setSelectName(item.name) }
+													{ setOpen(true) }
+												</>
+											)
 										}}
 									>
-									削除
+										{edit === index ? "登録" : "削除"  }
 								</Button>
 							</div>
 						</div>
@@ -175,7 +287,7 @@ export default function CarList() {
 					sx={{ mb: 2 }}
 				>登録</Button>
 			</Box>
-			<DeleteModal collectionName="carlist" id={selectId} open={open} setOpen={setOpen}/>
+			<DeleteModal submit={handleDelete} name={selectName } id={selectId} open={open} setOpen={setOpen}/>
 		</>
 	)
 }

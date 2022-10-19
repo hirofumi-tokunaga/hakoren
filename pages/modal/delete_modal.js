@@ -1,28 +1,20 @@
-import { useEffect, useState } from 'react'
-import {doc, deleteDoc,collection} from "firebase/firestore"
-import db from 'components/firebase'
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import styles from "styles/modal.module.scss"
 
-export default function DeleteModal({ 
-	collectionName,
+export default function DeleteModal({
+	name,
 	id ,
 	open,
 	setOpen,
+	submit
 }) {
 	const handleClose = () => {
 		setOpen(false);
 	}
-	async function handleDelete(){
-		deleteDoc(doc(db(), "carlist", id?.id))
-		// .then((res) => {window.location.reload()});
-	}
-	console.log()
 	return (
 		<div>
-			{/* <Button onClick={handleOpen}>Open modal</Button> */}
 			<Modal
 				open={open}
 				onClose={handleClose}
@@ -30,13 +22,13 @@ export default function DeleteModal({
 				aria-describedby="modal-modal-description"
 			>
 				<Box className={styles.box}>
-					<h2 id="child-modal-title">{id?.id}</h2>
+					<h2 id="child-modal-title">車種 : {name}</h2>
 					<p id="child-modal-description">
 						削除しますか？
 					</p>
 					<Box className={styles.btns}>
 						<Button className="btn" onClick={handleClose} variant="outlined">Cancel</Button>
-						<Button className="btn" onClick={handleDelete} variant="contained">OK</Button>
+						<Button className="btn" onClick={submit} variant="contained">OK</Button>
 					</Box>
 				</Box>
 			</Modal>
