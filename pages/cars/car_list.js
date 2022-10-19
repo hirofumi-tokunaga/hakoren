@@ -32,31 +32,30 @@ export default function CarList() {
 	const [editClass, setEditClass] = useState()
 
 	// 読み込み ----------------------
-	useEffect(() => {
-		async function fetchCar() {
-			const collect = await collection(db, 'carlist')
-			const docSet = await getDocs(collect)
-			let posts = []
-			const docList = docSet.docs.map(doc => doc.data())
-			setCarList(docList)
-			docSet.docs.forEach(doc => {
-				posts.push(
-					doc.id
-				)
-			})
-			setCarId(posts)
-		}
-		async function fetchClass() {
-			const collect = await collection(db, 'class')
-			const docSet = await getDocs(collect)
+	async function fetchCar() {
+		const collect = await collection(db, 'carlist')
+		const docSet = await getDocs(collect)
+		let posts = []
+		const docList = docSet.docs.map(doc => doc.data())
+		setCarList(docList)
+		docSet.docs.forEach(doc => {
+			posts.push(
+				doc.id
+			)
+		})
+		setCarId(posts)
+	}
+	async function fetchClass() {
+		const collect = await collection(db, 'class')
+		const docSet = await getDocs(collect)
 
-			const docList = docSet.docs.map(doc => doc.data())
-			setClassList(docList)
-			setSelectClass(docList[0]?.name)
-		}
+		const docList = docSet.docs.map(doc => doc.data())
+		setClassList(docList)
+		setSelectClass(docList[0]?.name)
+	}
+	useEffect(() => {
 		fetchCar()
 		fetchClass()
-
 	}, [])
 
 	// 追加 ----------------------
@@ -72,7 +71,7 @@ export default function CarList() {
 			number: number,
 			class:cl
 		}).then(ref => {
-			window.location.reload()
+			fetchCar()
 		})
 	}
 	// 編集 ----------------------
@@ -85,19 +84,19 @@ export default function CarList() {
 			.then((res) => {
 				setSelectId("")
 				setEdit(false)
-				window.location.reload()
+				fetchCar()
 			}
 			);
 	}
 	// 削除 ----------------------
   async function handleDelete() {
 		await deleteDoc(doc(db, "carlist", selectId ))
-		.then((res) => {
-			setSelectId("")
-			setSelectName("")
-			window.location.reload()
-		}
-		);
+			.then((res) => {
+				setOpen(false);
+				setSelectId("")
+				setSelectName("")
+				fetchCar()
+			});
 	}
 	const handleNameChange = (event) => {
 		setEditName(event.target.value)
@@ -105,6 +104,10 @@ export default function CarList() {
 	const handleNumberChange = (event) => {
 		setEditNumber(event.target.value)
 	}
+	const handleClassChange = (event) => {
+		setEditClass(event.target.value)
+	}
+
 	const handleChange = (event) => {
 		setSelectClass(event.target.value)
 	}
@@ -143,7 +146,7 @@ export default function CarList() {
 												id=""
 												value={editClass}
 												label="クラス"
-												onChange={handleChange}
+												onChange={handleClassChange}
 												name='classInput'
 												defaultValue={item.class }
 											>
