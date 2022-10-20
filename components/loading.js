@@ -8,8 +8,8 @@ export default function Loading({ loading }){
 			{loading && (
 				<div className={styles.loading}>
 					<ReactLoading
-						className="SpinningBubbles"
-						type="bubbles"
+						className="spinningBubbles"
+						type="spinningBubbles"
 						width="150px"
 						height="150px"
 					/>

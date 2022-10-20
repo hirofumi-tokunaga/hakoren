@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
-import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, query,orderBy } from 'firebase/firestore/lite';
-import { getDb,getId } from 'components/api'
-
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import { getDb, getId, deleteData, setData, addData, getSortData } from 'components/api'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import Box from '@mui/material/Box'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
 
 import MainHead from 'components/mainhead'
 import DeleteModal from 'pages/modal/delete_modal'
@@ -35,31 +33,14 @@ export default function CarList() {
 	const [loading, setLoading] = useState(false)
 
 	// 読み込み ----------------------
-	// async function fetchCar() {
-	// 	const collect = await collection(db, 'carlist')
-	// 	const docSet = await getDocs(collect)
-	// 	let posts = []
-	// 	const docList = docSet.docs.map(doc => doc.data())
-	// 	setCarList(docList)
-	// 	docSet.docs.forEach(doc => {
-	// 		posts.push(
-	// 			doc.id
-	// 		)
-	// 	})
-	// 	setCarId(posts)
-	// }
-
-	async function fetchClass() {
-		const collect = await collection(db, 'class')
-		const docSet = await getDocs(collect)
-		const docList = docSet.docs.map(doc => doc.data())
-		setClassList(docList)
-		setSelectClass(docList[0]?.name)
-	}
 	useEffect(() => {
-		setCarList(getDb('carlist'))
-		setCarId(getId('carlist'))
-		fetchClass()
+		async function init() {
+			setCarList(await getDb('carlist'))
+			setCarId(await getId('carlist'))
+			setClassList(await getDb('class'))
+			setSelectClass(classList[0]?.name)
+		}
+		init();
 	}, [])
 
 	// 追加 ----------------------
@@ -69,35 +50,35 @@ export default function CarList() {
 		let name = data.get('nameInput')
 		let number = data.get('numberInput')
 		let cl = data.get('classInput')
-		setLoading(true)
-		await addDoc(collection(db, "carlist"), {
+		let object = {
 			name: name,
 			number: number,
 			class: cl
-		}).then(ref => {
-			setNewPost(false)
-			fetchCar()
-			sort()
-			setLoading(false)
-		})
+		}
+		setLoading(true)
+		await addData('carlist',object)
+		setNewPost(false)
+		setCarList(await getDb('carlist'))
+		setCarId(await getId('carlist'))
+		sort()
+		setLoading(false)
 	}
 	const handleChange = (event) => {
 		setSelectClass(event.target.value)
 	}
 	// 編集 ----------------------
-	async function handleEdit(id) {
-		await setDoc(doc(db, "carlist", id), {
+	async function handleSet(id) {
+		let object = {
 			name: editName,
 			number: editNumber,
 			class: editClass
-		})
-			.then((res) => {
-				setSelectId("")
-				setEdit(false)
-				fetchCar()
-				sort()
-			}
-			);
+		}
+		await setData("carlist", object, id)
+		setSelectId("")
+		setEdit(false)
+		setCarList(await getDb('carlist'))
+		setCarId(await getId('carlist'))
+		sort()
 	}
 	const handleNameChange = (event) => {
 		setEditName(event.target.value)
@@ -111,25 +92,19 @@ export default function CarList() {
 	// 削除 ----------------------
 	async function handleDelete() {
 		setLoading(true)
-		await deleteDoc(doc(db, "carlist", selectId))
-			.then((res) => {
-				setOpen(false);
-				setSelectId("")
-				setSelectName("")
-				fetchCar()
-				sort()
-				setLoading(false)
-			});
+		await deleteData("carlist", selectId)
+		setOpen(false);
+		setSelectId("")
+		setSelectName("")
+		setCarList(await getDb('carlist'))
+		setCarId(await getId('carlist'))
+		sort()
+		setLoading(false)
 	}
 	// ソート ----------------------
 	async function sort() {
 		if (order) {
-			const collect = await collection(db, 'carlist')
-			await getDocs(query(collect, orderBy(order,sortSw[switchId] ? "desc":"")))
-				.then(set => {
-					const docList = set.docs.map(doc => doc.data())
-					setCarList(docList)
-			})
+			setCarList(await getSortData('carlist',order,sortSw[switchId]))
 		}
 	}
 	useEffect(() => {
@@ -178,7 +153,7 @@ export default function CarList() {
 						</div>
 					</div>
 					<div className={styles.tbody}>
-						{carList?.map((item, index) => {
+						{carList && (carList.map((item, index) => {
 							return (
 								<div key={index} className={styles.tr}>
 									{edit === index ? (
@@ -193,7 +168,7 @@ export default function CarList() {
 													name='classInput'
 													defaultValue={item.class }
 												>
-													{classList?.map((name, index) => (
+													{classList.map((name, index) => (
 														<MenuItem
 															key={index}
 															value={name.name}
@@ -272,7 +247,7 @@ export default function CarList() {
 											className={styles.btn}
 											onClick={() => {
 												edit === index ? (
-													handleEdit(carId[index])
+													handleSet(carId[index])
 												): (
 													<>
 														{ setSelectId(carId[index]) }
@@ -287,7 +262,7 @@ export default function CarList() {
 								</div>
 							</div>
 							)
-						})}
+						}))}
 					</div>
 					<div className={styles.tfoot}>
 						<Box className={styles.tr} component="form" noValidate onSubmit={handleSubmit} >

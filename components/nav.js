@@ -15,7 +15,11 @@ export default function Nav() {
 						<a>CAR_LIST</a>
 					</Link>
 				</li>
-				
+				<li>
+					<Link href="/input">
+						<a>INPUT</a>
+					</Link>
+				</li>
 			</ul>
 		</nav>
 	)
