@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, query,orderBy } from 'firebase/firestore/lite';
-import { db } from 'components/firebase'
+import { getDb,getId } from 'components/api'
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -9,22 +9,12 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+
 import MainHead from 'components/mainhead'
 import DeleteModal from 'pages/modal/delete_modal'
-
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Loading from 'components/loading'
 
 import styles from 'styles/car_list.module.scss'
-
-
-
-const theme = createTheme({
-	typography: {
-		button: {
-			textTransform: "none"
-		}
-	}
-});
 
 export default function CarList() {
 	const [carList, setCarList] = useState([{}])
@@ -41,21 +31,24 @@ export default function CarList() {
 	const [sortSw, setSortSw] = useState([false, false, false, false, false])
 	const [newPost,setNewPost] = useState(false)
 	const [order, setOrder] = useState("")
-	const [switchId,setSwitchId] = useState()
+	const [switchId, setSwitchId] = useState()
+	const [loading, setLoading] = useState(false)
+
 	// 読み込み ----------------------
-	async function fetchCar() {
-		const collect = await collection(db, 'carlist')
-		const docSet = await getDocs(collect)
-		let posts = []
-		const docList = docSet.docs.map(doc => doc.data())
-		setCarList(docList)
-		docSet.docs.forEach(doc => {
-			posts.push(
-				doc.id
-			)
-		})
-		setCarId(posts)
-	}
+	// async function fetchCar() {
+	// 	const collect = await collection(db, 'carlist')
+	// 	const docSet = await getDocs(collect)
+	// 	let posts = []
+	// 	const docList = docSet.docs.map(doc => doc.data())
+	// 	setCarList(docList)
+	// 	docSet.docs.forEach(doc => {
+	// 		posts.push(
+	// 			doc.id
+	// 		)
+	// 	})
+	// 	setCarId(posts)
+	// }
+
 	async function fetchClass() {
 		const collect = await collection(db, 'class')
 		const docSet = await getDocs(collect)
@@ -64,7 +57,8 @@ export default function CarList() {
 		setSelectClass(docList[0]?.name)
 	}
 	useEffect(() => {
-		fetchCar()
+		setCarList(getDb('carlist'))
+		setCarId(getId('carlist'))
 		fetchClass()
 	}, [])
 
@@ -75,14 +69,16 @@ export default function CarList() {
 		let name = data.get('nameInput')
 		let number = data.get('numberInput')
 		let cl = data.get('classInput')
-
+		setLoading(true)
 		await addDoc(collection(db, "carlist"), {
 			name: name,
 			number: number,
 			class: cl
 		}).then(ref => {
+			setNewPost(false)
 			fetchCar()
 			sort()
+			setLoading(false)
 		})
 	}
 	const handleChange = (event) => {
@@ -114,6 +110,7 @@ export default function CarList() {
 	}
 	// 削除 ----------------------
 	async function handleDelete() {
+		setLoading(true)
 		await deleteDoc(doc(db, "carlist", selectId))
 			.then((res) => {
 				setOpen(false);
@@ -121,25 +118,26 @@ export default function CarList() {
 				setSelectName("")
 				fetchCar()
 				sort()
+				setLoading(false)
 			});
 	}
 	// ソート ----------------------
 	async function sort() {
-
-		const collect = await collection(db, 'carlist')
-		await getDocs(query(collect, orderBy(order,sortSw[switchId] ? "desc":"")))
-			.then(set => {
-				const docList = set.docs.map(doc => doc.data())
-				setCarList(docList)
-		})
+		if (order) {
+			const collect = await collection(db, 'carlist')
+			await getDocs(query(collect, orderBy(order,sortSw[switchId] ? "desc":"")))
+				.then(set => {
+					const docList = set.docs.map(doc => doc.data())
+					setCarList(docList)
+			})
+		}
 	}
 	useEffect(() => {
 		sort()
 	}, [switchId,sortSw,order])
 	return (
 		<>
-			<ThemeProvider theme={theme}>
-
+			<Loading loading={loading} />
 				<MainHead title="車両リスト"/>
 				<div className={styles.table} >
 					<div className={styles.thead}>
@@ -180,7 +178,7 @@ export default function CarList() {
 						</div>
 					</div>
 					<div className={styles.tbody}>
-						{carList.map((item, index) => {
+						{carList?.map((item, index) => {
 							return (
 								<div key={index} className={styles.tr}>
 									{edit === index ? (
@@ -195,7 +193,7 @@ export default function CarList() {
 													name='classInput'
 													defaultValue={item.class }
 												>
-													{classList.map((name, index) => (
+													{classList?.map((name, index) => (
 														<MenuItem
 															key={index}
 															value={name.name}
@@ -377,7 +375,6 @@ export default function CarList() {
 				</div>
 
 				<DeleteModal submit={handleDelete} name={selectName } id={selectId} open={open} setOpen={setOpen}/>
-			</ThemeProvider>
 		</>
 	)
 }
