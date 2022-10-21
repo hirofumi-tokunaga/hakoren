@@ -2,10 +2,13 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 
 export default function TimePicker({ time, setTime }) {
+	const handleChange = (event) => {
+		setTime(event.target.value)
+	}
 	return (
 		<Select
 			value={time}
-			onChange={(time) => setTime(time)}
+			onChange={handleChange}
 		>
 			<MenuItem value="08:30">08:30</MenuItem>
 			<MenuItem value="09:00">09:00</MenuItem>

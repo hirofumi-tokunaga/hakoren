@@ -23,13 +23,11 @@ export default function Input() {
 	const Today = new Date()
 	const [startDate, setStartDate] = useState(Today)
 	const [endDate, setEndDate] = useState(Today)
-	const [startTime, setStartTime] = useState()
-	const [endTime, setEndTime] = useState()
+	const [startTime, setStartTime] = useState("08:30")
+	const [endTime, setEndTime] = useState("20:30")
 	const [loading,setLoading] = useState(false)
+	const [scheduleOk,setScheduleOk] = useState(false)
 
-	const handleSchedule = async (event) => {
-
-	}
 	const handlePersonalData = async (event) => {
 		event.preventDefault();
 		let data = new FormData(event.currentTarget);
@@ -41,23 +39,56 @@ export default function Input() {
 			familyNameKana: data.get('familyNameKana'),
 			tel: data.get('tel'),
 			gender: data.get('gender'),
-			startDate: data.get('startDate'),
-			startTime: data.get('startTime'),
-			endDate: data.get('endDate'),
-			endTime: data.get('endTime'),
+			startDate: transDate(startDate),
+			startTime: startTime,
+			endDate: transDate(endDate),
+			endTime: endTime,
 			carId: id,
 		}
 		setLoading(true)
-		await addData('bookinginfo', object)
+		handleDateCheck()
+		if(scheduleOk){
+			await addData('bookinginfo', object).then(() => {
+				setStartDate(Today)
+				setEndDate(Today)
+				setStartTime("08:30")
+				setEndTime("20:30")
+			})
+		}else{
+			alert("予約が重なってしまい、予約が出来ませんでした")
+		}
 		setLoading(false)
 	}
-	const handleChange = (event) => {
-		setSelectClass(event.target.value)
+	const transDate = (date) => {
+		var dd = String(date.getDate()).padStart(2, "0")
+		var mm = String(date.getMonth() + 1).padStart(2, "0")
+		var yyyy = date.getFullYear()
+		return yyyy + mm + dd
 	}
+
+	const handleDateCheck = async() => {
+		let currentStart = Number(transDate(startDate))
+		let currentEnd = Number(transDate(endDate))
+		setScheduleOk(false)
+		await getDb('bookinginfo').then((bookingInfo) => {
+			bookingInfo.forEach(doc => {
+				var startDate = Number(doc.startDate)
+				var endDate = Number(doc.endDate)
+				if(( endDate < currentStart ) 
+				|| ( currentEnd < startDate )){
+					setScheduleOk(true)
+				}
+			})
+		})
+	}
+	useEffect(() => {
+		handleDateCheck()
+	}, [startDate,endDate])
 	return (
 		<>
+			<Loading loading={loading}/>
 			<h2>ご予約</h2>
-			<Box className={styles.schedule} component="" noValidate onSubmit={handleSchedule} >
+			<Box className={styles.schedule} >
 				<Box className={styles.box}>
 					<FormControl className={styles.day}>
 						<InputLabel className="input-label" shrink={true} name="startDate">出発日</InputLabel>
@@ -80,10 +111,12 @@ export default function Input() {
 				</Box>
 				<Button
 					className={styles.btn}
-					type="submit"
 					variant="contained"
 					sx={{ mb: 2 }}
+					onClick={handleDateCheck}
 				>在庫検索</Button>
+
+					<p style={scheduleOk ? {color:"#0000ff"} : {color:"#ff0000"}}>{scheduleOk ? "在庫が在ります" : "在庫がありません"}</p>
 			</Box>
 
 

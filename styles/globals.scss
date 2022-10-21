@@ -86,7 +86,6 @@ a{
 		box-sizing: border-box;
 	}
 	> label{
-		background-color: #fff;
 		display: block;
 		overflow: visible;
 
@@ -94,9 +93,9 @@ a{
 			content:"";
 			position: absolute;
 			left:-8px;
-			height:100%;
-			top:0;
 			width:calc(100% + 16px);
+			height: 14px;
+			top:0;
 			background-color: #fff;
 			z-index: -1;
 		}
