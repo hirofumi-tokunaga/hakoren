@@ -160,7 +160,7 @@ export default function CarList() {
 										<>
 											<div className={styles.td}>
 												<FormControl>
-													<InputLabel id="demo-multiple-name-label" InputLabelProps={{ shrink: true }}>クラス</InputLabel>
+													<InputLabel InputLabelProps={{ shrink: true }}>クラス</InputLabel>
 													<Select
 														id=""
 														value={editClass}
