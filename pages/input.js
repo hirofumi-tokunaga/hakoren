@@ -27,6 +27,9 @@ export default function Input() {
 	const [endTime, setEndTime] = useState("20:30")
 	const [loading,setLoading] = useState(false)
 	const [scheduleOk,setScheduleOk] = useState(false)
+	const [carList, setCarList] = useState([{}])
+	const [carId, setCarId] = useState([])
+	const [okCarId,setOkCarId] = useState([])
 
 	const handlePersonalData = async (event) => {
 		event.preventDefault();
@@ -71,18 +74,31 @@ export default function Input() {
 		let currentEnd = Number(transDate(endDate))
 		setScheduleOk(false)
 		await getDb('bookinginfo').then((bookingInfo) => {
-			bookingInfo.forEach(doc => {
+			let ids = []
+			bookingInfo.forEach((doc,index) => {
 				var startDate = Number(doc.startDate)
 				var endDate = Number(doc.endDate)
 				if(( endDate < currentStart ) 
 				|| ( currentEnd < startDate )){
 					setScheduleOk(true)
+					ids.push(
+						carId[index]
+					)
 				}
 			})
+			setOkCarId(carId)
 		})
 	}
 	useEffect(() => {
 		handleDateCheck()
+	}, [])
+	useEffect(() => {
+		async function init() {
+			setCarList(await getDb('carlist'))
+			setCarId(await getId('carlist'))
+			handleDateCheck()
+		}
+		init();
 	}, [startDate,endDate])
 	return (
 		<>
@@ -115,8 +131,25 @@ export default function Input() {
 					sx={{ mb: 2 }}
 					onClick={handleDateCheck}
 				>在庫検索</Button>
-
-					<p style={scheduleOk ? {color:"#0000ff"} : {color:"#ff0000"}}>{scheduleOk ? "在庫が在ります" : "在庫がありません"}</p>
+				<p style={scheduleOk ? {color:"#0000ff"} : {color:"#ff0000"}}>{scheduleOk ? "在庫が在ります" : "在庫がありません"}</p>
+				<div className={styles.table}>
+					{carList && (carList.map((item, index) => {
+						return (
+							<>
+								{okCarId[index] === carId[index] && (
+									<Box key={index} className={styles.tr}>
+										<label className={styles.td}>
+											{item.name}
+										</label>
+										<label className={styles.td}>
+											{item.number}
+										</label>
+									</Box>
+								)}
+							</>
+						)
+					}))}
+				</div>
 			</Box>
 
 
