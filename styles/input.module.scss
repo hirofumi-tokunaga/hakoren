@@ -1,0 +1,32 @@
+.schedule{
+	margin-top:50px;
+	.box {
+		margin-bottom:20px;
+		.day{
+			margin-right:10px;
+		}
+		.time{
+			width:100px;
+		}
+	}
+}
+
+.personalData{
+	margin-top:50px;
+	.box {
+		margin-bottom:20px;
+		> div:nth-of-type(1){
+			margin-right:10px;
+		}
+		> label{
+			width:140px;
+			display: inline-block;
+		}
+		.day{
+			margin-right:10px;
+		}
+		.time{
+			width:100px;
+		}
+	}
+}

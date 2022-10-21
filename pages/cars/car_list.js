@@ -158,48 +158,52 @@ export default function CarList() {
 								<div key={index} className={styles.tr}>
 									{edit === index ? (
 										<>
-											<FormControl className={styles.td}>
-												<InputLabel id="demo-multiple-name-label">クラス</InputLabel>
-												<Select
+											<div className={styles.td}>
+												<FormControl>
+													<InputLabel id="demo-multiple-name-label" InputLabelProps={{ shrink: true }}>クラス</InputLabel>
+													<Select
+														id=""
+														value={editClass}
+														label="クラス"
+														onChange={handleClassChange}
+														name='classInput'
+														defaultValue={item.class }
+													>
+														{classList.map((name, index) => (
+															<MenuItem
+																key={index}
+																value={name.name}
+															>
+																{name.name}
+															</MenuItem>
+														))}
+													</Select>
+												</FormControl>
+											</div>
+											<div className={styles.td}>
+												<TextField
+													name="nameInput"
+													label="名称"
+													type="text"
 													id=""
-													value={editClass}
-													label="クラス"
-													onChange={handleClassChange}
-													name='classInput'
-													defaultValue={item.class }
-												>
-													{classList.map((name, index) => (
-														<MenuItem
-															key={index}
-															value={name.name}
-														>
-															{name.name}
-														</MenuItem>
-													))}
-												</Select>
-											</FormControl>
-											<TextField
-												required
-												name="nameInput"
-												label="名称"
-												type="text"
-												id=""
-												defaultValue={item.name}
-												value={editName}
-												onChange={handleNameChange}
-												className={styles.td}
-											/>
-											<TextField
-												required
-												name="numberInput"
-												label="ナンバー"
-												type="text"
-												id=""
-												defaultValue={item.number}
-												onChange={handleNumberChange}
-												className={styles.td}
-												value={editNumber}
-											/>
+													defaultValue={item.name}
+													value={editName}
+													onChange={handleNameChange}
+													InputLabelProps={{ shrink: true }}
+												/>
+											</div>
+											<div className={styles.td}>
+												<TextField
+													name="numberInput"
+													label="ナンバー"
+													type="text"
+													id=""
+													defaultValue={item.number}
+													onChange={handleNumberChange}
+													value={editNumber}
+													InputLabelProps={{ shrink: true }}
+												/>
+											</div>
 										</>
 									): (
 										<>
@@ -269,11 +273,12 @@ export default function CarList() {
 							<div className={styles.td}>
 								{newPost && (
 									<FormControl className={styles.classinput}>
-										<InputLabel id="demo-multiple-name-label">クラス</InputLabel>
+									<InputLabel className="input-label" shrink={true} >クラス</InputLabel>
 										<Select
 											id=""
 											value={selectClass}
 											label="クラス"
+											InputLabelProps={{ shrink: true }}
 											onChange={handleChange}
 											name='classInput'
 											style={{ height: "53px" }}
@@ -293,24 +298,22 @@ export default function CarList() {
 							<div className={styles.td}>
 								{newPost && (
 									<TextField
-										required
 										name="nameInput"
 										label="名称"
 										type="text"
-										id=""
 										className={styles.text}
+										InputLabelProps={{ shrink: true }}
 									/>
 								)}
 							</div>
 							<div className={styles.td}>
 								{newPost && (
 									<TextField
-										required
 										name="numberInput"
 										label="ナンバー"
 										type="text"
-										id=""
 										className={styles.text}
+										InputLabelProps={{ shrink: true }}
 									/>
 									)}
 							</div>
@@ -332,7 +335,7 @@ export default function CarList() {
 										)
 									}}
 								>
-									{newPost ? "キャンセル" : "新規登録"}
+								{newPost ? "取消" : "新規登録"}
 								</Button>
 							</div>
 							<div className={styles.td}>
