@@ -131,3 +131,6 @@ input[type=text] {
 		margin:0 10px;
 	}
 }
+.react-datepicker-popper{
+	z-index: 100 !important;
+}

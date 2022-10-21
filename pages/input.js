@@ -105,6 +105,7 @@ export default function Input() {
 						aria-labelledby="demo-radio-buttons-group-label"
 						defaultValue="female"
 						name="radio-buttons-group"
+						style={{display:"inline-block"}}
 					>
 						<FormControlLabel value="男性" control={<Radio />} label="男性" />
 						<FormControlLabel value="女性" control={<Radio />} label="女性" />
