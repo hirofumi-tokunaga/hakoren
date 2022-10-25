@@ -21,10 +21,10 @@ export default function CarList() {
 	const [selectId, setSelectId] = useState()
 	const [selectName, setSelectName] = useState()
 	const [open, setOpen] = useState(false)
-	const [carId, setCarId] = useState([])
 	const [edit, setEdit] = useState(false)
 	const [editName, setEditName] = useState()
-	const [editNumber, setEditNumber] = useState()
+	const [editNumberA, setEditNumberA] = useState()
+	const [editNumberB, setEditNumberB] = useState()
 	const [editClass, setEditClass] = useState()
 	const [sortSw, setSortSw] = useState([false, false, false, false, false])
 	const [newPost,setNewPost] = useState(false)
@@ -36,7 +36,6 @@ export default function CarList() {
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist'))
-			setCarId(await getId('carlist'))
 			setClassList(await getDb('class'))
 			setSelectClass(classList[0]?.name)
 		}
@@ -48,18 +47,19 @@ export default function CarList() {
 		event.preventDefault();
 		let data = new FormData(event.currentTarget);
 		let name = data.get('nameInput')
-		let number = data.get('numberInput')
+		let numberA = data.get('numberInputA')
+		let numberB = data.get('numberInputB')
 		let cl = data.get('classInput')
 		let object = {
 			name: name,
-			number: number,
+			number_a: numberA,
+			number_b: numberB,
 			class: cl
 		}
 		setLoading(true)
 		await addData('carlist',object)
 		setNewPost(false)
 		setCarList(await getDb('carlist'))
-		setCarId(await getId('carlist'))
 		sort()
 		setLoading(false)
 	}
@@ -70,21 +70,24 @@ export default function CarList() {
 	async function handleSet(id) {
 		let object = {
 			name: editName,
-			number: editNumber,
+			number_a: editNumberA,
+			number_b: editNumberB,
 			class: editClass
 		}
 		await setData("carlist", object, id)
 		setSelectId("")
 		setEdit(false)
 		setCarList(await getDb('carlist'))
-		setCarId(await getId('carlist'))
 		sort()
 	}
 	const handleNameChange = (event) => {
 		setEditName(event.target.value)
 	}
-	const handleNumberChange = (event) => {
-		setEditNumber(event.target.value)
+	const handleNumberChangeA = (event) => {
+		setEditNumberA(event.target.value)
+	}
+	const handleNumberChangeB = (event) => {
+		setEditNumberB(event.target.value)
 	}
 	const handleClassChange = (event) => {
 		setEditClass(event.target.value)
@@ -97,7 +100,6 @@ export default function CarList() {
 		setSelectId("")
 		setSelectName("")
 		setCarList(await getDb('carlist'))
-		setCarId(await getId('carlist'))
 		sort()
 		setLoading(false)
 	}
@@ -136,8 +138,17 @@ export default function CarList() {
 								}}>ソート</Button>
 							</div>
 							<div className={styles.th}>
-								ナンバー<Button className={styles.btn} onClick={() => {
-									setOrder("number")
+
+							ナンバー
+							<Button className={styles.btn} onClick={() => {
+								setOrder("number_a")
+								setSortSw((prevState) =>
+									prevState.map((value, index) => (index === 2 ? !value : value))
+								)
+								setSwitchId(2)
+							}}>ソート</Button>
+							<Button className={styles.btn} onClick={() => {
+									setOrder("number_b")
 									setSortSw((prevState) =>
 										prevState.map((value, index) => (index === 2 ? !value : value))
 									)
@@ -194,13 +205,25 @@ export default function CarList() {
 											</div>
 											<div className={styles.td}>
 												<TextField
-													name="numberInput"
+													name="numberInputA"
 													label="ナンバー"
 													type="text"
 													id=""
-													defaultValue={item.number}
-													onChange={handleNumberChange}
-													value={editNumber}
+													defaultValue={item.number_a}
+													onChange={handleNumberChangeA}
+													value={editNumberA}
+													InputLabelProps={{ shrink: true }}
+												/>
+											</div>
+											<div className={styles.td}>
+												<TextField
+													name="numberInputB"
+													label="ナンバー（下４桁）"
+													type="text"
+													id=""
+													defaultValue={item.number_b}
+													onChange={handleNumberChangeB}
+													value={editNumberB}
 													InputLabelProps={{ shrink: true }}
 												/>
 											</div>
@@ -214,7 +237,10 @@ export default function CarList() {
 												{item.name}
 											</div>
 											<div className={styles.td}>
-												{item.number}
+												{item.number_a}
+											</div>
+											<div className={styles.td}>
+												{item.number_b}
 											</div>
 										</>
 									)}
@@ -227,16 +253,18 @@ export default function CarList() {
 												<>
 													{setEdit(false)}
 													{setEditName(item.name)}
-													{setEditNumber(item.number)}
+													{setEditNumberA(item.number_a)}
+													{setEditNumberB(item.number_b)}
 													{setEditClass(item.class)}
 												</>
 											) : (
 													<>
 														{setSelectClass(item.class) }
 														{setEdit(index)}
-														{setSelectId(carId[index])}
+														{setSelectId(carList[index].id)}
 														{setEditName(item.name)}
-														{setEditNumber(item.number)}
+														{setEditNumberA(item.number_a)}
+														{setEditNumberB(item.number_b)}
 														{setEditClass(item.class)}
 													</>
 											)
@@ -251,10 +279,10 @@ export default function CarList() {
 											className={styles.btn}
 											onClick={() => {
 												edit === index ? (
-													handleSet(carId[index])
+													handleSet(carList[index].id)
 												): (
 													<>
-														{ setSelectId(carId[index]) }
+														{ setSelectId(carList[index].id) }
 														{ setSelectName(item.name) }
 														{ setOpen(true) }
 													</>
@@ -309,7 +337,7 @@ export default function CarList() {
 							<div className={styles.td}>
 								{newPost && (
 									<TextField
-										name="numberInput"
+										name="numberInputA"
 										label="ナンバー"
 										type="text"
 										className={styles.text}
@@ -317,7 +345,17 @@ export default function CarList() {
 									/>
 									)}
 							</div>
-
+							<div className={styles.td}>
+								{newPost && (
+									<TextField
+										name="numberInputB"
+										label="ナンバー"
+										type="text"
+										className={styles.text}
+										InputLabelProps={{ shrink: true }}
+									/>
+								)}
+							</div>
 							<div className={styles.td}>
 								<Button
 									variant="outlined"

@@ -5,9 +5,8 @@
 		display: flex;
 		width:100%;
 		padding:10px;
-		.th,
-		.td{
-
+		.th{
+			padding:5px;
 			align-self: center;
 			&:nth-child(1){
 				width:20%;
@@ -28,7 +27,32 @@
 				justify-content: center;
 				display: flex;
 			}
+		}
+		.td{
 			padding:5px;
+			align-self: center;
+			&:nth-child(1){
+				width:20%;
+			}
+			&:nth-child(2){
+				width:30%;
+			}
+			&:nth-child(3){
+				width:15%;
+			}
+			&:nth-child(4){
+				width:15%;
+			}
+			&:nth-child(5){
+				width:10%;
+				justify-content: center;
+				display: flex;
+			}
+			&:nth-child(6){
+				width:10%;
+				justify-content: center;
+				display: flex;
+			}
 		}
 		.btn{
 			font-size: var(--small);
@@ -48,7 +72,9 @@
 			}
 			.td{
 				text-align: left;
-
+				&:nth-child(3){
+					text-align: right;
+				}
 			}
 		}
 	}

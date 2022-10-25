@@ -3,7 +3,6 @@ import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, query, orderBy } f
 
 export async function getDb(collectionName) {
 	try {
-		let posts = []
 		const collect = await collection(db, collectionName)
 		const docSet = await getDocs(collect)
 		const docList = docSet.docs.map(doc => doc.data())

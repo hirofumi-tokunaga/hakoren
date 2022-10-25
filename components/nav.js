@@ -20,6 +20,11 @@ export default function Nav() {
 						<a>INPUT</a>
 					</Link>
 				</li>
+				<li>
+					<Link href="/view">
+						<a>稼働表</a>
+					</Link>
+				</li>
 			</ul>
 		</nav>
 	)

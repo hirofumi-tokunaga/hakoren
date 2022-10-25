@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react'
-import { getDb,  deleteData, setData, addData, getSortData } from 'components/api'
+import { getDb, addData } from 'components/api'
 
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
 
 import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
@@ -27,7 +24,7 @@ export default function Input() {
 	const [endTime, setEndTime] = useState("20:30")
 	const [loading,setLoading] = useState(false)
 	const [scheduleOk,setScheduleOk] = useState(false)
-	const [carList, setCarList] = useState([{}])
+	const [carList, setCarList] = useState([])
 	const [okCar, setOkCar] = useState([])
 	const [selectCarId,setSelectCarId] = useState()
 	const [isSearch, setIsSearch] = useState(false)
@@ -101,7 +98,6 @@ export default function Input() {
 			let newItems = []
 			carList.forEach((car) => {
 				let carOK = true
-
 				bookingInfo.forEach((info) => {
 					if (info.carId === car.id) {
 						var startDate = Number(info.startDate)
