@@ -47,9 +47,9 @@ export default function View() {
 						<Box className={styles.th}>
 							{transDate(Today)}
 						</Box>
-						{[...Array(9)].map(() => {
+						{[...Array(9)].map((_, i) => {
 							return(
-								<Box className={styles.th}>
+								<Box className={styles.th} key={i}>
 									{transDate(Today,1)}
 								</Box>
 							)
@@ -71,9 +71,9 @@ export default function View() {
 										({car.name})
 									</span>
 								</Box>
-								{[...Array(20)].map(() => {
+								{[...Array(20)].map((_, i) => {
 									return (
-										<Box className={styles.td}>
+										<Box className={styles.td} key={i}>
 											{ }
 										</Box>
 									)
