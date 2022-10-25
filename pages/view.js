@@ -59,7 +59,7 @@ export default function View() {
 				<Box className={styles.body}>
 					{carList.map((car) => {
 						return (
-							<Box className={styles.tr}>
+							<Box className={styles.tr} key={car.id}  >
 								<Box className={styles.td}>
 									<span>
 										{car.number_a}
