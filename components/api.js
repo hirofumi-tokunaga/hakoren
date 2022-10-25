@@ -2,40 +2,35 @@ import { db } from 'components/firebase'
 import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, query, orderBy } from 'firebase/firestore/lite';
 
 export async function getDb(collectionName) {
-	try{
+	try {
+		let posts = []
 		const collect = await collection(db, collectionName)
 		const docSet = await getDocs(collect)
 		const docList = docSet.docs.map(doc => doc.data())
-		return docList
-	} catch (err){
-		console.log('~~ getDb ~~')
-		console.log(err)
-	}
-}
-export async function getId(collectionName) {
-	try{
-		const collect = await collection(db, collectionName)
-		const docSet = await getDocs(collect)
 		let ids = []
 		docSet.docs.forEach(doc => {
 			ids.push(
 				doc.id
 			)
 		})
-		return ids
+		docList.forEach((item,index) => {
+			item.id = ids[index]
+		})
+		console.log("docList",docList)
+		return docList
 	} catch (err){
-		console.log('~~ getId ~~')
+		console.log('~~ getDb ~~')
 		console.log(err)
-	} 
+	}
 }
 export async function addData(collectionName,object){
 	try{
-		const val = await addDoc(collection(db,collectionName), object) 
+		const val = await addDoc(collection(db,collectionName), object)
 		return val
 	} catch (err){
 		console.log('~~ addData ~~')
 		console.log(err)
-	} 
+	}
 }
 export async function deleteData(collectionName,id){
 	try{
@@ -43,7 +38,7 @@ export async function deleteData(collectionName,id){
 	} catch (err){
 		console.log('~~ deleteData ~~')
 		console.log(err)
-	} 
+	}
 }
 export async function setData(collectionName, object, id){
 	try{
@@ -51,7 +46,7 @@ export async function setData(collectionName, object, id){
 	} catch (err){
 		console.log('~~ setData ~~')
 		console.log(err)
-	} 
+	}
 }
 export async function getSortData(collectionName, order, desc){
 	try{
@@ -62,5 +57,5 @@ export async function getSortData(collectionName, order, desc){
 	} catch (err){
 		console.log('~~ getSortData ~~')
 		console.log(err)
-	} 
+	}
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDb, getId, deleteData, setData, addData, getSortData } from 'components/api'
+import { getDb,  deleteData, setData, addData, getSortData } from 'components/api'
 
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -28,39 +28,62 @@ export default function Input() {
 	const [loading,setLoading] = useState(false)
 	const [scheduleOk,setScheduleOk] = useState(false)
 	const [carList, setCarList] = useState([{}])
-	const [carId, setCarId] = useState([])
-	const [okCarId,setOkCarId] = useState([])
+	const [okCar, setOkCar] = useState([])
+	const [selectCarId,setSelectCarId] = useState()
+	const [isSearch, setIsSearch] = useState(false)
 
 	const handlePersonalData = async (event) => {
 		event.preventDefault();
 		let data = new FormData(event.currentTarget);
-		let id = "testCarId"
-		let object = {
-			firstName: data.get('firstName'),
-			familyName: data.get('familyName'),
-			firstNameKana: data.get('firstNameKana'),
-			familyNameKana: data.get('familyNameKana'),
-			tel: data.get('tel'),
-			gender: data.get('gender'),
-			startDate: transDate(startDate),
-			startTime: startTime,
-			endDate: transDate(endDate),
-			endTime: endTime,
-			carId: id,
+		if (inputCheck(data)) {
+			let object = {
+				firstName: data.get('firstName'),
+				familyName: data.get('familyName'),
+				firstNameKana: data.get('firstNameKana'),
+				familyNameKana: data.get('familyNameKana'),
+				tel: data.get('tel'),
+				gender: data.get('gender'),
+				startDate: transDate(startDate),
+				startTime: startTime,
+				endDate: transDate(endDate),
+				endTime: endTime,
+				carId: selectCarId,
+			}
+			setLoading(true)
+			handleDateCheck()
+			if(scheduleOk){
+				await addData('bookinginfo', object).then(() => {
+					setStartDate(Today)
+					setEndDate(Today)
+					setStartTime("08:30")
+					setEndTime("20:30")
+				})
+			}else{
+				alert("予約が重なってしまい、予約が出来ませんでした")
+			}
+			setLoading(false)
+		} else {
+			alert("入力項目に不備があります")
 		}
-		setLoading(true)
-		handleDateCheck()
-		if(scheduleOk){
-			await addData('bookinginfo', object).then(() => {
-				setStartDate(Today)
-				setEndDate(Today)
-				setStartTime("08:30")
-				setEndTime("20:30")
-			})
-		}else{
-			alert("予約が重なってしまい、予約が出来ませんでした")
+	}
+	const inputCheck = (data) => {
+		if (
+			data.get('firstName') &&
+			data.get('familyName') &&
+			data.get('firstNameKana') &&
+			data.get('familyNameKana') &&
+			data.get('tel') &&
+			data.get('gender') &&
+			transDate(startDate) &&
+			startTime &&
+			transDate(endDate) &&
+			endTime &&
+			selectCarId
+		) {
+			return true
+		} else {
+			return false
 		}
-		setLoading(false)
 	}
 	const transDate = (date) => {
 		var dd = String(date.getDate()).padStart(2, "0")
@@ -69,33 +92,46 @@ export default function Input() {
 		return yyyy + mm + dd
 	}
 
-	const handleDateCheck = async() => {
+	const handleDateCheck = async () => {
 		let currentStart = Number(transDate(startDate))
 		let currentEnd = Number(transDate(endDate))
 		setScheduleOk(false)
 		await getDb('bookinginfo').then((bookingInfo) => {
-			let ids = []
-			bookingInfo.forEach((doc,index) => {
-				var startDate = Number(doc.startDate)
-				var endDate = Number(doc.endDate)
-				if(( endDate < currentStart ) 
-				|| ( currentEnd < startDate )){
-					setScheduleOk(true)
-					ids.push(
-						carId[index]
+			let okCarList = []
+			let newItems = []
+			carList.forEach((car) => {
+				let carOK = true
+
+				bookingInfo.forEach((info) => {
+					if (info.carId === car.id) {
+						var startDate = Number(info.startDate)
+						var endDate = Number(info.endDate)
+						if(!(( endDate < currentStart )
+						|| ( currentEnd < startDate ))){
+							carOK = false
+						}
+					}
+				})
+				if (carOK) {
+					okCarList.push(
+						car.id
 					)
+					newItems.push(carList.filter((item) => item.id === car.id)[0])
+					setScheduleOk(true)
 				}
 			})
-			setOkCarId(carId)
+			setOkCar(newItems)
 		})
 	}
 	useEffect(() => {
-		handleDateCheck()
+		async function init() {
+			setCarList(await getDb('carlist'))
+		}
+		init();
 	}, [])
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist'))
-			setCarId(await getId('carlist'))
 			handleDateCheck()
 		}
 		init();
@@ -129,29 +165,35 @@ export default function Input() {
 					className={styles.btn}
 					variant="contained"
 					sx={{ mb: 2 }}
-					onClick={handleDateCheck}
+					onClick={() => {
+						handleDateCheck()
+						setIsSearch(true)
+					}}
 				>在庫検索</Button>
-				<p style={scheduleOk ? {color:"#0000ff"} : {color:"#ff0000"}}>{scheduleOk ? "在庫が在ります" : "在庫がありません"}</p>
+				<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch &&(scheduleOk ? "以下の在庫が在ります" : "在庫がありません")}</p>
 				<div className={styles.table}>
-					{carList && (carList.map((item, index) => {
-						return (
-							<>
-								{okCarId[index] === carId[index] && (
-									<Box key={index} className={styles.tr}>
-										<label className={styles.td}>
-											{item.name}
-										</label>
-										<label className={styles.td}>
-											{item.number}
-										</label>
-									</Box>
-								)}
-							</>
-						)
-					}))}
+					<RadioGroup>
+						{isSearch && (okCar.map((item, index) => {
+							return (
+								<>
+									<FormControlLabel key={index} value={item.id} control={<Radio />} label={
+										<div>
+											<label className={styles.td}>
+												{item.name}
+											</label>
+											<label className={styles.td}>
+												{item.number}
+											</label>
+										</div>
+									}
+										onChange={() => setSelectCarId(item.id)}
+									/>
+								</>
+							)}
+						))}
+					</RadioGroup>
 				</div>
 			</Box>
-
 
 			<Box className={styles.personalData} component="form" noValidate onSubmit={handlePersonalData} >
 				<Box className={`${styles.box} ${styles.name}`}>
