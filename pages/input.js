@@ -92,7 +92,6 @@ export default function Input() {
 	const handleDateCheck = async () => {
 		let currentStart = Number(transDate(startDate))
 		let currentEnd = Number(transDate(endDate))
-		setScheduleOk(false)
 		await getDb('bookinginfo').then((bookingInfo) => {
 			let okCarList = []
 			let newItems = []
@@ -167,28 +166,31 @@ export default function Input() {
 					}}
 				>在庫検索</Button>
 				<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch &&(scheduleOk ? "以下の在庫が在ります" : "在庫がありません")}</p>
-				<div className={styles.table}>
-					<RadioGroup>
-						{isSearch && (okCar.map((item, index) => {
+				<RadioGroup>
+					<ul className={styles.cardata}>
+						{isSearch && (okCar.map((item) => {
 							return (
-								<>
-									<FormControlLabel key={index} value={item.id} control={<Radio />} label={
-										<div>
-											<label className={styles.td}>
+								<li key={item.id}>
+									<FormControlLabel value={item.id} control={<Radio />} label={
+										<>
+											<label  className={styles.td}>
 												{item.name}
 											</label>
 											<label className={styles.td}>
-												{item.number}
+												{item.number_a}
 											</label>
-										</div>
+											<label className={styles.td}>
+												{item.number_b}
+											</label>
+										</>
 									}
 										onChange={() => setSelectCarId(item.id)}
 									/>
-								</>
+								</li>
 							)}
 						))}
-					</RadioGroup>
-				</div>
+					</ul>
+				</RadioGroup>
 			</Box>
 
 			<Box className={styles.personalData} component="form" noValidate onSubmit={handlePersonalData} >

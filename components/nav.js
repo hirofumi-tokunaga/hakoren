@@ -12,12 +12,12 @@ export default function Nav() {
 				</li>
 				<li>
 					<Link href="/cars/car_list">
-						<a>CAR_LIST</a>
+						<a>車両一覧</a>
 					</Link>
 				</li>
 				<li>
 					<Link href="/input">
-						<a>INPUT</a>
+						<a>予約</a>
 					</Link>
 				</li>
 				<li>

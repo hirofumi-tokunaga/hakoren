@@ -8,6 +8,7 @@
 	--modal:#444444;
 	--border:#c4c4c4;
 	/* タイポグラフィ（フォントサイズ） */
+	--min:9px;
 	--small: 11px;
 	--body: 14px;
 	--display:clamp(4.5rem,1.83rem + 11.34vw,10rem ); /* 72-160 */
@@ -28,7 +29,7 @@
 
 /* 基本設定 */
 body {
-	color: var(--black);
+	color:var(--font-primary);
 	font-family: -apple-system, BlinkMacSystemFont,'Segoe UI',Helvetica, Arial,sans-serif;
 	font-size: var(--body);
 }
@@ -50,7 +51,6 @@ body,h1,h2,h3,p,figure,ul{
 }
 *,*::before,*::after{
 	box-sizing: border-box;
-	color:var(--font-primary)
 }
 a{
 	color:inherit;

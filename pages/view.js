@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDb, addData, getSortData } from 'components/api'
+import { getDb, addData } from 'components/api'
 
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -15,22 +15,65 @@ import DatePicker_Custom from 'components/datepicker-custom'
 import TimePicker from 'components/timepicker'
 import styles from 'styles/view.module.scss'
 
-
+const putDate = (dateStr, i = 0) => {
+	let yy = dateStr.slice(0, 4)
+	let mm = dateStr.slice(4, 6)
+	let dd = dateStr.slice(6, 8)
+	let newDate = new Date(yy, mm - 1  , Number(dd) + i, 1, 0, 0)
+	var y = newDate.getFullYear();
+	var m = ("00" + (newDate.getMonth() + 1) ).slice(-2);
+	var d = ("00" + newDate.getDate()).slice(-2);
+	return `${m} / ${d}`
+}
+const getDateString = (date) => {
+	var y = date.getFullYear();
+	var m = ("00" + (date.getMonth() + 1)).slice(-2);
+	var d = ("00" + date.getDate()).slice(-2);
+	var result = y + m + d;
+	return result;
+}
 export default function View() {
-	const Today = new Date()
+	const Today = getDateString(new Date())
+	const daySpan = 10
 	const [loading, setLoading] = useState(false)
 	const [carList, setCarList] = useState([])
+	const [scheduleList,setScheduleList] = useState([])
+	const [bookingInfo, setBookingInfo] = useState([])
+	const [baseDate,setBaseDate] = useState(new Date())
 
-	const transDate = (dt, i = 0) => {
-		dt.setDate(dt.getDate() + (i) )
-		var dd = dt.getDate()
-		var mm = dt.getMonth() + 1
-		// var yyyy = date.getFullYear()
-		return `${mm} / ${dd}`
+	const calcDate = (dateStr1,dateStr2) => {
+		let yy1 = dateStr1.slice(0, 4)
+		let mm1 = dateStr1.slice(4, 6)
+		let dd1 = dateStr1.slice(6, 8)
+		let dt1 = new Date(yy1 , mm1 - 1 , dd1, 1, 0, 0)
+		let yy2 = dateStr2.slice(0, 4)
+		let mm2 = dateStr2.slice(4, 6)
+		let dd2 = dateStr2.slice(6, 8)
+		let dt2 = new Date(yy2 , mm2 - 1, dd2, 1, 0, 0)
+		var sa = (dt1 - dt2) / 86400000
+		return sa
+	}
+
+
+
+	const setCarSchedule = () => {
+		let carToSchedule = []
+		carList.map((car) => (
+			carToSchedule.push(bookingInfo.filter((item) => item.carId === car.id))
+		))
+		console.log("carTo", carToSchedule)
+		setScheduleList(carToSchedule)
 	}
 	useEffect(() => {
+		setCarSchedule()
+	}, [bookingInfo])
+	useEffect(() => {
 		async function init() {
-			setCarList(await getSortData('carlist','number_b',true))
+			setCarList(await getDb('carlist', 'number_b', true))
+			setBookingInfo(await getDb('bookinginfo'))
+			await setCarSchedule()
+			calcDate('20221023', '20221020')
+			setBaseDate(Today)
 		}
 		init();
 	}, [])
@@ -44,20 +87,17 @@ export default function View() {
 						<Box className={styles.th}>
 							{}
 						</Box>
-						<Box className={styles.th}>
-							{transDate(Today)}
-						</Box>
-						{[...Array(9)].map((_, i) => {
+						{[...Array(daySpan - 1)].map((_, i) => {
 							return(
 								<Box className={styles.th} key={i}>
-									{transDate(Today,1)}
+									{putDate(Today,i)}
 								</Box>
 							)
 						})}
 					</Box>
 				</Box>
 				<Box className={styles.body}>
-					{carList.map((car) => {
+					{carList.map((car,index) => {
 						return (
 							<Box className={styles.tr} key={car.id}  >
 								<Box className={styles.td}>
@@ -71,13 +111,45 @@ export default function View() {
 										({car.name})
 									</span>
 								</Box>
-								{[...Array(20)].map((_, i) => {
+								{[...Array(daySpan * 2)].map((_, i) => {
 									return (
 										<Box className={styles.td} key={i}>
 											{ }
 										</Box>
 									)
 								})}
+								<Box className={styles.scheduleBox}>
+									{scheduleList[index]?.map((item) => {
+										return (
+											<Box className={styles.schedule} key={item.id}
+												style={{
+													left: `${Number(calcDate(item.startDate,baseDate )) * 100}px`,
+													width: `${Number(calcDate(item.endDate, item.startDate) + 1) * 100}px`
+												}}
+												>
+												{console.log(item.id,
+													`"${Number(calcDate(baseDate, item.startDate)) * 80}px"`,
+													calcDate(item.startDate, baseDate)
+												)}
+												<Box className={styles.scheduleInfo}>
+													<p className={styles.name}>{item.familyNameKana} {item.firstNameKana}</p>
+													<Box className={styles.time}>
+														<div className={styles.start}>
+															<p>出発</p>
+															<p>{putDate(item.startDate)}</p>
+															{item.startTime}
+														</div>
+														<div className={styles.end}>
+															<p>返却</p>
+															<p>{putDate(item.endDate)}</p>
+															{item.endTime}
+														</div>
+													</Box>
+												</Box>
+											</Box>
+										)
+									})}
+								</Box>
 							</Box>
 						)
 					})}

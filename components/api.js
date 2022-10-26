@@ -1,10 +1,16 @@
 import { db } from 'components/firebase'
 import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, query, orderBy } from 'firebase/firestore/lite';
 
-export async function getDb(collectionName) {
+export async function getDb(collectionName, order = null, desc = true) {
 	try {
 		const collect = await collection(db, collectionName)
-		const docSet = await getDocs(collect)
+		let docSet
+		if (order) {
+			docSet = await getDocs(query(collect, orderBy(order, desc ? "desc" : "")))
+		} else {
+			docSet = await getDocs(collect)
+		}
+
 		const docList = docSet.docs.map(doc => doc.data())
 		let ids = []
 		docSet.docs.forEach(doc => {
@@ -15,7 +21,6 @@ export async function getDb(collectionName) {
 		docList.forEach((item,index) => {
 			item.id = ids[index]
 		})
-		console.log("docList",docList)
 		return docList
 	} catch (err){
 		console.log('~~ getDb ~~')
@@ -47,14 +52,23 @@ export async function setData(collectionName, object, id){
 		console.log(err)
 	}
 }
-export async function getSortData(collectionName, order, desc){
-	try{
-		const collect = await collection(db, collectionName)
-		const val = await getDocs(query(collect, orderBy(order, desc ? "desc" : "")))
-		const docList = val.docs.map(doc => doc.data())
-		return docList
-	} catch (err){
-		console.log('~~ getSortData ~~')
-		console.log(err)
-	}
-}
+// export async function getSortData(collectionName, order, desc){
+// 	try{
+// 		const collect = await collection(db, collectionName)
+// 		const val = await getDocs(query(collect, orderBy(order, desc ? "desc" : "")))
+// 		const docList = val.docs.map(doc => doc.data())
+// 		let ids = []
+// 		val.docs.forEach(doc => {
+// 			ids.push(
+// 				doc.id
+// 			)
+// 		})
+// 		docList.forEach((item, index) => {
+// 			item.id = ids[index]
+// 		})
+// 		return docList
+// 	} catch (err){
+// 		console.log('~~ getSortData ~~')
+// 		console.log(err)
+// 	}
+// }

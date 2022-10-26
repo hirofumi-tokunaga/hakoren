@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDb, getId, deleteData, setData, addData, getSortData } from 'components/api'
+import { getDb, deleteData, setData, addData  } from 'components/api'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
@@ -35,9 +35,9 @@ export default function CarList() {
 	// 読み込み ----------------------
 	useEffect(() => {
 		async function init() {
-			setCarList(await getDb('carlist'))
+			setCarList(await getDb('carlist','number_b',true))
 			setClassList(await getDb('class'))
-			setSelectClass(classList[0]?.name)
+			setSelectClass(await classList[0]?.name)
 		}
 		init();
 	}, [])
@@ -59,7 +59,6 @@ export default function CarList() {
 		setLoading(true)
 		await addData('carlist',object)
 		setNewPost(false)
-		setCarList(await getDb('carlist'))
 		sort()
 		setLoading(false)
 	}
@@ -77,7 +76,6 @@ export default function CarList() {
 		await setData("carlist", object, id)
 		setSelectId("")
 		setEdit(false)
-		setCarList(await getDb('carlist'))
 		sort()
 	}
 	const handleNameChange = (event) => {
@@ -99,14 +97,15 @@ export default function CarList() {
 		setOpen(false);
 		setSelectId("")
 		setSelectName("")
-		setCarList(await getDb('carlist'))
 		sort()
 		setLoading(false)
 	}
 	// ソート ----------------------
 	async function sort() {
 		if (order) {
-			setCarList(await getSortData('carlist',order,sortSw[switchId]))
+			setCarList(await getDb('carlist',order,sortSw[switchId]))
+		} else {
+			setCarList(await getDb('carlist', "number_b", true))
 		}
 	}
 	useEffect(() => {
@@ -173,7 +172,6 @@ export default function CarList() {
 												<FormControl>
 													<InputLabel InputLabelProps={{ shrink: true }}>クラス</InputLabel>
 													<Select
-														id=""
 														value={editClass}
 														label="クラス"
 														onChange={handleClassChange}
@@ -196,7 +194,6 @@ export default function CarList() {
 													name="nameInput"
 													label="名称"
 													type="text"
-													id=""
 													defaultValue={item.name}
 													value={editName}
 													onChange={handleNameChange}
@@ -208,7 +205,6 @@ export default function CarList() {
 													name="numberInputA"
 													label="ナンバー"
 													type="text"
-													id=""
 													defaultValue={item.number_a}
 													onChange={handleNumberChangeA}
 													value={editNumberA}
@@ -220,7 +216,6 @@ export default function CarList() {
 													name="numberInputB"
 													label="ナンバー（下４桁）"
 													type="text"
-													id=""
 													defaultValue={item.number_b}
 													onChange={handleNumberChangeB}
 													value={editNumberB}
