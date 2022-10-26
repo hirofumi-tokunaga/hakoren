@@ -127,10 +127,7 @@ export default function View() {
 													width: `${Number(calcDate(item.endDate, item.startDate) + 1) * 100}px`
 												}}
 												>
-												{console.log(item.id,
-													`"${Number(calcDate(baseDate, item.startDate)) * 80}px"`,
-													calcDate(item.startDate, baseDate)
-												)}
+												
 												<Box className={styles.scheduleInfo}>
 													<p className={styles.name}>{item.familyNameKana} {item.firstNameKana}</p>
 													<Box className={styles.time}>
