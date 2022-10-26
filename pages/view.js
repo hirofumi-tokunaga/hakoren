@@ -6,9 +6,14 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
 
 import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
@@ -81,6 +86,24 @@ export default function View() {
 		<>
 			<Loading loading={loading} />
 			<h2>稼働表</h2>
+			<Box className={styles.buttons}>
+				<Button>
+					<KeyboardDoubleArrowLeftIcon/>
+					10日
+				</Button>
+				<Button>
+					<ArrowBackIosIcon style={{fontSize:"medium"}}/>
+					1日
+				</Button>
+				<Button>
+					1日
+					<ArrowForwardIosIcon style={{fontSize:"medium"}}/>
+				</Button>
+				<Button>
+					10日
+					<KeyboardDoubleArrowRightIcon/>
+				</Button>
+			</Box>
 			<Box className={styles.table} >
 				<Box className={styles.thead}>
 					<Box className={styles.tr}>

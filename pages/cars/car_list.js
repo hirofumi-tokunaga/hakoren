@@ -296,7 +296,7 @@ export default function CarList() {
 							<div className={styles.td}>
 								{newPost && (
 									<FormControl className={styles.classinput}>
-									<InputLabel className="input-label" shrink={true} >クラス</InputLabel>
+										<InputLabel className="input-label" shrink={true} >クラス</InputLabel>
 										<Select
 											id=""
 											value={selectClass}

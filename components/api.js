@@ -52,23 +52,3 @@ export async function setData(collectionName, object, id){
 		console.log(err)
 	}
 }
-// export async function getSortData(collectionName, order, desc){
-// 	try{
-// 		const collect = await collection(db, collectionName)
-// 		const val = await getDocs(query(collect, orderBy(order, desc ? "desc" : "")))
-// 		const docList = val.docs.map(doc => doc.data())
-// 		let ids = []
-// 		val.docs.forEach(doc => {
-// 			ids.push(
-// 				doc.id
-// 			)
-// 		})
-// 		docList.forEach((item, index) => {
-// 			item.id = ids[index]
-// 		})
-// 		return docList
-// 	} catch (err){
-// 		console.log('~~ getSortData ~~')
-// 		console.log(err)
-// 	}
-// }
