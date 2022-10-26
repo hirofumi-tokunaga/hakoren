@@ -18,6 +18,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
 import TimePicker from 'components/timepicker'
+import MainHead from 'components/mainhead'
 import styles from 'styles/view.module.scss'
 
 const putDate = (dateStr, i = 0) => {
@@ -85,7 +86,7 @@ export default function View() {
 	return (
 		<>
 			<Loading loading={loading} />
-			<h2>稼働表</h2>
+			<MainHead title="稼働表" />
 			<Box className={styles.buttons}>
 				<Button>
 					<KeyboardDoubleArrowLeftIcon/>

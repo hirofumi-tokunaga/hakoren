@@ -14,7 +14,7 @@ import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
 import TimePicker from 'components/timepicker'
 import styles from 'styles/input.module.scss'
-
+import MainHead from 'components/mainhead'
 
 export default function Input() {
 	const Today = new Date()
@@ -134,7 +134,7 @@ export default function Input() {
 	return (
 		<>
 			<Loading loading={loading}/>
-			<h2>ご予約</h2>
+			<MainHead title="ご予約" />
 			<Box className={styles.schedule} >
 				<Box className={styles.box}>
 					<FormControl className={styles.day}>
