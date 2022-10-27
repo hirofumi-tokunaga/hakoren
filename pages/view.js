@@ -22,19 +22,39 @@ const putDate = (dateStr, i = 0) => {
 	let yy = dateStr.slice(0, 4)
 	let mm = dateStr.slice(4, 6)
 	let dd = dateStr.slice(6, 8)
-	let newDate = new Date(yy, mm - 1  , Number(dd) + i, 1, 0, 0)
-	var y = newDate.getFullYear();
-	var m = ("00" + (newDate.getMonth() + 1) ).slice(-2);
-	var d = ("00" + newDate.getDate()).slice(-2);
+	let newDate = new Date(yy, mm - 1 ,Number(dd) + i, 1, 0, 0)
+	let y = newDate.getFullYear();
+	let m = ("00" + (newDate.getMonth() + 1) ).slice(-2);
+	let d = ("00" + newDate.getDate()).slice(-2);
 	return `${m} / ${d}`
 }
 const getDateString = (date) => {
-	var y = date.getFullYear();
-	var m = ("00" + (date.getMonth() + 1)).slice(-2);
-	var d = ("00" + date.getDate()).slice(-2);
-	var result = y + m + d;
+	let y = date.getFullYear();
+	let m = ("00" + (date.getMonth() + 1)).slice(-2);
+	let d = ("00" + date.getDate()).slice(-2);
+	let result = y + m + d;
 	return result;
 }
+const calcDate = (dateStr1, dateStr2) => {
+	let yy1 = dateStr1.slice(0, 4)
+	let mm1 = dateStr1.slice(4, 6)
+	let dd1 = dateStr1.slice(6, 8)
+	let dt1 = new Date(yy1, mm1 - 1, dd1, 1, 0, 0)
+	let yy2 = dateStr2.slice(0, 4)
+	let mm2 = dateStr2.slice(4, 6)
+	let dd2 = dateStr2.slice(6, 8)
+	let dt2 = new Date(yy2, mm2 - 1, dd2, 1, 0, 0)
+	let sa = (dt1 - dt2) / 86400000
+	return sa
+}
+const calcDateToNum = (dateStr, calcNum) => {
+	let yy = dateStr.slice(0, 4)
+	let mm = dateStr.slice(4, 6)
+	let dd = dateStr.slice(6, 8)
+	let dt = new Date(yy, mm - 1, Number(dd) + calcNum, 1, 0, 0)
+	return getDateString(dt)
+}
+
 export default function View() {
 	const Today = getDateString(new Date())
 	const daySpan = 10
@@ -42,22 +62,7 @@ export default function View() {
 	const [carList, setCarList] = useState([])
 	const [scheduleList,setScheduleList] = useState([])
 	const [bookingInfo, setBookingInfo] = useState([])
-	const [baseDate,setBaseDate] = useState(new Date())
-
-	const calcDate = (dateStr1,dateStr2) => {
-		let yy1 = dateStr1.slice(0, 4)
-		let mm1 = dateStr1.slice(4, 6)
-		let dd1 = dateStr1.slice(6, 8)
-		let dt1 = new Date(yy1 , mm1 - 1 , dd1, 1, 0, 0)
-		let yy2 = dateStr2.slice(0, 4)
-		let mm2 = dateStr2.slice(4, 6)
-		let dd2 = dateStr2.slice(6, 8)
-		let dt2 = new Date(yy2 , mm2 - 1, dd2, 1, 0, 0)
-		var sa = (dt1 - dt2) / 86400000
-		return sa
-	}
-
-
+	const [baseDate, setBaseDate] = useState(getDateString(new Date()))
 
 	const setCarSchedule = () => {
 		let carToSchedule = []
@@ -75,29 +80,28 @@ export default function View() {
 			setCarList(await getDb('carlist', 'number_b', true))
 			setBookingInfo(await getDb('bookinginfo'))
 			await setCarSchedule()
-			calcDate('20221023', '20221020')
-			setBaseDate(Today)
 		}
 		init();
 	}, [])
+
 	return (
 		<>
 			<Loading loading={loading} />
 			<MainHead title="稼働表" />
 			<Box className={styles.buttons}>
-				<Button>
-					<KeyboardDoubleArrowLeftIcon />
+				<Button onClick={() => setBaseDate(calcDateToNum(baseDate, -10))} >
+					<KeyboardDoubleArrowLeftIcon/>
 					10日
 				</Button>
-				<Button>
+				<Button onClick={() => setBaseDate(calcDateToNum(baseDate, -1))}>
 					<ArrowBackIosIcon style={{ fontSize: "medium" }} />
 					1日
 				</Button>
-				<Button>
+				<Button onClick={() => setBaseDate(calcDateToNum(baseDate, 1))}>
 					1日
 					<ArrowForwardIosIcon style={{ fontSize: "medium" }} />
 				</Button>
-				<Button>
+				<Button onClick={() => setBaseDate(calcDateToNum(baseDate, 10))} >
 					10日
 					<KeyboardDoubleArrowRightIcon />
 				</Button>
@@ -111,7 +115,7 @@ export default function View() {
 						{[...Array(daySpan)].map((_, i) => {
 							return(
 								<Box className={styles.th} key={i}>
-									{putDate(Today,i)}
+									{putDate(baseDate,i)}
 								</Box>
 							)
 						})}

@@ -48,13 +48,17 @@
 		.schedule{
 			background-color: #0000ff99;
 			height:100%;
-			padding:2px 5px;
+			padding:0 8px;
 			position: absolute;
 			font-size:var(--min);
 			color:#fff;
 			.time{
 				display: flex;
 				justify-content: space-between;
+				.start,
+				.end{
+					text-align: center;
+				}
 			}
 		}
 	}
