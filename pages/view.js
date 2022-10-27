@@ -115,11 +115,11 @@ export default function View() {
 		init();
 	}, [])
 	const onControlledDrag = (e, position, itemId) => {
-		console.log("onDrag", x, y, itemId)
+		console.log("onDrag",  position.y, itemId)
 		setPosData((prevState) =>
 			prevState.map(
 				(obj) => (
-					obj.id === itemId ? { id: obj.id, x: position.x, y: position.y } : obj
+					obj.id === itemId ? { id: obj.id, x:0, y: position.y } : obj
 				))
 		)
 	}
