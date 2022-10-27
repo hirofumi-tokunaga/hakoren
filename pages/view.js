@@ -6,13 +6,16 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
 
 import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
 import TimePicker from 'components/timepicker'
+import MainHead from 'components/mainhead'
 import styles from 'styles/view.module.scss'
 
 const putDate = (dateStr, i = 0) => {
@@ -80,7 +83,25 @@ export default function View() {
 	return (
 		<>
 			<Loading loading={loading} />
-			<h2>稼働表</h2>
+			<MainHead title="稼働表" />
+			<Box className={styles.buttons}>
+				<Button>
+					<KeyboardDoubleArrowLeftIcon />
+					10日
+				</Button>
+				<Button>
+					<ArrowBackIosIcon style={{ fontSize: "medium" }} />
+					1日
+				</Button>
+				<Button>
+					1日
+					<ArrowForwardIosIcon style={{ fontSize: "medium" }} />
+				</Button>
+				<Button>
+					10日
+					<KeyboardDoubleArrowRightIcon />
+				</Button>
+			</Box>
 			<Box className={styles.table} style={{ width: `${daySpan * 100 + 180}px ` }}>
 				<Box className={styles.thead}>
 					<Box className={styles.tr}>
