@@ -81,6 +81,43 @@ export default function View() {
 			)
 		}
 	}
+	const onControlledDrag = (e, position, itemId) => {
+		const hit1 = posData.filter((item) => item.y === position.y)
+		const hit2 = hit1.filter((item) => item.id !== itemId)
+		const hit3 = hit2.map((item) => {
+			return(item.id)
+		})
+		const myInfo = bookingInfo.filter((item) => item.id === itemId)[0]
+		let flag = true
+		hit3?.map((target) => {
+			const tgtInfo = bookingInfo.filter((item) => item.id === target)[0]			
+			if(!(( tgtInfo.endDate < myInfo.startDate )
+				|| ( myInfo.endDate < tgtInfo.startDate ))){
+				flag = false
+			} 
+		})
+		if(flag){
+
+			setPosData((prevState) =>
+				prevState.map(
+					(obj) => (
+						obj.id === itemId ? { id: obj.id, x:0, y: position.y } : obj
+					))
+			)
+		}
+	}
+	const scheduleCheck = (itemA,itemB) => {
+		const myInfo = bookingInfo.filter((item) => item.id === itemA)
+		itemB.map((target) => {
+			const tgtInfo = bookingInfo.filter((item) => item.id === target)
+			if(!(( tgtInfo.endDate < myInfo.startDate )
+				|| ( myInfo.endDate < tgtInfo.startDate ))){
+				return false
+			} else {
+				return true
+			}
+		})
+	}
 	useEffect(() => {
 		setCarSchedule()
 	}, [bookingInfo])
@@ -94,18 +131,8 @@ export default function View() {
 			setBookingInfo(await getDb('bookinginfo'))
 			setCarSchedule()
 		}
-		init();
+		init()
 	}, [])
-	const onControlledDrag = (e, position, itemId) => {
-		console.log("onDrag",  position.y, itemId)
-		setPosData((prevState) =>
-			prevState.map(
-				(obj) => (
-					obj.id === itemId ? { id: obj.id, x:0, y: position.y } : obj
-				))
-		)
-	}
-
 	return (
 		<>
 			<Loading loading={loading} />
