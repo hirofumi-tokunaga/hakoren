@@ -24,7 +24,6 @@ const putDate = (dateStr, i = 0) => {
 	let mm = dateStr.slice(4, 6)
 	let dd = dateStr.slice(6, 8)
 	let newDate = new Date(yy, mm - 1 ,Number(dd) + i, 1, 0, 0)
-	let y = newDate.getFullYear();
 	let m = ("00" + (newDate.getMonth() + 1) ).slice(-2);
 	let d = ("00" + newDate.getDate()).slice(-2);
 	return `${m} / ${d}`
@@ -57,7 +56,6 @@ const calcDateToNum = (dateStr, calcNum) => {
 }
 
 export default function View() {
-	const Today = getDateString(new Date())
 	const daySpan = 10
 	const [loading, setLoading] = useState(false)
 	const [carList, setCarList] = useState([])
@@ -65,26 +63,12 @@ export default function View() {
 	const [bookingInfo, setBookingInfo] = useState([])
 	const [baseDate, setBaseDate] = useState(getDateString(new Date()))
 	const [posData, setPosData] = useState([])
-	// handleDrag = (e, ui) => {
-	// 	const { x, y } = this.state.deltaPosition;
-	// 	this.setState({
-	// 		deltaPosition: {
-	// 			x: x + ui.deltaX,
-	// 			y: y + ui.deltaY,
-	// 		}
-	// 	});
-	// };
-
-
-	// const dragHandlers = { onStart: this.onStart, onStop: this.onStop }
-
-
+	
 	const setCarSchedule = () => {
 		let carToSchedule = []
-		carList.map((car) => (
+		carList?.map((car) => (
 			carToSchedule.push(bookingInfo.filter((item) => item.carId === car.id))
 		))
-		console.log("carTo", carToSchedule)
 		setScheduleList(carToSchedule)
 	}
 	const initPos = () => {
@@ -92,7 +76,6 @@ export default function View() {
 			carList?.map((car,index) => (
 					scheduleList[index]?.map((sche,index2) => {
 						setPosData((prevState) => [...prevState, { id: sche.id, x: 0, y: index * 63 }])
-						console.log("posData",posData)
 					})
 				)
 			)
@@ -109,8 +92,7 @@ export default function View() {
 		async function init() {
 			setCarList(await getDb('carlist', 'number_b', true))
 			setBookingInfo(await getDb('bookinginfo'))
-			await setCarSchedule()
-			await initPos()
+			setCarSchedule()
 		}
 		init();
 	}, [])
@@ -191,7 +173,7 @@ export default function View() {
 
 						{carList.map((car, index) => {
 							return (
-								<>
+								<Box key={car.id}>
 									{scheduleList[index]?.map((item, index2) => {
 
 										return (
@@ -199,7 +181,7 @@ export default function View() {
 												<Draggable
 													position={
 														{
-															x: posData?.filter((item2) => item2.id === item.id)[0]?.x,
+															x: 0 ,
 															y: posData?.filter((item2) => item2.id === item.id)[0]?.y
 														}
 													}
@@ -208,18 +190,16 @@ export default function View() {
 													}}
 													axis="y"
 													grid={[63, 63]}
-													// defaultPosition={{ x: 0, y: index * 63 }}
-													key={"3333333333333333333333333333"}
-
 													>
 													<Box className={styles.schedule}
 														style={{
 															left: `${Number(calcDate(item.startDate, baseDate)) * 100}px`,
 															width: `${Number(calcDate(item.endDate, item.startDate) + 1) * 100}px`
 														}}
+														key={item.id}
+														
 													>
-
-														<Box className={styles.scheduleInfo}>
+														<Box className={styles.scheduleInfo} key={item.id}>
 															<p className={styles.name}>{item.familyNameKana} {item.firstNameKana}</p>
 															<Box className={styles.time}>
 																<div className={styles.start}>
@@ -239,7 +219,7 @@ export default function View() {
 											</>
 										)
 									})}
-								</>
+								</Box>
 							)
 						})}
 					</Box>
