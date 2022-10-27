@@ -87,37 +87,10 @@ export default function View() {
 		console.log("carTo", carToSchedule)
 		setScheduleList(carToSchedule)
 	}
-	useEffect(() => {
-		setCarSchedule()
-	}, [bookingInfo])
-	useEffect(() => {
-		async function init() {
-			setCarList(await getDb('carlist', 'number_b', true))
-			setBookingInfo(await getDb('bookinginfo'))
-			await setCarSchedule()
-			initPos()
-		}
-		init();
-	}, [])
-	const onControlledDrag = (e, position, itemId) => {
-		const { x, y } = position;
-		console.log("onDrag", x, y, itemId)
-		// setDragState({ controlledPosition: { x, y } });
-		// const data = [
-		// 	[{ x: "10", y: "20" }, { x: "100", y: "200" }],
-		// 	[{ x: "30", y: "60" }, { x: "150", y: "300" }],
-		// ]
-		setPosData((prevState) =>
-			prevState.map(
-				(obj) => (
-					obj.id === itemId ? { id: obj.id, x: position.x, y: position.y } : obj
-				))
-		)
-	}
 	const initPos = () => {
 		if (carList && scheduleList) {
-			carList.map((car,index) => (
-					scheduleList[index].map((sche,index2) => {
+			carList?.map((car,index) => (
+					scheduleList[index]?.map((sche,index2) => {
 						setPosData((prevState) => [...prevState, { id: sche.id, x: 0, y: index * 63 }])
 						console.log("posData",posData)
 					})
@@ -125,6 +98,32 @@ export default function View() {
 			)
 		}
 	}
+	useEffect(() => {
+		setCarSchedule()
+	}, [bookingInfo])
+	useEffect(() => {
+		initPos()
+	}, [scheduleList])
+	
+	useEffect(() => {
+		async function init() {
+			setCarList(await getDb('carlist', 'number_b', true))
+			setBookingInfo(await getDb('bookinginfo'))
+			await setCarSchedule()
+			await initPos()
+		}
+		init();
+	}, [])
+	const onControlledDrag = (e, position, itemId) => {
+		console.log("onDrag", x, y, itemId)
+		setPosData((prevState) =>
+			prevState.map(
+				(obj) => (
+					obj.id === itemId ? { id: obj.id, x: position.x, y: position.y } : obj
+				))
+		)
+	}
+
 	return (
 		<>
 			<Loading loading={loading} />
@@ -200,8 +199,8 @@ export default function View() {
 												<Draggable
 													position={
 														{
-															x: posData?.filter((item2) => item2.id === item.id)[0].x,
-															y: posData?.filter((item2) => item2.id === item.id)[0].y
+															x: posData?.filter((item2) => item2.id === item.id)[0]?.x,
+															y: posData?.filter((item2) => item2.id === item.id)[0]?.y
 														}
 													}
 													onDrag={(e, position) => {
