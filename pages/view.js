@@ -63,7 +63,7 @@ export default function View() {
 	const [bookingInfo, setBookingInfo] = useState([])
 	const [baseDate, setBaseDate] = useState(getDateString(new Date()))
 	const [posData, setPosData] = useState([])
-	
+
 	const setCarSchedule = () => {
 		let carToSchedule = []
 		carList?.map((car) => (
@@ -90,14 +90,13 @@ export default function View() {
 		const myInfo = bookingInfo.filter((item) => item.id === itemId)[0]
 		let flag = true
 		hit3?.map((target) => {
-			const tgtInfo = bookingInfo.filter((item) => item.id === target)[0]			
+			const tgtInfo = bookingInfo.filter((item) => item.id === target)[0]
 			if(!(( tgtInfo.endDate < myInfo.startDate )
 				|| ( myInfo.endDate < tgtInfo.startDate ))){
 				flag = false
-			} 
+			}
 		})
 		if(flag){
-
 			setPosData((prevState) =>
 				prevState.map(
 					(obj) => (
@@ -124,7 +123,7 @@ export default function View() {
 	useEffect(() => {
 		initPos()
 	}, [scheduleList])
-	
+
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist', 'number_b', true))
@@ -224,7 +223,7 @@ export default function View() {
 															width: `${Number(calcDate(item.endDate, item.startDate) + 1) * 100}px`
 														}}
 														key={item.id}
-														
+
 													>
 														<Box className={styles.scheduleInfo} key={item.id}>
 															<p className={styles.name}>{item.familyNameKana} {item.firstNameKana}</p>
