@@ -1,5 +1,5 @@
 import { db } from 'components/firebase'
-import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, query, orderBy } from 'firebase/firestore/lite';
+import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, query, orderBy,updateDoc} from 'firebase/firestore/lite';
 
 export async function getDb(collectionName, order = null, desc = true) {
 	try {
@@ -49,6 +49,14 @@ export async function setData(collectionName, object, id){
 		await setDoc(doc(db, collectionName, id),object)
 	} catch (err){
 		console.log('~~ setData ~~')
+		console.log(err)
+	}
+}
+export async function setUpDate(collectionName,  id,field,val) {
+	try {
+		await updateDoc(doc(db, collectionName, id),{[field]:val})
+	} catch (err) {
+		console.log('~~ setUpDate ~~')
 		console.log(err)
 	}
 }

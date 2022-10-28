@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDb, addData } from 'components/api'
+import { getDb, setUpDate } from 'components/api'
 import Draggable from 'react-draggable'
 
 import TextField from '@mui/material/TextField'
@@ -57,6 +57,7 @@ const calcDateToNum = (dateStr, calcNum) => {
 
 export default function View() {
 	const daySpan = 10
+	const baseHeight = 63
 	const [loading, setLoading] = useState(false)
 	const [carList, setCarList] = useState([])
 	const [scheduleList,setScheduleList] = useState([])
@@ -75,7 +76,7 @@ export default function View() {
 		if (carList && scheduleList) {
 			carList?.map((car,index) => (
 					scheduleList[index]?.map((sche,index2) => {
-						setPosData((prevState) => [...prevState, { id: sche.id, x: 0, y: index * 63 }])
+						setPosData((prevState) => [...prevState, { id: sche.id, x: 0, y: index * baseHeight }])
 					})
 				)
 			)
@@ -103,7 +104,15 @@ export default function View() {
 						obj.id === itemId ? { id: obj.id, x:0, y: position.y } : obj
 					))
 			)
+
 		}
+	}
+	async function onDrop(e,id){
+		alert("予約データ更新");
+		const carIndex = posData?.filter((item) => item.id === id)[0]?.y / baseHeight
+
+		console.log(carIndex)
+		await setUpDate("bookinginfo",id,"carId",carList[carIndex].id)
 	}
 	const scheduleCheck = (itemA,itemB) => {
 		const myInfo = bookingInfo.filter((item) => item.id === itemA)
@@ -212,10 +221,13 @@ export default function View() {
 														}
 													}
 													onDrag={(e, position) => {
-														onControlledDrag(e, position, item.id)
+														onControlledDrag(e, position, item.id )
+													}}
+													onStop={(e) => {
+														onDrop(e, item.id)
 													}}
 													axis="y"
-													grid={[63, 63]}
+													grid={[baseHeight, baseHeight]}
 													>
 													<Box className={styles.schedule}
 														style={{
