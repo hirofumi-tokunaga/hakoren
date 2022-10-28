@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDb, setUpDate } from 'components/api'
+import { getDb, upDate } from 'components/api'
 import Draggable from 'react-draggable'
 
 import TextField from '@mui/material/TextField'
@@ -112,7 +112,7 @@ export default function View() {
 		const carIndex = posData?.filter((item) => item.id === id)[0]?.y / baseHeight
 
 		console.log(carIndex)
-		await setUpDate("bookinginfo",id,"carId",carList[carIndex].id)
+		await upDate("bookinginfo",id,"carId",carList[carIndex].id)
 	}
 	const scheduleCheck = (itemA,itemB) => {
 		const myInfo = bookingInfo.filter((item) => item.id === itemA)

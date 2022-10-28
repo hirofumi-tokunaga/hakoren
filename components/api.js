@@ -52,7 +52,7 @@ export async function setData(collectionName, object, id){
 		console.log(err)
 	}
 }
-export async function setUpDate(collectionName,  id,field,val) {
+export async function upDate(collectionName,id,field,val) {
 	try {
 		await updateDoc(doc(db, collectionName, id),{[field]:val})
 	} catch (err) {
