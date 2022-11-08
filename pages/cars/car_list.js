@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { getDb, deleteData, setData, addData  } from 'components/api'
+import { getDb, deleteData, setData, addData } from 'components/api'
+import { fireauth } from 'components/firebase'
+
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
@@ -31,7 +33,6 @@ export default function CarList() {
 	const [order, setOrder] = useState("")
 	const [switchId, setSwitchId] = useState()
 	const [loading, setLoading] = useState(false)
-
 	// 読み込み ----------------------
 	useEffect(() => {
 		async function init() {

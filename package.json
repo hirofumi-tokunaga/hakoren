@@ -22,7 +22,10 @@
     "react-dates": "^21.8.0",
     "react-dom": "18.2.0",
     "react-draggable": "^4.4.5",
+    "react-firebaseui": "^6.0.0",
     "react-loading": "^2.0.3",
+    "react-router-dom": "^6.4.3",
+    "recoil": "^0.7.6",
     "sass": "^1.55.0"
   },
   "devDependencies": {
