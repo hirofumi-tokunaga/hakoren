@@ -15,7 +15,7 @@
 		"isolatedModules": true,
 		"jsx": "preserve"
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/signin.tsx"],
 	"exclude": ["node_modules"],
-	"baseUrl": "./",
+	"baseUrl": "./"
 }
