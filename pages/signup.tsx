@@ -4,7 +4,7 @@ import InputLabel from "@mui/material/InputLabel"
 import Button from "@mui/material/Button";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
-import { app } from "components/firebase"
+import { app } from "../components/firebase"
 import { useRouter } from "next/router"
 
 export default function signup() {

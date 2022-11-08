@@ -3,7 +3,7 @@ import Router from "next/router";
 import { getAuth, signOut } from "firebase/auth";
 
 import "components/firebase"; // Initialize FirebaseApp
-import { useAuthState } from "hooks/useAuthState";
+import { useAuthState } from "../hooks/useAuthState";
 
 export const SignInOrOutButton: FC = () => {
 	const { isSignedIn } = useAuthState();
