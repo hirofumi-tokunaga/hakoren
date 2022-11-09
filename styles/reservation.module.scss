@@ -1,0 +1,28 @@
+.form{
+	max-width:1000px;
+	margin:0 auto;
+	width:90%;
+	border:1px solid #222222;
+	border-radius: 10px;
+	padding:20px;
+	.schedule{
+		display: flex;
+		.box{
+			width:50%;
+			&:first-child{
+				margin-right:40px;
+			}
+			.day{
+				margin-right: 1%;
+				width:70%;
+			}
+			.time{
+				width:29%;
+			}
+		}
+	}
+	.btn{
+		display: block;
+		margin: 20px auto;
+	}
+}

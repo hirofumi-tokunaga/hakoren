@@ -7,6 +7,7 @@
 	--font-primary:#444444;
 	--modal:#444444;
 	--border:#c4c4c4;
+	--background:#f8f8f8;
 	/* タイポグラフィ（フォントサイズ） */
 	--min:9px;
 	--small: 11px;
@@ -62,8 +63,11 @@ a{
 .btn{
 	font-size: var(--small);
 }
-
+main{
+	background-color: var(--background);
+}
 // MUI ----------------------------
+
 .MuiInputBase-root{
 	> input{
 		padding:10px 15px ;
@@ -85,6 +89,7 @@ a{
 		font-size: var(--body);
 		height:40px;
 		box-sizing: border-box;
+		background-color: #ffffff;
 	}
 	> label{
 		display: block;
@@ -99,8 +104,10 @@ a{
 			background-color: #fff;
 			z-index: -1;
 		}
-
 	}
+}
+.MuiTextField-root > div{
+	background-color: #ffffff;
 }
 // 素のinput ----------------------------
 input[type=text] {

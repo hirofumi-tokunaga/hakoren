@@ -4,6 +4,11 @@
 	background-color: var(--primary);
 	color:#fff;
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
 	padding:0 20px;
+	button{
+		background-color: #4488ff;
+		// color:var(--primary);
+	}
 }

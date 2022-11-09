@@ -7,7 +7,7 @@ export default function Nav() {
 			<ul>
 				<li>
 					<Link href="/">
-						<a>Home</a>
+						<a>ダッシュボード</a>
 					</Link>
 				</li>
 				<li>
@@ -25,6 +25,17 @@ export default function Nav() {
 						<a>稼働表</a>
 					</Link>
 				</li>
+				<li>
+					<Link href="/signup">
+						<a>ログインユーザー追加</a>
+					</Link>
+				</li>
+				<li>
+					<Link href="/reservation">
+						<a>コーポレートサイトの予約フォーム</a>
+					</Link>
+				</li>
+
 			</ul>
 		</nav>
 	)

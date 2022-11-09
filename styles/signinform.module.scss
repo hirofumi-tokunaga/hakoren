@@ -1,0 +1,14 @@
+.section{
+	height:100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	.container{
+		margin-bottom:10rem;
+		h1{
+			font-size: 1.5rem;
+			text-align: center;
+		}
+	}
+	background-color: var(--background);
+}

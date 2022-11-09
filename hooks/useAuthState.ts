@@ -31,7 +31,6 @@ const INITIAL_AUTH_STATE: AuthState = {
  */
 export function useAuthState(): AuthState {
 	const [authState, setAuthState] = useState(INITIAL_AUTH_STATE);
-
 	// サインイン状態の変化を監視する
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
