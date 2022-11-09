@@ -136,67 +136,72 @@ export default function Input() {
 	return (
 		<>
 			<Loading loading={loading} />
-			<Box className={styles.form}>
-				<MainHead title="レンタカー最安検索" />
-				<Box className={styles.schedule} >
-					<Box className={styles.box}>
-						<FormControl className={styles.day}>
-							<InputLabel className="input-label" shrink={true} name="startDate">出発日</InputLabel>
-							<DatePicker_Custom date={startDate} setDate={setStartDate} />
-						</FormControl>
-						<FormControl className={styles.time} >
-							<InputLabel className="input-label" shrink={true} name="startTime">出発時刻</InputLabel>
-							<TimePicker time={startTime} setTime={setStartTime} />
-						</FormControl>
-					</Box>
-					<Box className={styles.box}>
-						<FormControl className={styles.day} >
-							<InputLabel className="input-label" shrink={true} name="endDate">返却日</InputLabel>
-							<DatePicker_Custom date={endDate} setDate={setEndDate} />
-						</FormControl>
-						<FormControl className={styles.time}>
-							<InputLabel className="input-label" shrink={true} name="endTime">返却時刻</InputLabel>
-							<TimePicker time={endTime} setTime={setEndTime} />
-						</FormControl>
-					</Box>
+			<Box className={styles.container}>
 
-					<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "在庫がありません")}</p>
-					<RadioGroup>
-						<ul className={styles.cardata}>
-							{isSearch && (okCar.map((item) => {
-								return (
-									<li key={item.id}>
-										<FormControlLabel value={item.id} control={<Radio />} label={
-											<>
-												<label className={styles.td}>
-													{item.name}
-												</label>
-												<label className={styles.td}>
-													{item.number_a}
-												</label>
-												<label className={styles.td}>
-													{item.number_b}
-												</label>
-											</>
-										}
-											onChange={() => setSelectCarId(item.id)}
-										/>
-									</li>
-								)
-							}
-							))}
-						</ul>
-					</RadioGroup>
+				<Box className={styles.outline}>
+					<h2>レンタカー最安検索</h2>
+					<Box className={styles.form}>
+						<Box className={styles.schedule} >
+							<Box className={styles.box}>
+								<FormControl className={styles.day}>
+									<InputLabel className="input-label" shrink={true} name="startDate">出発日</InputLabel>
+									<DatePicker_Custom date={startDate} setDate={setStartDate} />
+								</FormControl>
+								<FormControl className={styles.time} >
+									<InputLabel className="input-label" shrink={true} name="startTime">出発時刻</InputLabel>
+									<TimePicker time={startTime} setTime={setStartTime} />
+								</FormControl>
+							</Box>
+							<Box className={styles.box}>
+								<FormControl className={styles.day} >
+									<InputLabel className="input-label" shrink={true} name="endDate">返却日</InputLabel>
+									<DatePicker_Custom date={endDate} setDate={setEndDate} />
+								</FormControl>
+								<FormControl className={styles.time}>
+									<InputLabel className="input-label" shrink={true} name="endTime">返却時刻</InputLabel>
+									<TimePicker time={endTime} setTime={setEndTime} />
+								</FormControl>
+							</Box>
+
+						</Box>
+						<Button
+							className={styles.btn}
+							variant="contained"
+							sx={{ mb: 2 }}
+							onClick={() => {
+								handleDateCheck()
+								setIsSearch(true)
+							}}
+						>在庫検索</Button>
+					</Box>
 				</Box>
-				<Button
-					className={styles.btn}
-					variant="contained"
-					sx={{ mb: 2 }}
-					onClick={() => {
-						handleDateCheck()
-						setIsSearch(true)
-					}}
-				>在庫検索</Button>
+				<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "在庫がありません")}</p>
+				<RadioGroup>
+					<ul className={styles.cardata}>
+						{isSearch && (okCar.map((item) => {
+							return (
+								<li key={item.id}>
+									<FormControlLabel value={item.id} control={<Radio />} label={
+										<>
+											<label className={styles.td}>
+												{item.name}
+											</label>
+											<label className={styles.td}>
+												{item.number_a}
+											</label>
+											<label className={styles.td}>
+												{item.number_b}
+											</label>
+										</>
+									}
+										onChange={() => setSelectCarId(item.id)}
+									/>
+								</li>
+							)
+						}
+						))}
+					</ul>
+				</RadioGroup>
 			</Box>
 			{/* <Button
 				className={styles.btn}
