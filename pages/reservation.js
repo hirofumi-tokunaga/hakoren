@@ -175,7 +175,7 @@ export default function Input() {
 						>在庫検索</Button>
 					</Box>
 				</Box>
-				<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "在庫がありません")}</p>
+				<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "条件に一致する在庫がありません")}</p>
 				<RadioGroup>
 					<ul className={styles.cardata}>
 						{isSearch && (okCar.map((item) => {

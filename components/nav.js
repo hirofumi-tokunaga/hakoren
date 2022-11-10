@@ -26,6 +26,12 @@ export default function Nav() {
 					</Link>
 				</li>
 				<li>
+					<Link href="/class/class_list">
+						<a>クラス</a>
+					</Link>
+				</li>
+
+				<li>
 					<Link href="/signup">
 						<a>ログインユーザー追加</a>
 					</Link>
