@@ -11,8 +11,8 @@ export default function Nav() {
 					</Link>
 				</li>
 				<li>
-					<Link href="/cars/car_list">
-						<a>車両一覧</a>
+					<Link href="/master/car_list">
+						<a>車両管理</a>
 					</Link>
 				</li>
 				<li>
@@ -26,7 +26,7 @@ export default function Nav() {
 					</Link>
 				</li>
 				<li>
-					<Link href="/class/class_list">
+					<Link href="/master/class_list">
 						<a>クラス</a>
 					</Link>
 				</li>

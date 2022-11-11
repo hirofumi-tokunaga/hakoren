@@ -1,0 +1,103 @@
+
+.table {
+	width: 100%;
+	.tr{
+		display: flex;
+		width:100%;
+		padding:0 10px;
+		&:nth-child(even){
+			display: block;
+		}
+		.th{
+			padding:5px;
+			align-self: center;
+			&:nth-child(1){
+				width:10%;
+			}
+			&:nth-child(2){
+				width:10%;
+			}
+			&:nth-child(3){
+				width:10%;
+			}
+			&:nth-child(4){
+				width:40%;
+				justify-content: center;
+				display: flex;
+			}
+			&:nth-child(5){
+				width:10%;
+				justify-content: center;
+				display: flex;
+			}
+			&:nth-child(6){
+				width:10%;
+				justify-content: center;
+				display: flex;
+			}
+		}
+		.td{
+			padding:5px;
+			align-self: center;
+			&:nth-child(1){
+				width:10%;
+			}
+			&:nth-child(2){
+				width:10%;
+			}
+			&:nth-child(3){
+				width:10%;
+				justify-content: center;
+				display: flex;
+			}
+			&:nth-child(4){
+				width:40%;
+				justify-content: center;
+				display: flex;
+			}
+			&:nth-child(5){
+				width:10%;
+				justify-content: center;
+				display: flex;
+			}
+			&:nth-child(6){
+				width:10%;
+				justify-content: center;
+				display: flex;
+			}
+		}
+		.btn{
+			font-size: var(--small);
+			margin:0;
+		}
+	}
+	.thead{
+		background-color: var(--secondary);
+		.th{
+			text-align: center;
+		}
+	}
+	.tbody{
+		.tr{
+			&:nth-child(even){
+				background-color: #fafafa;
+			}
+			.basicOpt,
+			.addOpt {
+				font-size: var(--small);
+				padding:2px 5px;
+			}
+			.td{
+				text-align: left;
+				&:nth-child(3){
+					text-align: right;
+				}
+			}
+		}
+	}
+	.tfoot{
+		.td > div{
+			width:100%;
+		}
+	}
+}
