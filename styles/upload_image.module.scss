@@ -1,9 +1,26 @@
 .fileSelect{
-	background-color: #ff0000;
+	background-color: var(--primary);
+	color:#ffffff;
+	min-width:80px;
+	height:36px;
+	line-height: 1;
+	padding :11px;
+	border-radius: 4px;
+	font-size: var(--body);
+	text-align: center;
+	margin-left:10px;
+	transition:.2s;
+	display: block;
+	cursor: pointer;
 	input {
 		display: none;
 	}
-	height:50px;
-	padding :10px;
-	width:100px;
+	&:hover{
+		transition:.2s;
+		filter:brightness(.5);
+	}
+}
+.btn{
+	margin:5px 0 0 10px !important;
+	min-width:80px !important;
 }

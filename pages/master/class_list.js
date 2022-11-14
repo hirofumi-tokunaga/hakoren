@@ -24,7 +24,7 @@ export default function ClassList() {
 	const [loading, setLoading] = useState(false)
 	const [selectId, setSelectId] = useState()
 	const [selectName, setSelectName] = useState()
-	const [imageUrl,setImageUrl] = useState()
+	const [imageUrl,setImageUrl] = useState("")
 
 	const [values, setValues] = useState({
 
@@ -33,7 +33,7 @@ export default function ClassList() {
 	useEffect(() => {
 		async function init() {
 			setClassList(await getDb('class','',true))
-			// setSelectClass(await classList[0]?.name)
+			setSelectName(await classList[0]?.name)
 		}
 		init();
 	}, [])
@@ -43,11 +43,15 @@ export default function ClassList() {
 		let name = values.nameInput
 		let car = values.carInput
 		let capacity = values.capacityInput
-		console.log(name,car,capacity)
+		let price = values.priceInput
+
 		let object = {
 			name: name,
 			car: car,
 			capacity: capacity,
+			basic_option: "",
+			add_option: "",
+			price:price,
 		}
 		setLoading(true)
 		await addData('class',object)
@@ -61,13 +65,15 @@ export default function ClassList() {
 		let car = values.carInput
 		let capacity = values.capacityInput
 		let url = imageUrl ? imageUrl : ""
+		let price = values.priceInput
 		let object = {
 			name: name,
 			car: car,
 			capacity: capacity,
 			basic_option: "",
 			add_option: "",
-			image:url
+			image: url,
+			price: price
 		}
 		await setData("class", object, id)
 		setSelectId("")
@@ -81,8 +87,8 @@ export default function ClassList() {
 		const name = target.name
 		setValues({ ...values, [name]: value })
 	}
-	const setInputChange = (val1, val2, val3) => {
-		setValues({ ...values,  nameInput: val1 , carInput: val2 , capacityInput: val3 })
+	const setInputChange = (val1, val2, val3,val4) => {
+		setValues({ ...values,  nameInput: val1 , carInput: val2 , capacityInput: val3,priceInput:val4 })
 	}
 	// 削除 ----------------------
 	async function handleDelete() {
@@ -105,7 +111,6 @@ export default function ClassList() {
 	useEffect(() => {
 		sort()
 	}, [switchId, sortSw, order])
-	console.log("upload",imageUrl)
 	return (
 		<>
 			<Loading loading={loading} />
@@ -142,7 +147,13 @@ export default function ClassList() {
 								}}>ソート</Button>
 							</div>
 							<div className={styles.th}>
+								当日価格
+							</div>
+							<div className={styles.th}>
 								画像
+							</div>
+							<div className={styles.th}>
+								オプション
 							</div>
 							<div className={styles.th}>
 								編集
@@ -193,6 +204,18 @@ export default function ClassList() {
 													/>
 												</div>
 												<div className={styles.td}>
+													<TextField
+														name="priceInput"
+														label="当日価格"
+														type="text"
+														defaultValue={item.price}
+														onChange={handleInputChange}
+														value={values.priceInput}
+														InputLabelProps={{ shrink: true }}
+													/>
+												</div>
+												<div className={styles.td}>
+													<img src={item.image} style={{height: "100px" }} />
 													<UploadImage setUrl={setImageUrl} />
 												</div>
 											</>
@@ -208,7 +231,10 @@ export default function ClassList() {
 													{item.capacity}
 												</div>
 												<div className={styles.td}>
-														<img src={item.image} style={{ height:"50px"}} />
+													{item.price}
+												</div>
+												<div className={styles.td}>
+														<img src={item.image} style={{ height:"100px"}} />
 												</div>
 											</>
 										)}
@@ -231,7 +257,7 @@ export default function ClassList() {
 														setEdit(false)
 													) : (
 															<>
-																{setInputChange(item.name, item.car, item.capacity)}
+																{setInputChange(item.name, item.car, item.capacity,item.price)}
 																{setEdit(index)}
 															</>
 													)
@@ -312,7 +338,31 @@ export default function ClassList() {
 										InputLabelProps={{ shrink: true }}
 									/>
 								)}
-							</div>
+						</div>
+						<div className={styles.td}>
+							{newPost && (
+								<TextField
+									name="capacityInput"
+									label="画像"
+									onChange={handleInputChange}
+									type="text"
+									className={styles.text}
+									InputLabelProps={{ shrink: true }}
+								/>
+							)}
+						</div>
+						<div className={styles.td}>
+							{newPost && (
+								<TextField
+									name="capacityInput"
+									label="オプション"
+									onChange={handleInputChange}
+									type="text"
+									className={styles.text}
+									InputLabelProps={{ shrink: true }}
+								/>
+							)}
+						</div>
 							<div className={styles.td}>
 								<Button
 									variant="outlined"

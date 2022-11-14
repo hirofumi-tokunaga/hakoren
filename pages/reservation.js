@@ -27,44 +27,11 @@ export default function Input() {
 	const [loading, setLoading] = useState(false)
 	const [scheduleOk, setScheduleOk] = useState(false)
 	const [carList, setCarList] = useState([])
-	const [okCar, setOkCar] = useState([])
+	const [okClass, setOkClass] = useState([])
+	const [classList,setClassList] = useState([])
 	const [selectCarId, setSelectCarId] = useState()
 	const [isSearch, setIsSearch] = useState(false)
 
-	const handlePersonalData = async (event) => {
-		event.preventDefault();
-		let data = new FormData(event.currentTarget);
-		if (inputCheck(data)) {
-			let object = {
-				firstName: data.get('firstName'),
-				familyName: data.get('familyName'),
-				firstNameKana: data.get('firstNameKana'),
-				familyNameKana: data.get('familyNameKana'),
-				tel: data.get('tel'),
-				gender: data.get('gender'),
-				startDate: transDate(startDate),
-				startTime: startTime,
-				endDate: transDate(endDate),
-				endTime: endTime,
-				carId: selectCarId,
-			}
-			setLoading(true)
-			handleDateCheck()
-			if (scheduleOk) {
-				await addData('bookinginfo', object).then(() => {
-					setStartDate(Today)
-					setEndDate(Today)
-					setStartTime("08:30")
-					setEndTime("20:30")
-				})
-			} else {
-				alert("予約が重なってしまい、予約が出来ませんでした")
-			}
-			setLoading(false)
-		} else {
-			alert("入力項目に不備があります")
-		}
-	}
 	const inputCheck = (data) => {
 		if (
 			data.get('firstName') &&
@@ -110,19 +77,21 @@ export default function Input() {
 					}
 				})
 				if (carOK) {
-					okCarList.push(
-						car.id
-					)
-					newItems.push(carList.filter((item) => item.id === car.id)[0])
+					if (okCarList.filter((item) => item === car.class).length < 1) {
+						okCarList.push(
+							car.class
+						)
+					}
 					setScheduleOk(true)
 				}
 			})
-			setOkCar(newItems)
+			setOkClass(okCarList)
 		})
 	}
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist'))
+			setClassList(await getDb('class'))
 		}
 		init();
 	}, [])
@@ -178,24 +147,41 @@ export default function Input() {
 				<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "条件に一致する在庫がありません")}</p>
 				<RadioGroup>
 					<ul className={styles.cardata}>
-						{isSearch && (okCar.map((item) => {
+						{isSearch && (okClass?.map((item,i) => {
+							const classData = classList?.filter((data) => data.name === item)[0]
 							return (
-								<li key={item.id}>
-									<FormControlLabel value={item.id} control={<Radio />} label={
+								<li key = { i } className="flex">
+									{classData && (
 										<>
-											<label className={styles.td}>
-												{item.name}
-											</label>
-											<label className={styles.td}>
-												{item.number_a}
-											</label>
-											<label className={styles.td}>
-												{item.number_b}
-											</label>
+											<div className={styles.left}>
+												<div className={styles.c_name}>
+													{classData.name}クラス
+												</div>
+												<div className={styles.c_image}>
+													<img src={classData.image}/>
+												</div>
+												<div className={styles.c_info}>
+													<div className="flex">
+														<div>車型</div>
+														<div>{classData.car}</div>
+													</div>
+													<div className="flex">
+														<div>定員</div>
+														<div>{classData.capacity}</div>
+													</div>
+												</div>
+											</div>
+											<div className={styles.right}>
+												<div className={styles.price_title}>当日料金</div>
+												<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price }>6,800</span>円～（税込）</div>
+												<Button
+													variant="contained"
+												>
+													詳細・お見積りへ
+												</Button>
+											</div>
 										</>
-									}
-										onChange={() => setSelectCarId(item.id)}
-									/>
+									)}
 								</li>
 							)
 						}

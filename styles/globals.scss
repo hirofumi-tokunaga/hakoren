@@ -1,8 +1,9 @@
 :root{
 	/* カラー */
 	--primary: #1976d2;
-	--secondary: #d9edf7;
-	--red:#dd4b39;
+	--secondary: #60b0ff;
+	--tertiary:#bcdeff;
+	--red:#dd2222;
 	--green:#00a65a;
 	--font-primary:#444444;
 	--modal:#444444;
@@ -12,6 +13,10 @@
 	--min:9px;
 	--small: 11px;
 	--body: 14px;
+	--large: 17px;
+	--xlarge:20px;
+	--xxlarge:24px;
+	--xxxlarge:28px;
 	--display:clamp(4.5rem,1.83rem + 11.34vw,10rem ); /* 72-160 */
 	--heading1:clamp(2rem,1.3rem + 3vw , 4rem   ); /* 32-64 */
 	--heading2:calc(var(--body) * 1.5); /* 24-27 */
@@ -43,7 +48,9 @@ h2{
 h3{
 	font-size: var(--heading3);
 }
-
+.flex{
+	display: flex;
+}
 /* リセット */
 body,h1,h2,h3,p,figure,ul{
 	margin:0;
@@ -60,11 +67,12 @@ a{
 .shadow{
 	box-shadow:1px 1px 1px #ccc;
 }
-.btn{
-	font-size: var(--small);
-}
+
 main{
 	background-color: var(--background);
+}
+img{
+	max-width: 100%;
 }
 // MUI ----------------------------
 
@@ -84,6 +92,7 @@ main{
 	> .MuiInputLabel-root{
 		font-size: .9rem;
 	}
+
 	.MuiSelect-select{
 		padding:10px 15px;
 		font-size: var(--body);
@@ -105,6 +114,12 @@ main{
 			z-index: -1;
 		}
 	}
+}
+.MuiButtonBase-root.MuiButton-root{
+	font-size: var(--body);
+	line-height: 1;
+	padding:11px 20px;
+	height:36px;
 }
 .MuiTextField-root > div{
 	background-color: #ffffff;

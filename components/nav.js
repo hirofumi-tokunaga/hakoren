@@ -30,7 +30,11 @@ export default function Nav() {
 						<a>クラス</a>
 					</Link>
 				</li>
-
+				<li>
+					<Link href="/media">
+						<a>メディア</a>
+					</Link>
+				</li>
 				<li>
 					<Link href="/signup">
 						<a>ログインユーザー追加</a>

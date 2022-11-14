@@ -11,6 +11,7 @@
 		.th{
 			padding:5px;
 			align-self: center;
+			text-align: center;
 			&:nth-child(1){
 				width:10%;
 			}
@@ -18,20 +19,30 @@
 				width:10%;
 			}
 			&:nth-child(3){
-				width:10%;
+				width:5%;
 			}
 			&:nth-child(4){
-				width:40%;
+				width:8%;
 				justify-content: center;
 				display: flex;
 			}
 			&:nth-child(5){
-				width:10%;
+				width:40%;
 				justify-content: center;
 				display: flex;
 			}
 			&:nth-child(6){
 				width:10%;
+				justify-content: center;
+				display: flex;
+			}
+			&:nth-child(7){
+				width:8%;
+				justify-content: center;
+				display: flex;
+			}
+			&:nth-child(8){
+				width:8%;
 				justify-content: center;
 				display: flex;
 			}
@@ -46,18 +57,19 @@
 				width:10%;
 			}
 			&:nth-child(3){
-				width:10%;
+				width:5%;
 				justify-content: center;
 				display: flex;
 			}
 			&:nth-child(4){
-				width:40%;
+				width:8%;
 				justify-content: center;
 				display: flex;
 			}
 			&:nth-child(5){
-				width:10%;
+				width:40%;
 				justify-content: center;
+				align-items: center;
 				display: flex;
 			}
 			&:nth-child(6){
@@ -65,22 +77,32 @@
 				justify-content: center;
 				display: flex;
 			}
+			&:nth-child(7){
+				width:8%;
+				justify-content: center;
+				display: flex;
+			}
+			&:nth-child(8){
+				width:8%;
+				justify-content: center;
+				display: flex;
+			}
 		}
 		.btn{
-			font-size: var(--small);
 			margin:0;
 		}
 	}
 	.thead{
-		background-color: var(--secondary);
+		background-color: var(--tertiary);
 		.th{
 			text-align: center;
 		}
 	}
 	.tbody{
+		background-color: #ffffff;
 		.tr{
 			&:nth-child(even){
-				background-color: #fafafa;
+				border-bottom:1px solid var(--border);
 			}
 			.basicOpt,
 			.addOpt {

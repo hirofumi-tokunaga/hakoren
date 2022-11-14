@@ -25,15 +25,16 @@ export default function UploadImage({ setUrl }) {
 	}
 	return (
 		<>
-			<img src={createObjectURL} style={{height:"50px"}} />
-			<label className={styles.fileSelect}>
-				<input type="file" accept="image/*" name="myImage" onChange={uploadToClient} />
-						画像ファイル選択
-
-			</label>
-			<Button className="btn btn-primary" type="submit" onClick={uploadToServer} variant="contained">
-				確定
-			</Button>
+			<img src={createObjectURL} style={{ height: "50px" }} />
+			<div>
+				<label className={styles.fileSelect}>
+					<input type="file" accept="image/*" name="myImage" onChange={uploadToClient} />
+							画像選択
+				</label>
+				<Button className={styles.btn} type="submit" onClick={uploadToServer} variant="contained">
+					確定
+				</Button>
+			</div>
 		</>
 	);
 }
