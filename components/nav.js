@@ -31,6 +31,11 @@ export default function Nav() {
 					</Link>
 				</li>
 				<li>
+					<Link href="/master/option_list">
+						<a>オプション</a>
+					</Link>
+				</li>
+				<li>
 					<Link href="/media">
 						<a>メディア</a>
 					</Link>

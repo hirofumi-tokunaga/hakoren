@@ -26,9 +26,7 @@ export default function ClassList() {
 	const [selectName, setSelectName] = useState()
 	const [imageUrl,setImageUrl] = useState("")
 
-	const [values, setValues] = useState({
-
-	});
+	const [values, setValues] = useState({})
 		// 読み込み ----------------------
 	useEffect(() => {
 		async function init() {
@@ -231,7 +229,7 @@ export default function ClassList() {
 													{item.capacity}
 												</div>
 												<div className={styles.td}>
-													{item.price}
+														{Number(item.price).toLocaleString()}
 												</div>
 												<div className={styles.td}>
 														<img src={item.image} style={{ height:"100px"}} />

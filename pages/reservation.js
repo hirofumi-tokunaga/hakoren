@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react'
 import { getDb, addData } from 'components/api'
 
-import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
 import TimePicker from 'components/timepicker'
 // import styles from 'styles/input.module.scss'
-import MainHead from 'components/mainhead'
 
 import styles from 'styles/reservation.module.scss'
 
@@ -167,13 +163,13 @@ export default function Input() {
 													</div>
 													<div className="flex">
 														<div>定員</div>
-														<div>{classData.capacity}</div>
+														<div>{classData.capacity} 名</div>
 													</div>
 												</div>
 											</div>
 											<div className={styles.right}>
 												<div className={styles.price_title}>当日料金</div>
-												<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price }>6,800</span>円～（税込）</div>
+												<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</div>
 												<Button
 													variant="contained"
 												>
