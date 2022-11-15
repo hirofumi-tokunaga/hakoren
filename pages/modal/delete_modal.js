@@ -21,7 +21,7 @@ export default function DeleteModal({
 				aria-describedby="modal-modal-description"
 			>
 				<Box className={styles.box}>
-					<h2 id="child-modal-title">車種 : {name}</h2>
+					<h2 id="child-modal-title">名称 : {name}</h2>
 					<p id="child-modal-description">
 						削除しますか？
 					</p>

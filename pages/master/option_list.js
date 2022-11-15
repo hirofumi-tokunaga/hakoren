@@ -33,6 +33,7 @@ export default function optionList() {
 	const [switchId, setSwitchId] = useState()
 	const [loading, setLoading] = useState(false)
 	const [values, setValues] = useState({})
+	const [visible,setVisible] = useState()
 
 	const daynumObj = ["日数","数量"]
 	const unitObj = ["個", "台", "枚", "人","つ" ]
@@ -48,17 +49,21 @@ export default function optionList() {
 
 	// 追加 ----------------------
 	const handleSubmit = async (event) => {
-		event.preventDefault();
-		let data = new FormData(event.currentTarget);
-		let name = data.get('nameInput')
-		let numberA = data.get('numberInputA')
-		let numberB = data.get('numberInputB')
-		let cl = data.get('classInput')
+		let visibled = true
+		let name = values.nameInput
+		let s_name = values.s_nameInput
+		let category = values.categoryInput
+		let unit = values.unitInput
+		let max = values.maxInput
+		let price = values.priceInput
 		let object = {
+			visible: visibled,
 			name: name,
-			number_a: numberA,
-			number_b: numberB,
-			class: cl
+			s_name: s_name,
+			category: category,
+			unit: unit,
+			max:max,
+			price: price
 		}
 		setLoading(true)
 		await addData('option', object)
@@ -66,32 +71,45 @@ export default function optionList() {
 		sort()
 		setLoading(false)
 	}
-	const handleChange = (event) => {
-		setSelectClass(event.target.value)
-	}
+	
 	// 編集 ----------------------
 	async function handleSet(id) {
+		let visibled = visible
+		let name = values.nameInput
+		let s_name = values.s_nameInput
+		let category = values.categoryInput
+		let unit = values.unitInput
+		let max = values.maxInput
+		let price = values.priceInput
 		let object = {
-			name: editName,
-			number_a: editNumberA,
-			number_b: editNumberB,
-			class: editClass
+			visible: visibled,
+			name: name,
+			s_name: s_name,
+			category: category,
+			unit: unit,
+			max:max,
+			price: price
 		}
 		await setData("option", object, id)
 		setSelectId("")
 		setEdit(false)
 		sort()
+		setVisible("")
+		setValues({})
 	}
 	const handleInputChange = (e) => {
 		const target = e.target
-		// const value = target.type === "checkbox" ? target.checked : target.value;
 		const value = target.value
 		const name = target.name
 		setValues({ ...values, [name]: value })
 	}
+	const handleVisibleChange = () => {
+		setVisible(!visible)
+	}
 	const setInputChange = (val1, val2, val3, val4, val5, val6, val7) => {
 		// item.visible, item.name, item.s_name, item.category, item.unit, item.price, item.max
-		setValues({ ...values, visibleInput: val1, nameInput: val2, s_nameInput: val3, categoryInput: val4, unitInput: val5, priceInput: val6, maxInput: val7})
+		setVisible(val1)
+		setValues({ ...values,  nameInput: val2, s_nameInput: val3, categoryInput: val4, unitInput: val5, priceInput: val6, maxInput: val7})
 	}
 	// 削除 ----------------------
 	async function handleDelete() {
@@ -171,11 +189,11 @@ export default function optionList() {
 													name="visibleInput"
 													label="表示/非表示"
 													type="button"
-													onChange={handleInputChange}
+													onClick={handleVisibleChange}
 													InputLabelProps={{ shrink: true }}
-													variant={item.visible ? "contained" : "outlined"}
+													variant={visible ? "contained" : "outlined"}
 												>
-													{item.visible ? "表示" : "非表示"}
+													{visible ? "表示" : "非表示"}
 												</Button>
 											</div>
 											<div className={styles.td}>
@@ -235,6 +253,15 @@ export default function optionList() {
 														</MenuItem>
 													))}
 												</Select>
+												<TextField
+													name="priceInput"
+													label="金額"
+													type="text"
+													defaultValue={item.price}
+													onChange={handleInputChange}
+													value={values.priceInput}
+													InputLabelProps={{ shrink: true }}
+												/>
 											</div>
 											<div className={styles.td}>
 												<TextField
@@ -260,7 +287,7 @@ export default function optionList() {
 													<div>{`【 ${item.s_name} 】`}</div>
 												</div>
 												<div className={styles.td}>
-													{item.category === "当日" ? "当日" : `1${item.unit}`}
+													{item.category === "日数" ? "当日" : `1${item.unit}`}
 													{" "}
 													{item.price === 0 ? "無料" : `${Number(item.price).toLocaleString()}円～` }
 												</div>
@@ -275,7 +302,11 @@ export default function optionList() {
 											className={styles.btn}
 											onClick={() => {
 												edit === index ? (
-													setEdit(false)
+													<>
+														{setEdit(false)}
+														{setVisible("")}
+														{setValues({})}
+													</>
 												) : (
 													<>
 															{setInputChange(item.visible, item.name, item.s_name, item.category, item.unit, item.price,item.max)}
@@ -312,7 +343,7 @@ export default function optionList() {
 					}))}
 				</div>
 				<div className={styles.tfoot}>
-					<Box className={styles.tr} component="form" noValidate onSubmit={handleSubmit} >
+					<Box className={styles.tr} component="form" noValidate  >
 
 						<div className={styles.td}>
 							{newPost && (
@@ -387,6 +418,14 @@ export default function optionList() {
 											</MenuItem>
 										))}
 									</Select>
+									<TextField
+										name="priceInput"
+										label="金額"
+										type="text"
+										onChange={handleInputChange}
+										value={values.priceInput}
+										InputLabelProps={{ shrink: true }}
+									/>
 								</>
 							)}
 						</div>
@@ -411,9 +450,15 @@ export default function optionList() {
 								className={styles.btn}
 								onClick={() => {
 									newPost ? (
-										setNewPost(false)
+										<>
+											{setNewPost(false)}
+											{setVisible("")}
+											{setValues({})}
+										</>
 									) : (
-										setNewPost(true)
+										<>
+											{setNewPost(true)}
+										</>
 									)
 								}}
 							>
