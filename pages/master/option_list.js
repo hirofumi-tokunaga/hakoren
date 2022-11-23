@@ -68,7 +68,7 @@ export default function OptionList() {
 		setLoading(true)
 		await addData('option', object)
 		setNewPost(false)
-		sort()
+		// sort()
 		setLoading(false)
 	}
 
