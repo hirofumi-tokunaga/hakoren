@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDb, addData } from 'components/api'
+import { getDb } from 'components/api'
 
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
@@ -10,11 +10,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
 import TimePicker from 'components/timepicker'
-// import styles from 'styles/input.module.scss'
 
 import styles from 'styles/reservation.module.scss'
 
-export default function Input() {
+export default function Estimate() {
 	const Today = new Date()
 	const [startDate, setStartDate] = useState(Today)
 	const [endDate, setEndDate] = useState(Today)
@@ -24,7 +23,7 @@ export default function Input() {
 	const [scheduleOk, setScheduleOk] = useState(false)
 	const [carList, setCarList] = useState([])
 	const [okClass, setOkClass] = useState([])
-	const [classList,setClassList] = useState([])
+	const [classList, setClassList] = useState([])
 	const [selectCarId, setSelectCarId] = useState()
 	const [isSearch, setIsSearch] = useState(false)
 
@@ -143,10 +142,10 @@ export default function Input() {
 				<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "条件に一致する在庫がありません")}</p>
 				<RadioGroup>
 					<ul className={styles.cardata}>
-						{isSearch && (okClass?.map((item,i) => {
+						{isSearch && (okClass?.map((item, i) => {
 							const classData = classList?.filter((data) => data.name === item)[0]
 							return (
-								<li key = { i } className="flex">
+								<li key={i} className="flex">
 									{classData && (
 										<>
 											<div className={styles.left}>
@@ -154,7 +153,7 @@ export default function Input() {
 													{classData.name}クラス
 												</div>
 												<div className={styles.c_image}>
-													<img src={classData.image}/>
+													<img src={classData.image} />
 												</div>
 												<div className={styles.c_info}>
 													<div className="flex">
@@ -185,12 +184,7 @@ export default function Input() {
 					</ul>
 				</RadioGroup>
 			</Box>
-			{/* <Button
-				className={styles.btn}
-				type="submit"
-				variant="contained"
-				sx={{ mb: 2 }}
-			>予約する</Button> */}
+
 		</>
 	)
 }

@@ -38,9 +38,9 @@
 			}
 		}
 		.td{
-			padding:5px;
-			align-self: center;
-
+			padding:10px 10px;
+			align-items: center;
+			display: flex;
 			&:nth-child(1){
 				width:10%;
 			}
@@ -92,8 +92,21 @@
 			}
 			.td{
 				text-align: center;
+				justify-content: center;
+				&.name{
+					display: block;
+				}
 				&:nth-child(3){
 					text-align: right;
+				}
+				.select{
+					height:40px;
+				}
+				> div{
+					margin-right:5px;
+					&:last-child{
+						margin-right:0;
+					}
 				}
 			}
 		}

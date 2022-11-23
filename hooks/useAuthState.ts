@@ -18,6 +18,7 @@ export type AuthState = {
  * useAuthState が返す初期値。
  * Next.js のサーバーサイドレンダリング時もこの値になる。
  */
+
 const INITIAL_AUTH_STATE: AuthState = {
 	isSignedIn: false,
 	isLoading: true,
@@ -25,6 +26,8 @@ const INITIAL_AUTH_STATE: AuthState = {
 	userName: undefined,
 	avatarUrl: undefined,
 };
+
+
 
 /**
  * ユーザーのサインイン状態を取得するためのカスタムフック。

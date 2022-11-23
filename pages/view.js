@@ -181,7 +181,7 @@ export default function View() {
 				<Box className={styles.body}>
 					{carList.map((car,index) => {
 						return (
-							<Box className={styles.tr} key={car.id}  >
+							<Box className={styles.tr} key={index}  >
 								<Box className={styles.td}>
 									<span>
 										{car.number_a}
@@ -208,53 +208,52 @@ export default function View() {
 
 						{carList.map((car, index) => {
 							return (
-								<Box key={car.id}>
+								<Box key={index}>
 									{scheduleList[index]?.map((item, index2) => {
 
 										return (
-											<>
-												<Draggable
-													position={
-														{
-															x: 0 ,
-															y: posData?.filter((item2) => item2.id === item.id)[0]?.y
-														}
+											<Draggable
+												key={index2}
+												position={
+													{
+														x: 0 ,
+														y: posData?.filter((item2) => item2.id === item.id)[0]?.y
 													}
-													onDrag={(e, position) => {
-														onControlledDrag(e, position, item.id )
+												}
+												onDrag={(e, position) => {
+													onControlledDrag(e, position, item.id )
+												}}
+												onStop={(e) => {
+													onDrop(e, item.id)
+												}}
+												axis="y"
+												grid={[baseHeight, baseHeight]}
+												>
+												<Box className={styles.schedule}
+													style={{
+														left: `${Number(calcDate(item.startDate, baseDate)) * 100}px`,
+														width: `${Number(calcDate(item.endDate, item.startDate) + 1) * 100}px`
 													}}
-													onStop={(e) => {
-														onDrop(e, item.id)
-													}}
-													axis="y"
-													grid={[baseHeight, baseHeight]}
-													>
-													<Box className={styles.schedule}
-														style={{
-															left: `${Number(calcDate(item.startDate, baseDate)) * 100}px`,
-															width: `${Number(calcDate(item.endDate, item.startDate) + 1) * 100}px`
-														}}
-														key={item.id}
+													key={item.id}
 
-													>
-														<Box className={styles.scheduleInfo} key={item.id}>
-															<p className={styles.name}>{item.familyNameKana} {item.firstNameKana}</p>
-															<Box className={styles.time}>
-																<div className={styles.start}>
-																	<p>出発</p>
-																	<p>{putDate(item.startDate)}</p>
-																	{item.startTime}
-																</div>
-																<div className={styles.end}>
-																	<p>返却</p>
-																	<p>{putDate(item.endDate)}</p>
-																	{item.endTime}
-																</div>
-															</Box>
+												>
+													<Box className={styles.scheduleInfo} key={item.id}>
+														<p className={styles.name}>{item.familyNameKana} {item.firstNameKana}</p>
+														<Box className={styles.time}>
+															<div className={styles.start}>
+																<p>出発</p>
+																<p>{putDate(item.startDate)}</p>
+																{item.startTime}
+															</div>
+															<div className={styles.end}>
+																<p>返却</p>
+																<p>{putDate(item.endDate)}</p>
+																{item.endTime}
+															</div>
 														</Box>
 													</Box>
-												</Draggable>
-											</>
+												</Box>
+											</Draggable>
 										)
 									})}
 								</Box>

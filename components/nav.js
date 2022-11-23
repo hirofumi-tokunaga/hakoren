@@ -46,8 +46,11 @@ export default function Nav() {
 					</Link>
 				</li>
 				<li>
-					<Link href="/reservation">
-						<a>コーポレートサイトの予約フォーム</a>
+					<Link href="/search">
+						<a>コーポレートサイトの検索フォーム</a>
+					</Link>
+					<Link href="/estimate">
+						<a>見積フォーム</a>
 					</Link>
 				</li>
 

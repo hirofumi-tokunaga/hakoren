@@ -124,6 +124,10 @@ img{
 .MuiTextField-root > div{
 	background-color: #ffffff;
 }
+.MuiSelect-select{
+	padding: 7.5px 32px 7.5px 15px !important;
+	border:1px solid var(--border) !important;
+}
 // 素のinput ----------------------------
 input[type=text] {
 	padding:10px 15px ;

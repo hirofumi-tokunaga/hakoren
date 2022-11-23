@@ -15,7 +15,7 @@ import Loading from 'components/loading'
 
 import styles from 'styles/option_list.module.scss'
 
-export default function optionList() {
+export default function OptionList() {
 	const [optionList, setOptionList] = useState([{}])
 	// const [classList, setClassList] = useState([])
 	const [selectClass, setSelectClass] = useState("")
@@ -54,8 +54,8 @@ export default function optionList() {
 		let s_name = values.s_nameInput
 		let category = values.categoryInput
 		let unit = values.unitInput
-		let max = values.maxInput
-		let price = values.priceInput
+		let max = String(values.maxInput)
+		let price = String(values.priceInput)
 		let object = {
 			visible: visibled,
 			name: name,
@@ -71,7 +71,7 @@ export default function optionList() {
 		sort()
 		setLoading(false)
 	}
-	
+
 	// 編集 ----------------------
 	async function handleSet(id) {
 		let visibled = visible
@@ -106,8 +106,9 @@ export default function optionList() {
 	const handleVisibleChange = () => {
 		setVisible(!visible)
 	}
-	const setInputChange = (val1, val2, val3, val4, val5, val6, val7) => {
+	const setInputChange = (val1 = true, val2 = "", val3 = "", val4 = "日数", val5 = "個", val6 = "0", val7 = "-") => {
 		// item.visible, item.name, item.s_name, item.category, item.unit, item.price, item.max
+
 		setVisible(val1)
 		setValues({ ...values,  nameInput: val2, s_nameInput: val3, categoryInput: val4, unitInput: val5, priceInput: val6, maxInput: val7})
 	}
@@ -190,7 +191,6 @@ export default function optionList() {
 													label="表示/非表示"
 													type="button"
 													onClick={handleVisibleChange}
-													InputLabelProps={{ shrink: true }}
 													variant={visible ? "contained" : "outlined"}
 												>
 													{visible ? "表示" : "非表示"}
@@ -201,7 +201,6 @@ export default function optionList() {
 													name="nameInput"
 													label="オプション名"
 													type="text"
-													defaultValue={item.name}
 													value={values.nameInput}
 													onChange={handleInputChange}
 													InputLabelProps={{ shrink: true }}
@@ -210,54 +209,52 @@ export default function optionList() {
 													name="s_nameInput"
 													label="略称"
 													type="text"
-													defaultValue={item.s_name}
 													value={values.s_nameInput}
 													onChange={handleInputChange}
 													InputLabelProps={{ shrink: true }}
 												/>
 											</div>
 											<div className={styles.td}>
-												<Select
-													name="categoryInput"
-													label="料金区分"
-													type="text"
-													defaultValue={item.category}
-													onChange={handleInputChange}
-													value={values.categoryInput}
-													InputLabelProps={{ shrink: true }}
-												>
-													{daynumObj.map((item, index) => (
-														<MenuItem
-															key={index}
-															value={item}
-														>
-															{item}
-														</MenuItem>
-													))}
-												</Select>
-												<Select
-													name="unitInput"
-													label="単位"
-													type="text"
-													defaultValue={item.unit}
-													onChange={handleInputChange}
-													value={values.unitInput}
-													InputLabelProps={{ shrink: true }}
-												>
-													{unitObj.map((item, index) => (
-														<MenuItem
-															key={index}
-															value={item}
-														>
-															{item}
-														</MenuItem>
-													))}
-												</Select>
+												<FormControl className={styles.day}>
+													<InputLabel shrink={true} >料金</InputLabel>
+													<Select
+														name="categoryInput"
+														type="text"
+														onChange={handleInputChange}
+														value={values.categoryInput}
+													>
+														{daynumObj.map((item, index) => (
+															<MenuItem
+																key={index}
+																value={item}
+															>
+																{item}
+															</MenuItem>
+														))}
+													</Select>
+												</FormControl>
+												<FormControl className={styles.day}>
+													<InputLabel shrink={true} >単位</InputLabel>
+													<Select
+														name="unitInput"
+														type="text"
+														onChange={handleInputChange}
+														value={values?.unitInput}
+													>
+														{unitObj.map((item, index) => (
+															<MenuItem
+																key={index}
+																value={item}
+															>
+																{item}
+															</MenuItem>
+														))}
+													</Select>
+												</FormControl>
 												<TextField
 													name="priceInput"
 													label="金額"
 													type="text"
-													defaultValue={item.price}
 													onChange={handleInputChange}
 													value={values.priceInput}
 													InputLabelProps={{ shrink: true }}
@@ -268,12 +265,10 @@ export default function optionList() {
 													name="maxInput"
 													label="最大貸渡数"
 													type="text"
-													defaultValue={item.max}
 													onChange={handleInputChange}
 													value={values.maxInput}
 													InputLabelProps={{ shrink: true }}
 												/>
-												{values.unitInput }
 											</div>
 
 										</>
@@ -282,14 +277,14 @@ export default function optionList() {
 												<div className={styles.td}>
 													{item.visible ? "表示" : "非表示"}
 												</div>
-												<div className={styles.td}>
+												<div className={`${ styles.td } ${ styles.name }`}>
 													<div>{item.name}</div>
 													<div>{`【 ${item.s_name} 】`}</div>
 												</div>
 												<div className={styles.td}>
 													{item.category === "日数" ? "当日" : `1${item.unit}`}
 													{" "}
-													{item.price === 0 ? "無料" : `${Number(item.price).toLocaleString()}円～` }
+													{item.price === "0" ? "無料" : `${Number(item.price).toLocaleString()}円～` }
 												</div>
 												<div className={styles.td}>
 													{item.max}{item.unit}
@@ -352,7 +347,6 @@ export default function optionList() {
 									label="表示/非表示"
 									type="button"
 									onChange={handleInputChange}
-									InputLabelProps={{ shrink: true }}
 								// variant={item.visible ? "contained" : "outlined"}
 								>
 									{/* {item.visible ? "表示" : "非表示"} */}
@@ -384,40 +378,44 @@ export default function optionList() {
 						<div className={styles.td}>
 							{newPost && (
 								<>
-									<Select
-										name="categoryInput"
-										label="料金区分"
-										type="text"
-										onChange={handleInputChange}
-										value={values.categoryInput}
-										InputLabelProps={{ shrink: true }}
-									>
-										{daynumObj.map((item, index) => (
-											<MenuItem
-												key={index}
-												value={item}
-											>
-												{item}
-											</MenuItem>
-										))}
-									</Select>
-									<Select
-										name="unitInput"
-										label="単位"
-										type="text"
-										onChange={handleInputChange}
-										value={values.unitInput}
-										InputLabelProps={{ shrink: true }}
-									>
-										{unitObj.map((item, index) => (
-											<MenuItem
-												key={index}
-												value={item}
-											>
-												{item}
-											</MenuItem>
-										))}
-									</Select>
+									<FormControl className={styles.day}>
+										<InputLabel shrink={true} >料金</InputLabel>
+										<Select
+											name="categoryInput"
+											type="text"
+											onChange={handleInputChange}
+											value={values.categoryInput}
+											className={styles.select}
+										>
+											{daynumObj.map((item, index) => (
+												<MenuItem
+													key={index}
+													value={item}
+												>
+													{item}
+												</MenuItem>
+											))}
+										</Select>
+									</FormControl>
+									<FormControl className={styles.day}>
+										<InputLabel shrink={true} >単位</InputLabel>
+										<Select
+											name="unitInput"
+											type="text"
+											onChange={handleInputChange}
+											value={values.unitInput}
+											className={styles.select}
+										>
+											{unitObj.map((item, index) => (
+												<MenuItem
+													key={index}
+													value={item}
+												>
+													{item}
+												</MenuItem>
+											))}
+										</Select>
+									</FormControl>
 									<TextField
 										name="priceInput"
 										label="金額"
@@ -425,13 +423,13 @@ export default function optionList() {
 										onChange={handleInputChange}
 										value={values.priceInput}
 										InputLabelProps={{ shrink: true }}
+
 									/>
 								</>
 							)}
 						</div>
 						<div className={styles.td}>
 							{newPost && (
-								<>
 									<TextField
 										name="maxInput"
 										label="最大貸渡数"
@@ -439,11 +437,10 @@ export default function optionList() {
 										onChange={handleInputChange}
 										value={values.maxInput}
 										InputLabelProps={{ shrink: true }}
-									/>
-									{values.unitInput}
-								</>
+								/>
 							)}
 						</div>
+						{console.log(values.maxInput) }
 						<div className={styles.td}>
 							<Button
 								variant="outlined"
@@ -457,7 +454,8 @@ export default function optionList() {
 										</>
 									) : (
 										<>
-											{setNewPost(true)}
+												{setNewPost(true)}
+												{setInputChange(true, "","", "日数", "個", "0", "-")}
 										</>
 									)
 								}}
