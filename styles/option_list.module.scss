@@ -5,9 +5,6 @@
 		display: flex;
 		width:100%;
 		padding:0 10px;
-		&:nth-child(even){
-			display: block;
-		}
 		.th{
 			padding:5px;
 			align-self: center;
@@ -80,10 +77,10 @@
 		}
 	}
 	.tbody{
-		background-color: #ffffff;
 		.tr{
+			background-color: #ffffff;
 			&:nth-child(even){
-				border-bottom:1px solid var(--border);
+				background-color: #f8f8f8;
 			}
 			.basicOpt,
 			.addOpt {

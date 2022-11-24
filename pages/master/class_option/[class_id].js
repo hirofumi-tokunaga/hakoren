@@ -68,39 +68,49 @@ export default function ClassOption(){
 			setBasicOption((prevState) => prevState.filter((value) => value !== id))
 		}
 	}
+	const handleAddOpt = (e, id) => {
+		if (e.target.checked) {
+			setAddOption((prevState) => ([...prevState, id]))
+		} else {
+			setAddOption((prevState) => prevState.filter((value) => value !== id))
+		}
+	}
 	return (
 		<>
 			<Loading loading={loading} />
 			<MainHead title={`[クラス：${currentClass?.name}] オプション設定`} />
-			<div className={styles.table} >
-				<div className={styles.thead}>
-					<div className={styles.tr}>
-						<div className={styles.th}>
-							使用
-						</div>
-						<div className={styles.th}>
-							<div>
-								オプション名<Button className={styles.btn} onClick={() => {
-									setOrder("name")
-									setSortSw((prevState) =>
-										prevState.map((value, index) => (index === 1 ? !value : value))
-									)
-									setSwitchId(1)
-								}}>ソート</Button>
+			<div className={styles.section}>
+				<div className={styles.section_ttl}>
+					標準装備
+				</div>
+				<div className={styles.table} >
+					<div className={styles.thead}>
+						<div className={styles.tr}>
+							<div className={styles.th}>
+								使用
+							</div>
+							<div className={styles.th}>
+								<div>
+									オプション名<Button className={styles.btn} onClick={() => {
+										setOrder("name")
+										setSortSw((prevState) =>
+											prevState.map((value, index) => (index === 1 ? !value : value))
+										)
+										setSwitchId(1)
+									}}>ソート</Button>
+								</div>
+							</div>
+							<div className={styles.th}>
+								料金
+							</div>
+							<div className={styles.th}>
+								最大貸渡
 							</div>
 						</div>
-						<div className={styles.th}>
-							料金
-						</div>
-						<div className={styles.th}>
-							最大貸渡
-						</div>
 					</div>
-				</div>
-				<div className={styles.tbody}>
-					{optionList && (optionList.map((item, index) => {
-						return (
-							<div key={index}>
+					<div className={styles.tbody}>
+						{optionList && (optionList.map((item, index) => {
+							return (
 								<div key={index} className={styles.tr}>
 									<div className={styles.td}>
 										<CheckBox onChange={(e) => handleBasicOpt(e, item.id)} checked={basicOption?.some((i) => i === item.id) || false} />
@@ -118,30 +128,83 @@ export default function ClassOption(){
 										{item.max}{item.unit}
 									</div>
 								</div>
-							</div>
-						)
-					}))}
+							)
+						}))}
+					</div>
 				</div>
-				<div className={styles.tfoot}>
-					<div className={styles.td}>
-						<Link href={"/master/class_list"}>
-							<Button
-								variant="outlined"
-								className={styles.btn}
-							>
-								取消
-							</Button>
-						</Link>
+			</div>
+
+			<div className={styles.section}>
+				<div className={styles.section_ttl}>
+					追加オプション
+				</div>
+				<div className={styles.table} >
+					<div className={styles.thead}>
+						<div className={styles.tr}>
+							<div className={styles.th}>
+								使用
+							</div>
+							<div className={styles.th}>
+								<div>
+									オプション名<Button className={styles.btn} onClick={() => {
+										setOrder("name")
+										setSortSw((prevState) =>
+											prevState.map((value, index) => (index === 1 ? !value : value))
+										)
+										setSwitchId(1)
+									}}>ソート</Button>
+								</div>
+							</div>
+							<div className={styles.th}>
+								料金
+							</div>
+							<div className={styles.th}>
+								最大貸渡
+							</div>
+						</div>
 					</div>
-					<div className={styles.td}>
+					<div className={styles.tbody}>
+						{optionList && (optionList.map((item, index) => {
+							return (
+								<div key={index} className={styles.tr}>
+									<div className={styles.td}>
+										<CheckBox onChange={(e) => handleAddOpt(e, item.id)} checked={addOption?.some((i) => i === item.id) || false} />
+									</div>
+									<div className={`${styles.td} ${styles.name}`}>
+										<div>{item.name}</div>
+									</div>
+									<div className={styles.td}>
+										{item.category === "日数" ? "当日" : `1${item.unit}`}
+										{" "}
+										{item.price === "0" ? "無料" : `${Number(item.price).toLocaleString()}円～`}
+									</div>
+									<div className={styles.td}>
+										{item.max}{item.unit}
+									</div>
+								</div>
+							)
+						}))}
+					</div>
+				</div>
+			</div>
+			
+			<div className={styles.section}>
+				<div className={styles.btns}>
+					<Link href={"/master/class_list"}>
 						<Button
+							variant="outlined"
 							className={styles.btn}
-							type="submit"
-							variant="contained"
-							sx={{ mb: 2 }}
-							onClick={handleSubmit}
-						>登録</Button>
-					</div>
+						>
+							取消
+						</Button>
+					</Link>
+					<Button
+						className={styles.btn}
+						type="submit"
+						variant="contained"
+						sx={{ mb: 2 }}
+						onClick={handleSubmit}
+					>登録</Button>
 				</div>
 			</div>
 		</>

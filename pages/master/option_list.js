@@ -176,158 +176,156 @@ export default function OptionList() {
 				<div className={styles.tbody}>
 					{optionList && (optionList.map((item, index) => {
 						return (
-							<div key={index}>
-								<div key={index} className={styles.tr}>
+							<div key={index} className={styles.tr}>
 
-									{edit === index ? (
+								{edit === index ? (
+									<>
+										<div className={styles.td}>
+											<Button
+												name="visibleInput"
+												label="表示/非表示"
+												type="button"
+												onClick={handleVisibleChange}
+												variant={visible ? "contained" : "outlined"}
+											>
+												{visible ? "表示" : "非表示"}
+											</Button>
+										</div>
+										<div className={styles.td}>
+											<TextField
+												name="nameInput"
+												label="オプション名"
+												type="text"
+												value={values.nameInput}
+												onChange={handleInputChange}
+												InputLabelProps={{ shrink: true }}
+											/>
+											<TextField
+												name="s_nameInput"
+												label="略称"
+												type="text"
+												value={values.s_nameInput}
+												onChange={handleInputChange}
+												InputLabelProps={{ shrink: true }}
+											/>
+										</div>
+										<div className={styles.td}>
+											<FormControl className={styles.day}>
+												<InputLabel shrink={true} >料金</InputLabel>
+												<Select
+													name="categoryInput"
+													type="text"
+													onChange={handleInputChange}
+													value={values.categoryInput}
+												>
+													{daynumObj.map((item, index) => (
+														<MenuItem
+															key={index}
+															value={item}
+														>
+															{item}
+														</MenuItem>
+													))}
+												</Select>
+											</FormControl>
+											<FormControl className={styles.day}>
+												<InputLabel shrink={true} >単位</InputLabel>
+												<Select
+													name="unitInput"
+													type="text"
+													onChange={handleInputChange}
+													value={values?.unitInput}
+												>
+													{unitObj.map((item, index) => (
+														<MenuItem
+															key={index}
+															value={item}
+														>
+															{item}
+														</MenuItem>
+													))}
+												</Select>
+											</FormControl>
+											<TextField
+												name="priceInput"
+												label="金額"
+												type="text"
+												onChange={handleInputChange}
+												value={values.priceInput}
+												InputLabelProps={{ shrink: true }}
+											/>
+										</div>
+										<div className={styles.td}>
+											<TextField
+												name="maxInput"
+												label="最大貸渡数"
+												type="text"
+												onChange={handleInputChange}
+												value={values.maxInput}
+												InputLabelProps={{ shrink: true }}
+											/>
+										</div>
+
+									</>
+								) : (
 										<>
 											<div className={styles.td}>
-												<Button
-													name="visibleInput"
-													label="表示/非表示"
-													type="button"
-													onClick={handleVisibleChange}
-													variant={visible ? "contained" : "outlined"}
-												>
-													{visible ? "表示" : "非表示"}
-												</Button>
+												{item.visible ? "表示" : "非表示"}
+											</div>
+											<div className={`${ styles.td } ${ styles.name }`}>
+												<div>{item.name}</div>
+												<div>{`【 ${item.s_name} 】`}</div>
 											</div>
 											<div className={styles.td}>
-												<TextField
-													name="nameInput"
-													label="オプション名"
-													type="text"
-													value={values.nameInput}
-													onChange={handleInputChange}
-													InputLabelProps={{ shrink: true }}
-												/>
-												<TextField
-													name="s_nameInput"
-													label="略称"
-													type="text"
-													value={values.s_nameInput}
-													onChange={handleInputChange}
-													InputLabelProps={{ shrink: true }}
-												/>
+												{item.category === "日数" ? "当日" : `1${item.unit}`}
+												{" "}
+												{item.price === "0" ? "無料" : `${Number(item.price).toLocaleString()}円～` }
 											</div>
 											<div className={styles.td}>
-												<FormControl className={styles.day}>
-													<InputLabel shrink={true} >料金</InputLabel>
-													<Select
-														name="categoryInput"
-														type="text"
-														onChange={handleInputChange}
-														value={values.categoryInput}
-													>
-														{daynumObj.map((item, index) => (
-															<MenuItem
-																key={index}
-																value={item}
-															>
-																{item}
-															</MenuItem>
-														))}
-													</Select>
-												</FormControl>
-												<FormControl className={styles.day}>
-													<InputLabel shrink={true} >単位</InputLabel>
-													<Select
-														name="unitInput"
-														type="text"
-														onChange={handleInputChange}
-														value={values?.unitInput}
-													>
-														{unitObj.map((item, index) => (
-															<MenuItem
-																key={index}
-																value={item}
-															>
-																{item}
-															</MenuItem>
-														))}
-													</Select>
-												</FormControl>
-												<TextField
-													name="priceInput"
-													label="金額"
-													type="text"
-													onChange={handleInputChange}
-													value={values.priceInput}
-													InputLabelProps={{ shrink: true }}
-												/>
+												{item.max}{item.unit}
 											</div>
-											<div className={styles.td}>
-												<TextField
-													name="maxInput"
-													label="最大貸渡数"
-													type="text"
-													onChange={handleInputChange}
-													value={values.maxInput}
-													InputLabelProps={{ shrink: true }}
-												/>
-											</div>
-
 										</>
-									) : (
-											<>
-												<div className={styles.td}>
-													{item.visible ? "表示" : "非表示"}
-												</div>
-												<div className={`${ styles.td } ${ styles.name }`}>
-													<div>{item.name}</div>
-													<div>{`【 ${item.s_name} 】`}</div>
-												</div>
-												<div className={styles.td}>
-													{item.category === "日数" ? "当日" : `1${item.unit}`}
-													{" "}
-													{item.price === "0" ? "無料" : `${Number(item.price).toLocaleString()}円～` }
-												</div>
-												<div className={styles.td}>
-													{item.max}{item.unit}
-												</div>
-											</>
-									)}
-									<div className={styles.td}>
-										<Button
-											variant="outlined"
-											className={styles.btn}
-											onClick={() => {
-												edit === index ? (
-													<>
-														{setEdit(false)}
-														{setVisible("")}
-														{setValues({})}
-													</>
-												) : (
-													<>
-															{setInputChange(item.visible, item.name, item.s_name, item.category, item.unit, item.price,item.max)}
-															{setEdit(index)}
-													</>
-												)
-											}}
-										>
-											{edit === index ? "取消" : "編集"}
-										</Button>
-									</div>
-									<div key={index} className={styles.td}>
-										<Button
-											variant="contained"
-											className={styles.btn}
-											onClick={() => {
-												edit === index ? (
-													handleSet(optionList[index].id)
-												) : (
-													<>
-														{setSelectId(optionList[index].id)}
-														{setSelectName(item.name)}
-														{setOpen(true)}
-													</>
-												)
-											}}
-										>
-											{edit === index ? "登録" : "削除"}
-										</Button>
-									</div>
+								)}
+								<div className={styles.td}>
+									<Button
+										variant="outlined"
+										className={styles.btn}
+										onClick={() => {
+											edit === index ? (
+												<>
+													{setEdit(false)}
+													{setVisible("")}
+													{setValues({})}
+												</>
+											) : (
+												<>
+														{setInputChange(item.visible, item.name, item.s_name, item.category, item.unit, item.price,item.max)}
+														{setEdit(index)}
+												</>
+											)
+										}}
+									>
+										{edit === index ? "取消" : "編集"}
+									</Button>
+								</div>
+								<div key={index} className={styles.td}>
+									<Button
+										variant="contained"
+										className={styles.btn}
+										onClick={() => {
+											edit === index ? (
+												handleSet(optionList[index].id)
+											) : (
+												<>
+													{setSelectId(optionList[index].id)}
+													{setSelectName(item.name)}
+													{setOpen(true)}
+												</>
+											)
+										}}
+									>
+										{edit === index ? "登録" : "削除"}
+									</Button>
 								</div>
 							</div>
 						)

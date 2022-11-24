@@ -15,6 +15,7 @@ import styles from 'styles/class_list.module.scss'
 
 export default function ClassList() {
 	const [classList, setClassList] = useState([{}])
+	const [optionList, setOptionList] = useState([{}])
 	const [open, setOpen] = useState(false)
 	const [edit, setEdit] = useState(false)
 	const [sortSw, setSortSw] = useState([false, false, false, false, false])
@@ -32,6 +33,7 @@ export default function ClassList() {
 		async function init() {
 			setClassList(await getDb('class','',true))
 			setSelectName(await classList[0]?.name)
+			setOptionList(await getDb('option','',true))
 		}
 		init();
 	}, [])
@@ -288,9 +290,23 @@ export default function ClassList() {
 									<div className={styles.tr}>
 										<div className={styles.basicOpt}>
 											標準装備：
+											{item?.basic_option?.map((optId,i) => {
+												return(
+													<span key={i} style={{margin:"0 10px"}}>
+														{optionList?.filter((obj) => obj.id === optId)[0]?.name}{` `}
+													</span>
+												)
+											})}
 										</div>
 										<div className={styles.addOpt}>
 											追加オプション：
+											{item?.add_option?.map((optId,i) => {
+												return(
+													<span key={i} style={{margin:"0 10px"}}>
+														{optionList?.filter((obj) => obj.id === optId)[0]?.name}{` `}
+													</span>
+												)
+											})}
 										</div>
 									</div>
 								</div>

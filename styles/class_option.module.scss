@@ -1,84 +1,91 @@
-
-.table {
-	width: 100%;
-	.tr{
-		display: flex;
-		width:100%;
-		padding:0 10px;
-		&:nth-child(even){
-			display: block;
-		}
-		.th{
-			padding:5px;
-			align-self: center;
-			text-align: center;
-			&:nth-child(1){
-				width:10%;
-			}
-			&:nth-child(2){
-				width:50%;
-			}
-			&:nth-child(3){
-				width:20%;
-			}
-			&:nth-child(4){
-				width:20%;
-				justify-content: center;
-				display: flex;
-			}
-		}
-		.td{
-			padding:5px;
-			align-self: center;
-			&:nth-child(1){
-				width:10%;
-			}
-			&:nth-child(2){
-				width:50%;
-			}
-			&:nth-child(3){
-				width:20%;
-				display: flex;
-			}
-			&:nth-child(4){
-				width:20%;
-				justify-content: center;
-				display: flex;
-			}
-		}
-		.btn{
-			margin:0;
-		}
+.section{
+	background-color: #fff;
+	margin-bottom:20px;
+	padding: 10px;
+	.section_ttl{
+		padding:10px ;
+		font-size: var(--xlarge);
 	}
-	.thead{
-		background-color: var(--tertiary);
-		.th{
-			text-align: center;
-		}
-	}
-	.tbody{
-		background-color: #ffffff;
+	.table {
+		width: 100%;
 		.tr{
-			&:nth-child(even){
-				border-bottom:1px solid var(--border);
-				background-color: #f8f8f8;
-			}
-			.basicOpt,
-			.addOpt {
-				font-size: var(--small);
-				padding:5px 5px;
+			display: flex;
+			width:100%;
+			padding:0 10px;
+			.th{
+				padding:5px;
+				align-self: center;
+				text-align: center;
+				&:nth-child(1){
+					width:10%;
+				}
+				&:nth-child(2){
+					width:50%;
+				}
+				&:nth-child(3){
+					width:20%;
+				}
+				&:nth-child(4){
+					width:20%;
+					justify-content: center;
+					display: flex;
+				}
 			}
 			.td{
-				text-align: left;
+				padding:5px;
+				align-self: center;
 				&:nth-child(1){
-					text-align: center;
+					width:10%;
+				}
+				&:nth-child(2){
+					width:50%;
+				}
+				&:nth-child(3){
+					width:20%;
+					display: flex;
+				}
+				&:nth-child(4){
+					width:20%;
+					justify-content: center;
+					display: flex;
+				}
+			}
+			.btn{
+				margin:0;
+			}
+		}
+		.thead{
+			background-color: var(--tertiary);
+			.th{
+				text-align: center;
+			}
+		}
+		.tbody{
+			background-color: #ffffff;
+			.tr{
+				&:nth-child(even){
+					background-color: #f8f8f8;
+				}
+				.basicOpt,
+				.addOpt {
+					font-size: var(--small);
+					padding:5px 5px;
+				}
+				.td{
+					text-align: left;
+					&:nth-child(1){
+						text-align: center;
+					}
 				}
 			}
 		}
 	}
-	.tfoot{
-		.td > div{
-			width:100%;
-		}
+}
+.btns{
+	width:100%;
+	background-color: #ffffff;
+	button{
+		margin-bottom: 0;
+		margin-right: 20px;
 	}
 }
