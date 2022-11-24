@@ -104,8 +104,7 @@ export default function ClassOption(){
 								<div key={index} className={styles.tr}>
 									<div className={styles.td}>
 										<CheckBox onChange={(e) => handleBasicOpt(e, item.id)} checked={basicOption?.some((i) => i === item.id) || false} />
-										{console.log("koko", basicOption?.some((i) => i === item.id)) }
-
+									
 									</div>
 									<div className={`${styles.td} ${styles.name}`}>
 										<div>{item.name}</div>
