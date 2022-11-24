@@ -18,15 +18,11 @@ import styles from 'styles/option_list.module.scss'
 export default function OptionList() {
 	const [optionList, setOptionList] = useState([{}])
 	// const [classList, setClassList] = useState([])
-	const [selectClass, setSelectClass] = useState("")
 	const [selectId, setSelectId] = useState()
 	const [selectName, setSelectName] = useState()
 	const [open, setOpen] = useState(false)
 	const [edit, setEdit] = useState(false)
-	const [editName, setEditName] = useState()
-	const [editNumberA, setEditNumberA] = useState()
-	const [editNumberB, setEditNumberB] = useState()
-	const [editClass, setEditClass] = useState()
+
 	const [sortSw, setSortSw] = useState([false, false, false, false, false])
 	const [newPost, setNewPost] = useState(false)
 	const [order, setOrder] = useState("")

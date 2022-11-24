@@ -103,11 +103,12 @@
 		.tr{
 			&:nth-child(even){
 				border-bottom:1px solid var(--border);
+				background-color: #f8f8f8;
 			}
 			.basicOpt,
 			.addOpt {
 				font-size: var(--small);
-				padding:2px 5px;
+				padding:5px 5px;
 			}
 			.td{
 				text-align: left;
