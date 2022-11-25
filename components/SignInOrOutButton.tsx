@@ -10,13 +10,16 @@ export const SignInOrOutButton: FC = () => {
 
 	if (isSignedIn) {
 		return (
-			<Button onClick={() => signOut(getAuth())} variant="contained">
+			<Button onClick={() => {
+				signOut(getAuth())
+				Router.push("/login")
+			}} variant="contained">
 				Sign-out
 			</Button>
 		);
 	} else {
 		return (
-			<Button onClick={() => Router.push("/signin")} variant="contained">
+			<Button onClick={() => Router.push("/login")} variant="contained">
 				Sign-in
 			</Button>
 		);

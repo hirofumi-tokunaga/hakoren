@@ -20,8 +20,9 @@ const uiConfig: auth.Config = {
 		// TwitterAuthProvider.PROVIDER_ID,
 	],
 	signInSuccessUrl: "/",
-};
 
+};
+console.log("さいんいん2");
 export const SignInForm: FC = () => {
 
 	return (

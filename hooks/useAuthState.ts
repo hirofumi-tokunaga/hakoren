@@ -53,6 +53,7 @@ export function useAuthState(): AuthState {
 		// ページ遷移時にサインイン状態の監視を解除
 		return () => unsubscribe();
 	}, []);
+	console.log("さいんいん", authState);
 
 	return authState;
 }

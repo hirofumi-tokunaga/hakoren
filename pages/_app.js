@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import '../styles/globals.scss'
 import Layout from 'components/layout'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { useAuthState } from 'hooks/useAuthState'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, router }) {
 	const theme = createTheme({
 		palette: {
 			primary: {
@@ -32,12 +34,26 @@ function MyApp({ Component, pageProps }) {
 			},
 		}
 	})
+	const login = useAuthState()
+	useEffect(() => {
+		if (router.pathname === "/login" || router.pathname === "/search") return; // pathnameが"/login"の場合には処理を行わない
+		// ここに処理を書く
+		if (!login.isSignedIn && !login.isLoading) {
+			router.push("/login")
+		}
+	}, [login.isLoading])
 	return (
-		<ThemeProvider theme={theme}>
-			<Layout>
-				< Component {...pageProps } />
-			</Layout>
-		</ThemeProvider>
+		<>
+			{(router.pathname === "/login" || router.pathname === "/search" || login.isSignedIn) && (
+				<ThemeProvider theme={theme}>
+					<Layout>
+						< Component {...pageProps } />
+					</Layout>
+				</ThemeProvider>
+
+				)
+			}
+		</>
 	)
 }
 
