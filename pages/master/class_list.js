@@ -251,14 +251,16 @@ export default function ClassList() {
 											</>
 										)}
 										<div className={styles.td}>
-											<Link href={"/master/class_option"} as={`/master/class_option/${item.id}`}>
-												<Button
-													variant="outlined"
-													className={styles.btn}
-												>
-													OP設定
-												</Button>
-											</Link>
+											{edit !== index && (
+												<Link href={"/master/class_option"} as={`/master/class_option/${item.id}`}>
+													<Button
+														variant="outlined"
+														className={styles.btn}
+													>
+														OP設定
+													</Button>
+												</Link>
+											)}
 										</div>
 										<div className={styles.td}>
 											<Button
