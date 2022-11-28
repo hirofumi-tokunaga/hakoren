@@ -18,9 +18,9 @@ const uiConfig: auth.Config = {
 		// FacebookAuthProvider.PROVIDER_ID,
 		GoogleAuthProvider.PROVIDER_ID,
 		// TwitterAuthProvider.PROVIDER_ID,
+		disableSignUp
 	],
 	signInSuccessUrl: "/",
-
 };
 console.log("さいんいん2");
 export const SignInForm: FC = () => {
