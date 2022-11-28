@@ -13,13 +13,14 @@ import styles from "styles/signinform.module.scss";
 
 const uiConfig: auth.Config = {
 	signInFlow: "popup",
-	signInOptions: [
+	signInOptions: [{
 		EmailAuthProvider.PROVIDER_ID,
+		GoogleAuthProvider.PROVIDER_ID
+		,
 		// FacebookAuthProvider.PROVIDER_ID,
-		GoogleAuthProvider.PROVIDER_ID,
 		// TwitterAuthProvider.PROVIDER_ID,
-		disableSignUp
-	],
+		disableSignUp: {status:true}
+	}],
 	signInSuccessUrl: "/",
 };
 export const SignInForm: FC = () => {
