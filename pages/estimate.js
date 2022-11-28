@@ -11,7 +11,7 @@ import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
 import TimePicker from 'components/timepicker'
 
-import styles from 'styles/reservation.module.scss'
+import styles from 'styles/search.module.scss'
 
 export default function Estimate() {
 	const Today = new Date()
