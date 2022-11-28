@@ -146,9 +146,9 @@ export default function Search() {
 											<div className={styles.option}>
 												<div>標準装備</div>
 												<div>
-													{classData.basic_option.map((item,i) => {
+													{classData.basic_option.map((item,i2) => {
 														return (
-															<span>
+															<span key={ i2 }>
 																{optionList.filter((item2) => item2.id === item)[0]?.name}
 															</span>
 														)
@@ -157,7 +157,7 @@ export default function Search() {
 											</div>
 											<div className={styles.text}>
 												{classData.text}
-											</div>	
+											</div>
 										</div>
 										<div className={styles.right}>
 											<div className={styles.price_title}>当日料金</div>
