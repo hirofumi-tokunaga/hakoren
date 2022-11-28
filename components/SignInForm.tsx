@@ -22,9 +22,7 @@ const uiConfig: auth.Config = {
 	],
 	signInSuccessUrl: "/",
 };
-console.log("さいんいん2");
 export const SignInForm: FC = () => {
-
 	return (
 		<div className={styles.section}>
 			<div className={styles.container}>

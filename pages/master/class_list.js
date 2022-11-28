@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 
-
 import MainHead from 'components/mainhead'
 import DeleteModal from 'pages/modal/delete_modal'
 import Loading from 'components/loading'
@@ -153,6 +152,9 @@ export default function ClassList() {
 								画像
 							</div>
 							<div className={styles.th}>
+								紹介文
+							</div>
+							<div className={styles.th}>
 								オプション
 							</div>
 							<div className={styles.th}>
@@ -236,17 +238,29 @@ export default function ClassList() {
 												<div className={styles.td}>
 														<img src={item.image} style={{ height:"100px"}} />
 												</div>
+												<div className={styles.td}>
+													<Link href={"/master/class_text"} as={`/master/class_text/${item.id}`}>
+														<Button
+															variant="outlined"
+															className={styles.btn}
+														>
+															紹介文設定
+														</Button>
+													</Link>
+												</div>
 											</>
 										)}
 										<div className={styles.td}>
-											<Link href={"/master/class_option"} as={`/master/class_option/${item.id}`}>
-												<Button
-													variant="outlined"
-													className={styles.btn}
-												>
-													OP設定
-												</Button>
-											</Link>
+											{edit !== index && (
+												<Link href={"/master/class_option"} as={`/master/class_option/${item.id}`}>
+													<Button
+														variant="outlined"
+														className={styles.btn}
+													>
+														OP設定
+													</Button>
+												</Link>
+											)}
 										</div>
 										<div className={styles.td}>
 											<Button
