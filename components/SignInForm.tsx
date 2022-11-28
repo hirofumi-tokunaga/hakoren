@@ -13,22 +13,33 @@ import styles from "styles/signinform.module.scss";
 
 const uiConfig: auth.Config = {
 	signInFlow: "popup",
-	signInOptions: [{
-		EmailAuthProvider.PROVIDER_ID,
-		GoogleAuthProvider.PROVIDER_ID
-		,
-		// FacebookAuthProvider.PROVIDER_ID,
-		// TwitterAuthProvider.PROVIDER_ID,
-		disableSignUp: {status:true}
-	}],
+	// signInOptions: [
+	// 	EmailAuthProvider.PROVIDER_ID,
+	// 	// FacebookAuthProvider.PROVIDER_ID,
+	// 	GoogleAuthProvider.PROVIDER_ID,
+	// 	// TwitterAuthProvider.PROVIDER_ID,
+
+	// ],
+	signInOptions: [
+		{
+			provider: EmailAuthProvider.PROVIDER_ID,
+			disableSignUp: { status: true },
+		},
+		{
+			provider: GoogleAuthProvider.PROVIDER_ID,
+			disableSignUp: { status: true },
+		},
+	],
 	signInSuccessUrl: "/",
 };
+console.log("さいんいん2");
 export const SignInForm: FC = () => {
+
 	return (
 		<div className={styles.section}>
 			<div className={styles.container}>
 				<h1>車両管理システム</h1>
-				< StyledFirebaseAuth firebaseAuth = { getAuth() } uiConfig = { uiConfig } />
+				< StyledFirebaseAuth firebaseAuth={getAuth()} uiConfig={uiConfig} />
 			</div>
 		</div>
 	)
