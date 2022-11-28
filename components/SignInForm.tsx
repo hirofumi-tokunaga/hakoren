@@ -25,10 +25,6 @@ const uiConfig: auth.Config = {
 			provider: EmailAuthProvider.PROVIDER_ID,
 			disableSignUp: { status: true },
 		},
-		{
-			provider: GoogleAuthProvider.PROVIDER_ID,
-			disableSignUp: { status: true },
-		},
 	],
 	signInSuccessUrl: "/",
 };
