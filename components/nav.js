@@ -52,6 +52,9 @@ export default function Nav() {
 					<Link href="/estimate">
 						<a>見積フォーム</a>
 					</Link>
+					<Link href="/post_put">
+						<a>テスト送信フォーム</a>
+					</Link>
 				</li>
 
 			</ul>
