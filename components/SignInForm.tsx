@@ -3,7 +3,7 @@ import {
 	getAuth,
 	EmailAuthProvider,
 	// FacebookAuthProvider,
-	GoogleAuthProvider,
+	// GoogleAuthProvider,
 	// TwitterAuthProvider,
 } from "firebase/auth";
 import { auth } from "firebaseui";
