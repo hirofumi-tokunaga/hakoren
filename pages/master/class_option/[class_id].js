@@ -30,6 +30,7 @@ export default function ClassOption(){
 	// 読み込み ----------------------
 	useEffect(() => {
 		async function init() {
+			
 			setOptionList(await getDb('option', 'name', true))
 			setClassList(await getDb('class', '', true))
 		}
@@ -114,7 +115,7 @@ export default function ClassOption(){
 								<div key={index} className={styles.tr}>
 									<div className={styles.td}>
 										<CheckBox onChange={(e) => handleBasicOpt(e, item.id)} checked={basicOption?.some((i) => i === item.id) || false} />
-									
+
 									</div>
 									<div className={`${styles.td} ${styles.name}`}>
 										<div>{item.name}</div>
@@ -187,7 +188,7 @@ export default function ClassOption(){
 					</div>
 				</div>
 			</div>
-			
+
 			<div className={styles.section}>
 				<div className={styles.btns}>
 					<Link href={"/master/class_list"}>

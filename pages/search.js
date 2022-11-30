@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getDb } from 'components/api'
+import Link from 'next/link'
 
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
@@ -162,11 +163,18 @@ export default function Search() {
 										<div className={styles.right}>
 											<div className={styles.price_title}>当日料金</div>
 											<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</div>
-											<Button
-												variant="contained"
-											>
-												詳細・お見積りへ
-											</Button>
+											{console.log(classData
+											)}
+											<Link href={{
+												pathname: '/estimate',
+												query: { id: classData.id },
+											}}>
+												<Button
+													variant="contained"
+												>
+													詳細・お見積りへ
+												</Button>
+											</Link>
 										</div>
 									</>
 								)}

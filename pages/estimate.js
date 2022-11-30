@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { getDb } from 'components/api'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import RadioGroup from '@mui/material/RadioGroup';
+import RadioGroup from '@mui/material/RadioGroup'
 
 import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
@@ -26,6 +28,15 @@ export default function Estimate() {
 	const [classList, setClassList] = useState([])
 	const [selectCarId, setSelectCarId] = useState()
 	const [isSearch, setIsSearch] = useState(false)
+
+	const router = useRouter()
+	const query = router.query;
+	useEffect(() => {
+		if (router.isReady) {
+			console.log(query.id)
+		}
+	}, [query, router])
+
 
 	const inputCheck = (data) => {
 		if (
@@ -101,7 +112,6 @@ export default function Estimate() {
 		<>
 			<Loading loading={loading} />
 			<Box className={styles.container}>
-
 				<Box className={styles.outline}>
 					<h2>レンタカー最安検索</h2>
 					<Box className={styles.form}>

@@ -28,7 +28,6 @@ const uiConfig: auth.Config = {
 	],
 	signInSuccessUrl: "/",
 };
-console.log("さいんいん2");
 export const SignInForm: FC = () => {
 
 	return (
