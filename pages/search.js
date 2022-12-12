@@ -6,7 +6,6 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import RadioGroup from '@mui/material/RadioGroup';
 
 import DatePicker_Custom from 'components/datepicker-custom'
 import TimePicker from 'components/timepicker'
@@ -77,6 +76,7 @@ export default function Search() {
 		}
 		init();
 	}, [startDate, endDate])
+	console.log(startDate)
 	return (
 		<Box className={styles.container}>
 			<Box className={styles.outline}>
@@ -117,73 +117,71 @@ export default function Search() {
 				</Box>
 			</Box>
 			<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "条件に一致する在庫がありません")}</p>
-			<RadioGroup>
-				<ul className={styles.cardata}>
-					{isSearch && (okClass?.map((item,i) => {
-						const classData = classList?.filter((data) => data.name === item)[0]
-						return (
-							<li key = { i } className="flex">
-								{classData && (
-									<>
-										<div className={styles.left}>
-											<div className={styles.c_name}>
-												{classData.name}クラス
+			<ul className={styles.cardata}>
+				{isSearch && (okClass?.map((item,i) => {
+					const classData = classList?.filter((data) => data.name === item)[0]
+					return (
+						<li key = { i } className="flex">
+							{classData && (
+								<>
+									<div className={styles.left}>
+										<div className={styles.c_name}>
+											{classData.name}クラス
+										</div>
+										<div className={styles.c_image}>
+											<img src={classData.image}/>
+										</div>
+										<div className={styles.c_info}>
+											<div className="flex">
+												<div>車型</div>
+												<div>{classData.car}</div>
 											</div>
-											<div className={styles.c_image}>
-												<img src={classData.image}/>
-											</div>
-											<div className={styles.c_info}>
-												<div className="flex">
-													<div>車型</div>
-													<div>{classData.car}</div>
-												</div>
-												<div className="flex">
-													<div>定員</div>
-													<div>{classData.capacity} 名</div>
-												</div>
+											<div className="flex">
+												<div>定員</div>
+												<div>{classData.capacity} 名</div>
 											</div>
 										</div>
-										<div className={styles.center}>
-											<div className={styles.option}>
-												<div>標準装備</div>
-												<div>
-													{classData.basic_option.map((item,i2) => {
-														return (
-															<span key={ i2 }>
-																{optionList.filter((item2) => item2.id === item)[0]?.name}
-															</span>
-														)
-													})}
-												</div>
-											</div>
-											<div className={styles.text}>
-												{classData.text}
+									</div>
+									<div className={styles.center}>
+										<div className={styles.option}>
+											<div>標準装備</div>
+											<div>
+												{classData.basic_option.map((item,i2) => {
+													return (
+														<span key={ i2 }>
+															{optionList.filter((item2) => item2.id === item)[0]?.name}
+														</span>
+													)
+												})}
 											</div>
 										</div>
-										<div className={styles.right}>
-											<div className={styles.price_title}>当日料金</div>
-											<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</div>
-											{console.log(classData
-											)}
-											<Link href={{
-												pathname: '/estimate',
-												query: { id: classData.id },
-											}}>
-												<Button
-													variant="contained"
-												>
-													詳細・お見積りへ
-												</Button>
-											</Link>
+										<div className={styles.text}>
+											{classData.text}
 										</div>
-									</>
-								)}
-							</li>
-						)
-					}
-					))}
-				</ul>
-			</RadioGroup>
+									</div>
+									<div className={styles.right}>
+										<div className={styles.price_title}>当日料金</div>
+										<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</div>
+										{console.log(classData
+										)}
+										<Link href={{
+											pathname: '/estimate',
+											query: { id: classData.id, sd: transDate(startDate), st: startTime, ed: transDate(endDate), et: endTime },
+										}}>
+											<Button
+												variant="contained"
+											>
+												詳細・お見積りへ
+											</Button>
+										</Link>
+									</div>
+								</>
+							)}
+						</li>
+					)
+				}
+				))}
+			</ul>
 		</Box>
 	)
 }

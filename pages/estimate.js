@@ -7,7 +7,6 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import RadioGroup from '@mui/material/RadioGroup'
 
 import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
@@ -24,16 +23,33 @@ export default function Estimate() {
 	const [loading, setLoading] = useState(false)
 	const [scheduleOk, setScheduleOk] = useState(false)
 	const [carList, setCarList] = useState([])
-	const [okClass, setOkClass] = useState([])
 	const [classList, setClassList] = useState([])
 	const [selectCarId, setSelectCarId] = useState()
 	const [isSearch, setIsSearch] = useState(false)
-
+	const [classData,setClassData] = useState()
 	const router = useRouter()
 	const query = router.query;
 	useEffect(() => {
 		if (router.isReady) {
-			console.log(query.id)
+			console.log(query.id, query.sd, query.st, query.ed, query.et)
+			let sy = query.sd.substr(0, 4)
+			let sm = query.sd.substr(4, 2)
+			let sd = query.sd.substr(6, 2)
+			let sday = sy + '.' + sm + '.' + sd
+			let sdate = new Date(sday);
+			console.log(sdate.toLocaleString(),query.st);
+
+			let ey = query.ed.substr(0, 4)
+			let em = query.ed.substr(4, 2)
+			let ed = query.ed.substr(6, 2)
+			let eday = ey + '.' + em + '.' + ed
+			let edate = new Date(eday);
+			console.log(edate.toLocaleString(), query.et);
+			setStartDate(sdate)
+			setStartTime(query.st)
+			setEndDate(edate)
+			setEndTime(query.et)
+			setClassData(classList?.filter((data) => data.id === query.id)[0])
 		}
 	}, [query, router])
 
@@ -91,7 +107,6 @@ export default function Estimate() {
 					setScheduleOk(true)
 				}
 			})
-			setOkClass(okCarList)
 		})
 	}
 	useEffect(() => {
@@ -150,49 +165,38 @@ export default function Estimate() {
 					</Box>
 				</Box>
 				<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "条件に一致する在庫がありません")}</p>
-				<RadioGroup>
-					<ul className={styles.cardata}>
-						{isSearch && (okClass?.map((item, i) => {
-							const classData = classList?.filter((data) => data.name === item)[0]
-							return (
-								<li key={i} className="flex">
-									{classData && (
-										<>
-											<div className={styles.left}>
-												<div className={styles.c_name}>
-													{classData.name}クラス
-												</div>
-												<div className={styles.c_image}>
-													<img src={classData.image} />
-												</div>
-												<div className={styles.c_info}>
-													<div className="flex">
-														<div>車型</div>
-														<div>{classData.car}</div>
-													</div>
-													<div className="flex">
-														<div>定員</div>
-														<div>{classData.capacity} 名</div>
-													</div>
-												</div>
+							{classData && (
+								<>
+									<div className={styles.left}>
+										<div className={styles.c_name}>
+											{classData.name}クラス
+										</div>
+										<div className={styles.c_image}>
+											<img src={classData.image} />
+										</div>
+										<div className={styles.c_info}>
+											<div className="flex">
+												<div>車型</div>
+												<div>{classData.car}</div>
 											</div>
-											<div className={styles.right}>
-												<div className={styles.price_title}>当日料金</div>
-												<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</div>
-												<Button
-													variant="contained"
-												>
-													詳細・お見積りへ
-												</Button>
+											<div className="flex">
+												<div>定員</div>
+												<div>{classData.capacity} 名</div>
 											</div>
-										</>
-									)}
-								</li>
-							)
-						}
-						))}
-					</ul>
-				</RadioGroup>
+										</div>
+									</div>
+									<div className={styles.right}>
+										<div className={styles.price_title}>当日料金</div>
+										<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</div>
+										<Button
+											variant="contained"
+										>
+											詳細・お見積りへ
+										</Button>
+									</div>
+								</>
+							)}
+
 			</Box>
 
 		</>
