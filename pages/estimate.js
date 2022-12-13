@@ -7,12 +7,14 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
 import Loading from 'components/loading'
 import DatePicker_Custom from 'components/datepicker-custom'
 import TimePicker from 'components/timepicker'
 
-import styles from 'styles/search.module.scss'
+import styles from 'styles/estimate.module.scss'
 
 export default function Estimate() {
 	const Today = new Date()
@@ -26,11 +28,14 @@ export default function Estimate() {
 	const [classList, setClassList] = useState([])
 	const [selectCarId, setSelectCarId] = useState()
 	const [isSearch, setIsSearch] = useState(false)
-	const [classData,setClassData] = useState()
+	const [classData, setClassData] = useState()
+	const [optionList, setOptionList] = useState([{}])
+	const [optionNum, setOptionNum] = useState([])
+
 	const router = useRouter()
 	const query = router.query;
 	useEffect(() => {
-		if (router.isReady) {
+		if (router.isReady && query.id) {
 			console.log(query.id, query.sd, query.st, query.ed, query.et)
 			let sy = query.sd.substr(0, 4)
 			let sm = query.sd.substr(4, 2)
@@ -49,9 +54,9 @@ export default function Estimate() {
 			setStartTime(query.st)
 			setEndDate(edate)
 			setEndTime(query.et)
-			setClassData(classList?.filter((data) => data.id === query.id)[0])
 		}
 	}, [query, router])
+
 
 
 	const inputCheck = (data) => {
@@ -109,13 +114,30 @@ export default function Estimate() {
 			})
 		})
 	}
+	const handleOptionNum = (event,index) => {
+		setOptionNum((prevState) => {
+				const arr = [...prevState];
+				arr.splice(index, 1, event.target.value);
+				return arr;
+			}
+		)
+	}
 	useEffect(() => {
 		async function init() {
-			setCarList(await getDb('carlist'))
 			setClassList(await getDb('class'))
+			setOptionList(await getDb('option', 'name', true))
 		}
 		init();
 	}, [])
+	useEffect(() => {
+		setClassData(classList?.filter((data) => data.id === query.id)[0])
+
+	}, [classList])
+	useEffect(() => {
+		const def = classData?.add_option.map(() => 0)
+		setOptionNum(def)
+		console.log(def)
+	}, [classData])
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist'))
@@ -123,13 +145,58 @@ export default function Estimate() {
 		}
 		init();
 	}, [startDate, endDate])
+	console.log(optionNum)
 	return (
 		<>
 			<Loading loading={loading} />
 			<Box className={styles.container}>
-				<Box className={styles.outline}>
-					<h2>レンタカー最安検索</h2>
-					<Box className={styles.form}>
+				{classData && (
+					<>
+						<Box className={styles.cardata}>
+							<Box className={styles.left}>
+								<Box className={styles.c_name}>
+									{classData.name}クラス
+								</Box>
+								<Box className={styles.c_image}>
+									<img src={classData.image} />
+								</Box>
+								<Box className={styles.c_info}>
+									<Box className="flex">
+										<Box>車型</Box>
+										<Box>{classData.car}</Box>
+									</Box>
+									<Box className="flex">
+										<Box>定員</Box>
+										<Box>{classData.capacity} 名</Box>
+									</Box>
+								</Box>
+							</Box>
+							<Box className={styles.center}>
+								<Box className={styles.option}>
+									<Box>標準装備</Box>
+									<Box>
+										{classData.basic_option.map((item, i2) => {
+											return (
+												<span key={i2}>
+													{optionList.filter((item2) => item2.id === item)[0]?.name}
+												</span>
+											)
+										})}
+									</Box>
+								</Box>
+								<Box className={styles.text}>
+									{classData.text}
+								</Box>
+							</Box>
+						</Box>
+					</>
+				)}
+				<Box className={styles.estimate}>
+					<h2>
+						ご利用条件・オプションを選択してお見積り
+					</h2>
+					<Box className={styles.inner}>
+						<h3>レンタカーご利用基本条件</h3>
 						<Box className={styles.schedule} >
 							<Box className={styles.box}>
 								<FormControl className={styles.day}>
@@ -151,54 +218,28 @@ export default function Estimate() {
 									<TimePicker time={endTime} setTime={setEndTime} />
 								</FormControl>
 							</Box>
-
 						</Box>
-						<Button
-							className={styles.btn}
-							variant="contained"
-							sx={{ mb: 2 }}
-							onClick={() => {
-								handleDateCheck()
-								setIsSearch(true)
-							}}
-						>在庫検索</Button>
+						<h3>オプション選択</h3>
+							{classData?.add_option.map((item, i) => {
+								let currentOpt = optionList?.filter((opt) => item === opt.id)[0]
+								return (
+									<Box className={styles.optSelect} key={i}>
+										{currentOpt?.name}
+										<Select
+											value={optionNum && (optionNum[i]) || 0}
+											onChange={(event) => handleOptionNum(event, i)}
+
+										>
+											<MenuItem value={0}>0</MenuItem>
+											<MenuItem value={1}>1</MenuItem>
+											<MenuItem value={2}>2</MenuItem>
+										</Select>
+									</Box>
+								)
+							})}
 					</Box>
 				</Box>
-				<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "条件に一致する在庫がありません")}</p>
-							{classData && (
-								<>
-									<div className={styles.left}>
-										<div className={styles.c_name}>
-											{classData.name}クラス
-										</div>
-										<div className={styles.c_image}>
-											<img src={classData.image} />
-										</div>
-										<div className={styles.c_info}>
-											<div className="flex">
-												<div>車型</div>
-												<div>{classData.car}</div>
-											</div>
-											<div className="flex">
-												<div>定員</div>
-												<div>{classData.capacity} 名</div>
-											</div>
-										</div>
-									</div>
-									<div className={styles.right}>
-										<div className={styles.price_title}>当日料金</div>
-										<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</div>
-										<Button
-											variant="contained"
-										>
-											詳細・お見積りへ
-										</Button>
-									</div>
-								</>
-							)}
-
 			</Box>
-
 		</>
 	)
 }

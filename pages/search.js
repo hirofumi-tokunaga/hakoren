@@ -117,35 +117,34 @@ export default function Search() {
 				</Box>
 			</Box>
 			<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "条件に一致する在庫がありません")}</p>
-			<ul className={styles.cardata}>
 				{isSearch && (okClass?.map((item,i) => {
 					const classData = classList?.filter((data) => data.name === item)[0]
 					return (
-						<li key = { i } className="flex">
+						<>
 							{classData && (
-								<>
-									<div className={styles.left}>
-										<div className={styles.c_name}>
+								<Box key={i} className={styles.cardata}>
+									<Box className={styles.left}>
+										<Box className={styles.c_name}>
 											{classData.name}クラス
-										</div>
-										<div className={styles.c_image}>
+										</Box>
+										<Box className={styles.c_image}>
 											<img src={classData.image}/>
-										</div>
-										<div className={styles.c_info}>
-											<div className="flex">
-												<div>車型</div>
-												<div>{classData.car}</div>
-											</div>
-											<div className="flex">
-												<div>定員</div>
-												<div>{classData.capacity} 名</div>
-											</div>
-										</div>
-									</div>
-									<div className={styles.center}>
-										<div className={styles.option}>
-											<div>標準装備</div>
-											<div>
+										</Box>
+										<Box className={styles.c_info}>
+											<Box className="flex">
+												<Box>車型</Box>
+												<Box>{classData.car}</Box>
+											</Box>
+											<Box className="flex">
+												<Box>定員</Box>
+												<Box>{classData.capacity} 名</Box>
+											</Box>
+										</Box>
+									</Box>
+									<Box className={styles.center}>
+										<Box className={styles.option}>
+											<Box>標準装備</Box>
+											<Box>
 												{classData.basic_option.map((item,i2) => {
 													return (
 														<span key={ i2 }>
@@ -153,15 +152,15 @@ export default function Search() {
 														</span>
 													)
 												})}
-											</div>
-										</div>
-										<div className={styles.text}>
+											</Box>
+										</Box>
+										<Box className={styles.text}>
 											{classData.text}
-										</div>
-									</div>
-									<div className={styles.right}>
-										<div className={styles.price_title}>当日料金</div>
-										<div className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</div>
+										</Box>
+									</Box>
+									<Box className={styles.right}>
+										<Box className={styles.price_title}>当日料金</Box>
+										<Box className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</Box>
 										{console.log(classData
 										)}
 										<Link href={{
@@ -174,14 +173,13 @@ export default function Search() {
 												詳細・お見積りへ
 											</Button>
 										</Link>
-									</div>
-								</>
+									</Box>
+								</Box>
 							)}
-						</li>
+						</>
 					)
 				}
 				))}
-			</ul>
 		</Box>
 	)
 }

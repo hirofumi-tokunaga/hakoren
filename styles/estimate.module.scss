@@ -3,7 +3,6 @@
 	width:90%;
 	margin:0 auto;
 	max-width:1000px;
-	padding:100px 0;
 	.outline{
 		margin:0 auto;
 		width:100%;
@@ -89,7 +88,7 @@
 			}
 		}
 		.center{
-			width: calc(100% - 500px);
+			width: calc(100% - 320px);
 			.option{
 				background-color: #eee;
 				height:auto;
@@ -150,6 +149,44 @@
 				}
 			}
 		}
+	}
 
+	.estimate{
+		padding: 20px 10px;
+    background: #666;
+    border-radius: 4px;
+		h2{
+			color: #fff;
+			margin-bottom:15px;
+			text-indent: 1em;
+		}
+		.inner{
+			padding: 20px;
+			background: #fff;
+			border-radius: 4px;
+			h3{
+				border-bottom:1px solid var(--border) ;
+				padding-bottom:6px;
+				margin-bottom: 24px;
+				&:not(:first-of-type){
+					margin-top:24px;
+				}
+			}
+			.schedule{
+				>.box{
+					&:first-of-type{
+						margin-bottom: 16px;
+					}
+					>div:first-of-type{
+						margin-right: 16px;
+					}
+				}
+			}
+			.optSelect{
+				display: flex;
+				justify-content: space-between;
+			}
+
+		}
 	}
 }
