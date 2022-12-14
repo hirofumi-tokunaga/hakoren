@@ -8,7 +8,7 @@ const nextConfig = {
 		{ key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
 	],
   // reactStrictMode: true,
-	swcMinify: true,
+	swcMinify: false,
 	webpack: (config) => {
 		config.module.rules.push({
 			test: /\.ttf$/i,
