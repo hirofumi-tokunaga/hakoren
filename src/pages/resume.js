@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PDFDownloadLink, PDFViewer, Page, Text, View, Font, Document, StyleSheet } from '@react-pdf/renderer'
 import fontRegular from 'public/fonts/Nasu-Regular.ttf'
 import fontBold from 'public/fonts/Nasu-Bold.ttf'
-// import 'public/fonts/Nasu-Regular.ttf'
-// import 'public/fonts/Nasu-Bold.ttf'
+import TextField from '@mui/material/TextField'
 
 export default function Resume(){
 	// ttfファイルのフォント定義
@@ -13,7 +12,7 @@ export default function Resume(){
 		src: fontRegular
 	});
 
-	// フォント「ナス 太字」
+	// // フォント「ナス 太字」
 	Font.register({
 		family: 'Nasu-Bold',
 		src: fontBold
@@ -26,16 +25,26 @@ export default function Resume(){
 		text3: { fontSize: '7pt', fontFamily: 'Nasu-Regular' }
 	});
 
+	const [data,setData] = useState()
+	const [data2,setData2] = useState()
+	const handleInput = (e) => {
+		setData(e.target.value);
+	}
+	const handleInput2 = (e) => {
+		setData2(e.target.value);
+	}
 	const MyDoc = () => {
-		return (
+		return (	
 			<Document>
 				{/* orientationは用紙の縦横を指定する（公式ドキュメント参照） */}
 				<Page size="A4" orientation="landscape" >
 					{/* View要素で罫線を出力、Text要素で文字列を出力 */}
 					<View style={{ textAlign: 'center', position: 'absolute', top: '100px', left: '35px', width: '40px', height: '32px', borderWidth: '0.2mm 0.2mm 0.2mm 0.2mm', borderStyle: 'solid solid solid solid' }}>
-						<Text style={wk_styles.text1}>大きい文字列です</Text>
+						{/* <Text style={wk_styles.text1}>大きい文字列です</Text>
 						<Text style={wk_styles.text2}>ふつうの文字列です</Text>
-						<Text style={wk_styles.text3}>小さい文字列です</Text>
+						<Text style={wk_styles.text3}>小さい文字列です</Text> */}
+						<Text style={wk_styles.text1}>{data}</Text>
+						<Text style={wk_styles.text1}>{data2}</Text>
 					</View>
 				</Page>
 			</Document>
@@ -44,6 +53,8 @@ export default function Resume(){
 
 	return (
     <>
+			<TextField onChange={handleInput} value={data}/>
+			<TextField onChange={handleInput2} value={data2}/>
 			{/* ①②は自分の目的に合わせて選ぶ */}
 			{/* ①:クリックするとPDFをダウンロードする */}
 			<PDFDownloadLink document={<MyDoc />} fileName="test1.pdf">
