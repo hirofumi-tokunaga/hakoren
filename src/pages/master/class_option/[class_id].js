@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from "next/router"
 import Link from 'next/link'
 
-import { getDb, upDate  } from 'components/api'
+import { getDb, upDate  } from 'src/components/api'
 import MainHead from 'src/components/mainhead'
 import Loading from 'src/components/loading'
 

@@ -8,8 +8,8 @@ import {
 } from "firebase/auth";
 import { auth } from "firebaseui";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import "components/firebase"; // Initialize FirebaseApp
-import styles from "styles/signinform.module.scss";
+import "src/components/firebase"; // Initialize FirebaseApp
+import styles from "src/styles/signinform.module.scss";
 
 const uiConfig: auth.Config = {
 	signInFlow: "popup",
