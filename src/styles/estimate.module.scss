@@ -185,8 +185,77 @@
 			.optSelect{
 				display: flex;
 				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 10px;
+				.selectBox{
+					width: 100px;
+				}
 			}
-
+			.calc{
+				margin-top:30px;
+				>.flexBox{
+					justify-content: flex-start !important;
+				}
+				.flexBox{
+					justify-content: space-between;
+					display: flex;
+					>div{
+						line-height: 2;
+					}
+					div:first-child{
+						margin-right:40px;
+					}
+				}
+				h4{
+					background-color:#eee ;
+					padding:5px;
+					text-align: center;
+					border-radius: 4px;
+				}
+				.basic{
+					width:300px;
+				}
+				.option{
+					width: 40%;
+				}
+				.optCalc,
+				.basicCalc{
+					border-top: 1px dashed var(--border) ;
+					line-height: 3;
+					text-align: right;
+					margin-top: 10px;
+				}
+				.totalCalc{
+					background-color: #ddd;
+					text-align: right;
+					padding:10px 20px;
+					display: flex;
+					align-items: flex-end;
+					justify-content: flex-end;
+					border-radius:4px ;
+					margin-top:20px;
+					span{
+						display: inline-block;
+						line-height: 1;
+					}
+					.text{
+						background-color:var(--red);
+						color: #fff;
+						padding: 5px;
+						font-weight: 700;
+						height: 25px;
+					}
+					.price{
+						font-size: 40px;
+						line-height: 1;
+						margin:0 5px 0 20px;
+						font-weight: 600;
+					}
+					.yen{
+						font-size: 20px;
+					}
+				}
+			}
 		}
 	}
 }

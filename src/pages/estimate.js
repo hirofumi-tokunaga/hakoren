@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React,{ useEffect, useState } from 'react'
 import { getDb } from 'src/components/api'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -31,29 +31,32 @@ export default function Estimate() {
 	const [classData, setClassData] = useState()
 	const [optionList, setOptionList] = useState([{}])
 	const [optionNum, setOptionNum] = useState([])
+	const [daysNum, setDaysNum] = useState()
+	const [basicCalc,setBasicCalc] = useState(0)
+	const [optCalc, setOptCalc] = useState(0)
+	const [totalCalc, setTotalCalc] = useState(0)
 
 	const router = useRouter()
 	const query = router.query;
 	useEffect(() => {
 		if (router.isReady && query.id) {
-			console.log(query.id, query.sd, query.st, query.ed, query.et)
 			let sy = query.sd.substr(0, 4)
 			let sm = query.sd.substr(4, 2)
 			let sd = query.sd.substr(6, 2)
 			let sday = sy + '.' + sm + '.' + sd
 			let sdate = new Date(sday);
-			console.log(sdate.toLocaleString(),query.st);
 
 			let ey = query.ed.substr(0, 4)
 			let em = query.ed.substr(4, 2)
 			let ed = query.ed.substr(6, 2)
 			let eday = ey + '.' + em + '.' + ed
 			let edate = new Date(eday);
-			console.log(edate.toLocaleString(), query.et);
+
 			setStartDate(sdate)
 			setStartTime(query.st)
 			setEndDate(edate)
 			setEndTime(query.et)
+
 		}
 	}, [query, router])
 
@@ -78,11 +81,11 @@ export default function Estimate() {
 			return false
 		}
 	}
-	const transDate = (date) => {
+	const transDate = (date,str = "") => {
 		var dd = String(date.getDate()).padStart(2, "0")
 		var mm = String(date.getMonth() + 1).padStart(2, "0")
 		var yyyy = date.getFullYear()
-		return yyyy + mm + dd
+		return yyyy + str + mm + str + dd
 	}
 
 	const handleDateCheck = async () => {
@@ -114,7 +117,7 @@ export default function Estimate() {
 			})
 		})
 	}
-	const handleOptionNum = (event,index) => {
+	const handleOptionNum = (event, index) => {
 		setOptionNum((prevState) => {
 				const arr = [...prevState];
 				arr.splice(index, 1, event.target.value);
@@ -136,16 +139,38 @@ export default function Estimate() {
 	useEffect(() => {
 		const def = classData?.add_option.map(() => 0)
 		setOptionNum(def)
-		console.log(def)
 	}, [classData])
+	useEffect(() => {
+		if (optionNum && classData && optionList) {
+			const list = classData.add_option.map((id,i) => {
+				return (
+					Number(optionList.filter((item) => item.id === id)[0]?.price) * optionNum[i]
+				)
+			})
+			const sum = list.reduce((prev, current) => {
+				return prev += current;
+			})
+			setOptCalc(sum || 0)
+		}
+	}, [optionNum])
+
+	useEffect(() => {
+		setTotalCalc(optCalc + basicCalc)
+	}, [optCalc, basicCalc])
+
+	useEffect(() => {
+		setBasicCalc(Number(classData?.price * daysNum))
+	}, [daysNum])
+
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist'))
 			handleDateCheck()
+			let diff = endDate.getTime() - startDate.getTime()
+			setDaysNum((diff / (1000 * 60 * 60 * 24)) + 1)
 		}
 		init();
 	}, [startDate, endDate])
-	console.log(optionNum)
 	return (
 		<>
 			<Loading loading={loading} />
@@ -220,23 +245,83 @@ export default function Estimate() {
 							</Box>
 						</Box>
 						<h3>オプション選択</h3>
-							{classData?.add_option.map((item, i) => {
-								let currentOpt = optionList?.filter((opt) => item === opt.id)[0]
-								return (
-									<Box className={styles.optSelect} key={i}>
-										{currentOpt?.name}
-										<Select
-											value={optionNum && (optionNum[i]) || 0}
-											onChange={(event) => handleOptionNum(event, i)}
+						{classData?.add_option.map((item, i) => {
+							let currentOpt = optionList?.filter((opt) => item === opt.id)[0]
 
-										>
-											<MenuItem value={0}>0</MenuItem>
-											<MenuItem value={1}>1</MenuItem>
-											<MenuItem value={2}>2</MenuItem>
-										</Select>
+							return (
+								<React.Fragment key={ i }>
+									{Number(currentOpt?.max) > 0 && (
+										<Box className={styles.optSelect}>
+											{currentOpt?.name}
+											<Select
+												value={optionNum && (optionNum[i]) || 0}
+												onChange={(event) => handleOptionNum(event, i)}
+												className={styles.selectBox }
+											>
+												<MenuItem key={0} value={0} role="menuitem">{0} {currentOpt?.unit}</MenuItem>
+													{[...Array(Number(currentOpt?.max))].map((_, ii) => {
+														return (
+															<MenuItem key={ii + 1} value={ii + 1}>{ii + 1} {currentOpt?.unit }</MenuItem>
+														)
+													})}
+											</Select>
+										</Box>
+									)}
+								</React.Fragment>
+							)
+						})}
+						<Box className={styles.calc}>
+							<Box className={styles.flexBox}>
+								<Box className={styles.basic}>
+									<h4>基本利用料金</h4>
+									<Box className={styles.flexBox }>
+										<Box>
+											出発日時<br />
+											返却日時<br />
+											利用日数<br />
+										</Box>
+										<Box>
+											{transDate(startDate, '-')} {startTime}<br/>
+											{transDate(endDate, '-')} {endTime}<br />
+											{daysNum}<br />
+										</Box>
 									</Box>
-								)
-							})}
+									<Box className={styles.basicCalc} >{basicCalc.toLocaleString()} 円</Box>
+								</Box>
+								<Box className={styles.option}>
+									<h4>オプション料金</h4>
+									{optionNum && (
+										<>
+										{classData?.add_option.map((item, i) => {
+											if (optionNum[i] < 1) {
+												return
+											}
+											return (
+												<Box className={styles.flexBox} key={i}>
+													<Box>
+														{optionList.filter((item2) => item2.id === item)[0]?.name}
+													</Box>
+													<Box>
+														{Number(optionList.filter((item2) => item2.id === item)[0]?.price * optionNum[i]).toLocaleString()} {"円" }
+													</Box>
+												</Box>
+											)
+										})}
+										</>
+									)}
+									<Box className={styles.optCalc} >{optCalc.toLocaleString()} 円</Box>
+								</Box>
+							</Box>
+							<Box className={styles.totalCalc} ><span className={styles.text}>合計料金</span><span className={styles.price}>{totalCalc.toLocaleString()}</span><span className={styles.yen}>円</span></Box>
+						</Box>
+						<Box className={styles.login}>
+							<Box>
+								初めてご利用の方
+							</Box>
+							<Box>
+								会員登録済みの方
+							</Box>
+						</Box>
 					</Box>
 				</Box>
 			</Box>
