@@ -55,7 +55,7 @@ export default function Nav() {
 					<Link href="/post_put">
 						<a>テスト送信フォーム</a>
 					</Link>
-					<Link href="/resume">
+					<Link href="/generator">
 						<a>PDFジェネレータ</a>
 					</Link>
 				</li>
