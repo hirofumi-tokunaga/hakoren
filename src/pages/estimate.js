@@ -314,12 +314,22 @@ export default function Estimate() {
 							</Box>
 							<Box className={styles.totalCalc} ><span className={styles.text}>合計料金</span><span className={styles.price}>{totalCalc.toLocaleString()}</span><span className={styles.yen}>円</span></Box>
 						</Box>
-						<Box className={styles.login}>
-							<Box>
+						<Box className={styles.btns}>
+							<Box className={styles.wrap}>
 								初めてご利用の方
+								<Link href="/members/registry">
+									<Button variant="contained">
+										会員登録して予約へ進む
+									</Button>
+								</Link>
 							</Box>
-							<Box>
+							<Box className={styles.wrap}>
 								会員登録済みの方
+								<Link href="/members/login">
+									<Button variant="contained">
+										ログインして予約へ進む
+									</Button>
+								</Link>
 							</Box>
 						</Box>
 					</Box>

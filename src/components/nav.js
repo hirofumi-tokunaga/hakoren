@@ -55,6 +55,12 @@ export default function Nav() {
 					<Link href="/post_put">
 						<a>テスト送信フォーム</a>
 					</Link>
+					<Link href="/members/registry">
+						<a>新規会員登録</a>
+					</Link>
+					<Link href="/members/login">
+						<a>メンバーログイン</a>
+					</Link>
 					<Link href="/generator">
 						<a>PDFジェネレータ</a>
 					</Link>

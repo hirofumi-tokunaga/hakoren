@@ -1,0 +1,52 @@
+
+.container{
+	width:90%;
+	margin:0 auto;
+	max-width:1000px;
+	.pageTitle{
+		text-align: center;
+		padding:50px 0;
+		font-size: 24px;
+	}
+	.registryInfo{
+		background-color: #fff;
+		border-radius: 4px;
+		padding: 20px;
+		h2{
+			background-color: #888;
+			color: #fff;
+			padding: 10px;
+			border-radius: 4px;
+			line-height: 1;
+		}
+		.table{
+			.tr{
+				display: flex;
+				align-items: center;
+				margin:20px 0;
+				.th{
+					width:200px;
+				}
+				.td{
+					width:100%;
+					>div{
+						width: 100%;
+					}
+					input{width:100%;}
+				}
+				.td.flex{
+					justify-content: space-between;
+					display: flex;
+					>div{
+						width:49%;
+					}
+				}
+			}
+		}
+		.confirm{
+			width:50%;
+			margin:40px auto;
+			display: block;
+		}
+	}
+}

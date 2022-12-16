@@ -250,10 +250,36 @@
 						line-height: 1;
 						margin:0 5px 0 20px;
 						font-weight: 600;
+						font-family: serif;
+						margin-bottom: -8px;
 					}
 					.yen{
 						font-size: 20px;
 					}
+				}
+			}
+			.btns{
+				margin-top:50px;
+				border:2px solid var(--border);
+				display: flex;
+				.wrap{
+					width: 50%;
+					margin:30px 0;
+					padding: 0 50px;
+					font-weight: 700;
+					text-align: center;
+					font-size: 16px;
+					&:nth-child(1){
+						border-right:1px dashed var(--border);
+					}
+				}
+				button{
+					width:100%;
+					font-size: 20px;
+					display: block;
+					font-weight: 700;
+					margin-top:30px;
+					height: auto;
 				}
 			}
 		}
