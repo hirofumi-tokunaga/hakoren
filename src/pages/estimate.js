@@ -166,7 +166,7 @@ export default function Estimate() {
 		async function init() {
 			setCarList(await getDb('carlist'))
 			handleDateCheck()
-			let diff = endDate.getTime() - startDate.getTime()
+			let diff = endDate?.getTime() - startDate?.getTime()
 			setDaysNum((diff / (1000 * 60 * 60 * 24)) + 1)
 		}
 		init();
