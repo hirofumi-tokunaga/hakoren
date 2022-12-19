@@ -15,6 +15,7 @@ import styles from 'src/styles/registry.module.scss'
 
 export default function Registry() {
 	const [confirm, setConfirm] = useState(false)
+	const [members,setMembers] = useState([])
 	const [nameA, setNameA] = useState("")
 	const [nameB, setNameB] = useState("")
 	const [nameKanaA, setNameKanaA] = useState("")
@@ -24,10 +25,11 @@ export default function Registry() {
 	const [pass, setPass] = useState("")
 	useEffect(() => {
 		async function init() {
-
+			setMembers(await getDb('members'))
 		}
 		init()
 	}, [])
+	console.log(members)
 	const handleInput = (e) => {
 		let name = e.target.name
 		let value = e.target.value
@@ -48,7 +50,11 @@ export default function Registry() {
 			tel &&
 			email &&
 			pass) {
-			setConfirm(true)
+			if (members.filter((item) => item.email === email)[0]) {
+				alert(`(${email})メールアドレスは既に登録されています`)
+			} else {
+				setConfirm(true)
+			}
 		} else {
 			alert('入力内容が不足しています')
 		}

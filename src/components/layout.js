@@ -4,12 +4,15 @@ import Nav from 'src/components/nav'
 import Box from '@mui/material/Box'
 import styles from 'src/styles/layout.module.scss'
 import { useRouter } from "next/router"
+import {LoginMemberProvider } from "src/components/loginMember"
 
 export default function Layout({ children}) {
 	const url = useRouter()
 	return (
-		url.pathname === "/search" || url.pathname === "/login" ? (
-			children
+		url.pathname === "/search" || url.pathname === "/login" || url.pathname === "/estimate" || url.pathname === "/members/registry" || url.pathname === "/members/login" ? (
+			<LoginMemberProvider>
+				{children}
+			</LoginMemberProvider>
 		) : (
 			<>
 				<Header />
