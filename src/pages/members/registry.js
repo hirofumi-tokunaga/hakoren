@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { getDb } from 'src/components/api'
+import { getDb , addData} from 'src/components/api'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { init, emailjs } from 'emailjs-com'
+import { init, send } from 'emailjs-com'
 
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
@@ -15,13 +15,13 @@ import styles from 'src/styles/registry.module.scss'
 
 export default function Registry() {
 	const [confirm, setConfirm] = useState(false)
-	const [nameA, setNameA] = useState()
-	const [nameB, setNameB] = useState()
-	const [nameKanaA, setNameKanaA] = useState()
-	const [nameKanaB, setNameKanaB] = useState()
-	const [tel, setTel] = useState()
-	const [email, setEmail] = useState()
-	const [pass, setPass] = useState()
+	const [nameA, setNameA] = useState("")
+	const [nameB, setNameB] = useState("")
+	const [nameKanaA, setNameKanaA] = useState("")
+	const [nameKanaB, setNameKanaB] = useState("")
+	const [tel, setTel] = useState("")
+	const [email, setEmail] = useState("")
+	const [pass, setPass] = useState("")
 	useEffect(() => {
 		async function init() {
 
@@ -58,24 +58,41 @@ export default function Registry() {
 	}
 	const handleSendMail = () => {
 		// emailjsのUser_IDを使って初期化
-		init('1haj4SXf6QFkzxOWH')
+		const PublicKey = "1haj4SXf6QFkzxOWH"
+		init(PublicKey)
 
 		// 環境変数からService_IDとTemplate_IDを取得する。
-		const emailjsServiceId = 'service_0hbt7kp';
-		const emailjsTemplateId = 'template_iwpkhd4';
+		const emailjsServiceId = 'service_0hbt7kp'
+		const emailjsTemplateId = 'template_iwpkhd4'
 
 		// emailjsのテンプレートに渡すパラメータを宣言
 		const templateParams = {
 			email: email,
-		};
+		}
 
 		// ServiceId,Template_ID,テンプレートに渡すパラメータを引数にemailjsを呼び出し
-		emailjs.send(emailjsServiceId, emailjsTemplateId, templateParams).
+		send(emailjsServiceId, emailjsTemplateId, templateParams).
 			then(() => {
-				// do something
-			});
+				alert('確認メールを送信しました')
+			}).
+			catch((error) => {
+				alert('確認メールの送信に失敗しました',error)
+			})
 	}
-
+	const handleSubmit = async () => {
+		let object = {
+			nameA: nameA,
+			nameB: nameB,
+			nameKanaA: nameKanaA,
+			nameKanaB: nameKanaB,
+			tel: tel,
+			email: email,
+			pass:pass
+		}
+		await addData('members', object).
+			then(() => { alert('登録しました') })
+			.catch(() => { alert('登録に失敗しました') })
+	}
 	return (
 		<>
 			<Box className={styles.container}>
@@ -108,12 +125,14 @@ export default function Registry() {
 								<Box className={styles.th}>メールアドレス</Box>
 								<Box className={styles.td}>
 									<TextField name="email" onChange={handleInput} value={email} />
-								</Box>
-								<Box>
-									<Button onClick={handleSendMail} variant="contained">
-										受信確認メールを送信
-									</Button>
-									※このボタンをクリックすると、ご入力いただいたメールアドレス宛てにメールを受信確認メールを送信いたします。
+									<Box className={styles.sendTest }>
+										<Button onClick={handleSendMail} variant="contained">
+											受信確認メールを送信
+										</Button>
+										<span className={styles.cap }>
+											※このボタンをクリックすると、ご入力いただいたメールアドレス宛てにメールを受信確認メールを送信いたします。
+										</span>
+									</Box>
 								</Box>
 							</Box>
 							<Box className={styles.tr}>
@@ -164,7 +183,7 @@ export default function Registry() {
 							<Button variant="outlined" className={styles.confirm} onClick={handleBack}>
 								内容を変更
 							</Button>
-							<Button variant="contained" className={styles.confirm} onClick={handleConfirm}>
+								<Button variant="contained" className={styles.confirm} onClick={handleSubmit}>
 								この内容で登録
 							</Button>
 						</Box>
