@@ -118,6 +118,7 @@ export default function Input() {
 			setOkCar(newItems)
 		})
 	}
+
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist'))

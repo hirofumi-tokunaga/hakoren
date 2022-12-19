@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getDb } from 'src/components/api'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { init, emailjs } from 'emailjs-com'
 
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
@@ -28,15 +29,53 @@ export default function Registry() {
 		init()
 	}, [])
 	const handleInput = (e) => {
-		console.log(e.target.name)
 		let name = e.target.name
 		let value = e.target.value
 		name === 'nameA' ? setNameA(value) : ""
-		console.log(nameA)
+		name === 'nameB' ? setNameB(value) : ""
+		name === 'nameKanaA' ? setNameKanaA(value) : ""
+		name === 'nameKanaB' ? setNameKanaB(value) : ""
+		name === 'tel' ? setTel(value) : ""
+		name === 'email' ? setEmail(value) : ""
+		name === 'pass' ? setPass(value) : ""
 	}
 	const handleConfirm = () => {
-		setConfirm(true)
+		if (
+			nameA &&
+			nameB &&
+			nameKanaA &&
+			nameKanaB &&
+			tel &&
+			email &&
+			pass) {
+			setConfirm(true)
+		} else {
+			alert('入力内容が不足しています')
+		}
 	}
+	const handleBack = () => {
+		setConfirm(false)
+	}
+	const handleSendMail = () => {
+		// emailjsのUser_IDを使って初期化
+		init('1haj4SXf6QFkzxOWH')
+
+		// 環境変数からService_IDとTemplate_IDを取得する。
+		const emailjsServiceId = 'service_0hbt7kp';
+		const emailjsTemplateId = 'template_iwpkhd4';
+
+		// emailjsのテンプレートに渡すパラメータを宣言
+		const templateParams = {
+			email: email,
+		};
+
+		// ServiceId,Template_ID,テンプレートに渡すパラメータを引数にemailjsを呼び出し
+		emailjs.send(emailjsServiceId, emailjsTemplateId, templateParams).
+			then(() => {
+				// do something
+			});
+	}
+
 	return (
 		<>
 			<Box className={styles.container}>
@@ -62,26 +101,32 @@ export default function Registry() {
 							<Box className={styles.tr}>
 								<Box className={styles.th}>携帯電話番号</Box>
 								<Box className={styles.td}>
-									<TextField name="tel" onChange={handleInput} value={tel}/>
+									<TextField name="tel" onChange={handleInput} value={tel} />
 								</Box>
 							</Box>
 							<Box className={styles.tr}>
 								<Box className={styles.th}>メールアドレス</Box>
-								<Box className={styles.td} name="email" onChange={handleInput} value={email}>
-									<TextField />
+								<Box className={styles.td}>
+									<TextField name="email" onChange={handleInput} value={email} />
+								</Box>
+								<Box>
+									<Button onClick={handleSendMail} variant="contained">
+										受信確認メールを送信
+									</Button>
+									※このボタンをクリックすると、ご入力いただいたメールアドレス宛てにメールを受信確認メールを送信いたします。
 								</Box>
 							</Box>
 							<Box className={styles.tr}>
 								<Box className={styles.th}>パスワード</Box>
 								<Box className={styles.td}>
-									<TextField name="pass" onChange={handleInput} value={pass } />
+									<TextField name="pass" onChange={handleInput} value={pass} />
 								</Box>
 							</Box>
 						</Box>
 						<Button variant="contained" className={styles.confirm} onClick={handleConfirm}>入力内容を確認</Button>
 					</Box>
-				): (
-					<Box className={styles.confirmInfo}>
+				) : (
+						<Box className={`${styles.registryInfo} ${styles.confirmInfo}`}>
 						<h2>お客様情報</h2>
 						<Box className={styles.table}>
 							<Box className={styles.tr}>
@@ -114,8 +159,15 @@ export default function Registry() {
 									{pass}
 								</Box>
 							</Box>
+						</Box >
+						<Box className={styles.btns } >
+							<Button variant="outlined" className={styles.confirm} onClick={handleBack}>
+								内容を変更
+							</Button>
+							<Button variant="contained" className={styles.confirm} onClick={handleConfirm}>
+								この内容で登録
+							</Button>
 						</Box>
-						<Button variant="contained" className={styles.confirm} onClick={handleConfirm}>入力内容を確認</Button>
 					</Box>
 				)}
 			</Box>

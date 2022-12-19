@@ -49,4 +49,16 @@
 			display: block;
 		}
 	}
+	.confirmInfo{
+		width: 500px;
+		margin:0 auto;
+		.btns{
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+			button{
+				width: 40%;
+			}
+		}
+	}
 }
