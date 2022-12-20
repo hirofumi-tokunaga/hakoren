@@ -30,16 +30,19 @@ export default function Estimate() {
 	const [selectCarId, setSelectCarId] = useState()
 	const [isSearch, setIsSearch] = useState(false)
 	const [classData, setClassData] = useState()
-	const [optionList, setOptionList] = useState([{}])
-	const [optionNum, setOptionNum] = useState([])
+	const [optionList, setOptionList] = useState([])
 	const [daysNum, setDaysNum] = useState()
 	const [basicCalc,setBasicCalc] = useState(0)
 	const [optCalc, setOptCalc] = useState(0)
 	const [totalCalc, setTotalCalc] = useState(0)
+	const [addOptList, setAddOptList] = useState([])
 
-	const { member } = useContext(LoginMemberContext)
+
+
+	const { member,booking,setBooking } = useContext(LoginMemberContext)
 	const router = useRouter()
 	const query = router.query;
+
 	useEffect(() => {
 		if (router.isReady && query.id) {
 			let sy = query.sd.substr(0, 4)
@@ -61,8 +64,61 @@ export default function Estimate() {
 
 		}
 	}, [query, router])
+	useEffect(() => {
+		async function init() {
+			setClassList(await getDb('class'))
+			setOptionList(await getDb('option', 'name', true))
+		}
+		init();
+	}, [])
+	useEffect(() => {
+		setClassData(classList?.filter((data) => data.id === query.id)[0])
+	}, [classList])
+	useEffect(() => {
+		if(classData && optionList.length > 0) {
+		setAddOptList(
+				classData?.add_option?.map((item) => {
+					const item3 = optionList?.filter((item2) => item2.id === item)[0]
+					item3['num'] = 0
+					return item3
+				})
+			)
+		}
+	}, [classData,optionList])
+	useEffect(() => {
+		if (addOptList.length > 0) {
+			const list = addOptList.map((item) => {
+				return (
+					Number(item.price * item.num)
+				)
+			})
+			console.log("list", list, addOptList)
+			const sum = list.reduce((prev, current) => {
+				return prev += current;
+			})
+			setOptCalc(sum || 0)
+		}
+	}, [addOptList])
 
+	useEffect(() => {
+		setTotalCalc(optCalc + basicCalc)
+	}, [optCalc, basicCalc])
 
+	useEffect(() => {
+		if (daysNum > 0) {
+			setBasicCalc(Number(classData?.price * daysNum))
+		}
+	}, [daysNum, classData])
+
+	useEffect(() => {
+		async function init() {
+			setCarList(await getDb('carlist'))
+			handleDateCheck()
+			let diff = endDate?.getTime() - startDate?.getTime()
+			setDaysNum((diff / (1000 * 60 * 60 * 24)) + 1)
+		}
+		init()
+	}, [startDate, endDate])
 
 	const inputCheck = (data) => {
 		if (
@@ -119,62 +175,53 @@ export default function Estimate() {
 			})
 		})
 	}
-	const handleOptionNum = (event, index) => {
-		setOptionNum((prevState) => {
-				const arr = [...prevState];
-				arr.splice(index, 1, event.target.value);
-				return arr;
-			}
+	const handleOptionNum = (e, index) => {
+		setAddOptList((prevState) =>
+			prevState.map((value, i) => (i === index ? {
+				category: value.category,
+				id: value.id,
+				max: value.max,
+				name: value.name,
+				price: value.price,
+				s_name: value.s_name,
+				unit: value.unit,
+				visible:value.visible,
+				num: e.target.value
+			} : value))
 		)
 	}
-	useEffect(() => {
-		async function init() {
-			setClassList(await getDb('class'))
-			setOptionList(await getDb('option', 'name', true))
+	const setBookingData = () => {
+		const basicOpt = classData?.basic_option.map((item) => {
+			return optionList.filter((item2) => item2.id === item)[0].name
+		})
+		const obj = {
+			car:classData.name,
+			capacity: classData.capacity,
+			startDate: transDate(startDate),
+			startTime: startTime,
+			endDate: transDate(endDate),
+			endTime: endTime,
+			basicOpt: basicOpt,
+			addOpt: addOptList.filter((item) => item.num > 0),
+			basicCalc: basicCalc,
+			addCalc:optCalc,
+			totalCalc:totalCalc
 		}
-		init();
-	}, [])
-	useEffect(() => {
-		setClassData(classList?.filter((data) => data.id === query.id)[0])
+		return obj
+	}
+	const handleRegistry = () => {
+		setBooking(setBookingData())
+		// router.push("/members/registry")
 
-	}, [classList])
-	useEffect(() => {
-		const def = classData?.add_option.map(() => 0)
-		setOptionNum(def)
-	}, [classData])
-	useEffect(() => {
-		if (optionNum && classData && optionList) {
-			const list = classData.add_option.map((id,i) => {
-				return (
-					Number(optionList.filter((item) => item.id === id)[0]?.price) * optionNum[i]
-				)
-			})
-			const sum = list.reduce((prev, current) => {
-				return prev += current;
-			})
-			setOptCalc(sum || 0)
-		}
-	}, [optionNum])
+	}
+	const handleBooking = () => {
+		router.push("/members/booking")
+	}
+	const handleLogin = () => {
+		router.push("/members/login")
+	}
+	console.log("current", addOptList,booking)
 
-	useEffect(() => {
-		setTotalCalc(optCalc + basicCalc)
-	}, [optCalc, basicCalc])
-
-	useEffect(() => {
-		if (daysNum > 0) {
-			setBasicCalc(Number(classData?.price * daysNum))
-		}
-	}, [daysNum,classData])
-
-	useEffect(() => {
-		async function init() {
-			setCarList(await getDb('carlist'))
-			handleDateCheck()
-			let diff = endDate?.getTime() - startDate?.getTime()
-			setDaysNum((diff / (1000 * 60 * 60 * 24)) + 1)
-		}
-		init()
-	}, [startDate, endDate])
 	return (
 		<>
 			<Loading loading={loading} />
@@ -249,23 +296,21 @@ export default function Estimate() {
 							</Box>
 						</Box>
 						<h3>オプション選択</h3>
-						{classData?.add_option.map((item, i) => {
-							let currentOpt = optionList?.filter((opt) => item === opt.id)[0]
-
+						{addOptList.map((item, i) => {
 							return (
 								<React.Fragment key={ i }>
-									{Number(currentOpt?.max) > 0 && (
+									{Number(item?.max) > 0 && (
 										<Box className={styles.optSelect}>
-											{currentOpt?.name}
+											{item?.name}
 											<Select
-												value={optionNum && (optionNum[i]) || 0}
+												value={item.num }
 												onChange={(event) => handleOptionNum(event, i)}
 												className={styles.selectBox }
 											>
-												<MenuItem key={0} value={0} role="menuitem">{0} {currentOpt?.unit}</MenuItem>
-													{[...Array(Number(currentOpt?.max))].map((_, ii) => {
+												<MenuItem key={0} value={0} role="menuitem">{0} {item?.unit}</MenuItem>
+												{[...Array(Number(item?.max))].map((_, ii) => {
 														return (
-															<MenuItem key={ii + 1} value={ii + 1}>{ii + 1} {currentOpt?.unit }</MenuItem>
+															<MenuItem key={ii + 1} value={ii + 1}>{ii + 1} {item?.unit }</MenuItem>
 														)
 													})}
 											</Select>
@@ -294,19 +339,17 @@ export default function Estimate() {
 								</Box>
 								<Box className={styles.option}>
 									<h4>オプション料金</h4>
-									{optionNum && (
+									{addOptList && (
 										<>
-										{classData?.add_option.map((item, i) => {
-											if (optionNum[i] < 1) {
-												return
-											}
+										{addOptList.map((item, i) => {
+
 											return (
 												<Box className={styles.flexBox} key={i}>
 													<Box>
-														{optionList.filter((item2) => item2.id === item)[0]?.name}
+														{item.name}
 													</Box>
 													<Box>
-														{Number(optionList.filter((item2) => item2.id === item)[0]?.price * optionNum[i]).toLocaleString()} {"円" }
+														{Number(item.price * item.num).toLocaleString()} {"円" }
 													</Box>
 												</Box>
 											)
@@ -319,26 +362,21 @@ export default function Estimate() {
 							<Box className={styles.totalCalc} ><span className={styles.text}>合計料金</span><span className={styles.price}>{totalCalc.toLocaleString()}</span><span className={styles.yen}>円</span></Box>
 						</Box>
 						{member.email ? (
-							<Link href="/members/booking">
-								<Button variant="contained" className={styles.bookingBtn }>予約へ進む</Button>
-							</Link>
+							<Button variant="contained" className={styles.bookingBtn} onClick={handleBooking}>予約へ進む</Button>
 						) : (
 							<Box className={styles.btns}>
 								<Box className={styles.wrap}>
 									初めてご利用の方
-									<Link href="/members/registry">
-										<Button variant="contained">
-											会員登録して予約へ進む
-										</Button>
-									</Link>
+									<Button variant="contained" onClick={handleRegistry}>
+										会員登録して予約へ進む
+									</Button>
 								</Box>
 								<Box className={styles.wrap}>
 									会員登録済みの方
-									<Link href="/members/login">
-										<Button variant="contained">
-											ログインして予約へ進む
-										</Button>
-									</Link>
+									<Button variant="contained" onClick={handleLogin}>
+										ログインして予約へ進む
+									</Button>
+
 								</Box>
 							</Box>
 						)}

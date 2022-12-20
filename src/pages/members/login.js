@@ -65,10 +65,10 @@ export default function Registry() {
 	}
 
 	const [showPassword, setShowPassword] = useState(false);
-	const handleClickShowPassword = () => setShowPassword((show) => !show);
+	const handleClickShowPassword = () => setShowPassword((show) => !show)
 	const handleMouseDownPassword = (event) => {
-		event.preventDefault();
-	};
+		event.preventDefault()
+	}
 
 	console.log(member)
 	return (
