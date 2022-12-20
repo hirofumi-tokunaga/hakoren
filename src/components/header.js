@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Logo from './logo'
 import styles from 'src/styles/header.module.scss'
 import { SignInOrOutButton } from 'src/components/SignInOrOutButton'

@@ -1,5 +1,6 @@
 import Header from 'src/components/header'
 import Footer from 'src/components/footer'
+import MemberHeader from 'src/components/memberHeader'
 import Nav from 'src/components/nav'
 import Box from '@mui/material/Box'
 import styles from 'src/styles/layout.module.scss'
@@ -11,6 +12,7 @@ export default function Layout({ children}) {
 	return (
 		url.pathname === "/search" || url.pathname === "/login" || url.pathname === "/estimate" || url.pathname === "/members/registry" || url.pathname === "/members/login" ? (
 			<LoginMemberProvider>
+				<MemberHeader />
 				{children}
 			</LoginMemberProvider>
 		) : (

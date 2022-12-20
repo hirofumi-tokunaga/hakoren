@@ -6,8 +6,25 @@
 	align-items: center;
 	>div{
 		margin-bottom: 20px;
+		font-weight: 400;
+		position: relative;
+		>div{
+			width: 250px;
+		}
+		.check{
+			position: absolute;
+			left:100%;
+			top:8px;
+			color: var(--primary);
+		}
+		
 	}
-	button{
+	.btn{
 		margin: 0 auto;
+		width: 250px;
+	}
+	.registry{
+		margin-top:20px;
+		color: var(--primary);
 	}
 }

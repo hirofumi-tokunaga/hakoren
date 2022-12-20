@@ -1,7 +1,8 @@
-import React,{ useEffect, useState } from 'react'
+import React,{ useEffect, useState ,useContext} from 'react'
 import { getDb } from 'src/components/api'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { LoginMemberContext } from "src/components/loginMember"
 
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
@@ -36,6 +37,7 @@ export default function Estimate() {
 	const [optCalc, setOptCalc] = useState(0)
 	const [totalCalc, setTotalCalc] = useState(0)
 
+	const { member } = useContext(LoginMemberContext)
 	const router = useRouter()
 	const query = router.query;
 	useEffect(() => {
@@ -159,8 +161,10 @@ export default function Estimate() {
 	}, [optCalc, basicCalc])
 
 	useEffect(() => {
-		setBasicCalc(Number(classData?.price * daysNum))
-	}, [daysNum])
+		if (daysNum > 0) {
+			setBasicCalc(Number(classData?.price * daysNum))
+		}
+	}, [daysNum,classData])
 
 	useEffect(() => {
 		async function init() {
@@ -169,7 +173,7 @@ export default function Estimate() {
 			let diff = endDate?.getTime() - startDate?.getTime()
 			setDaysNum((diff / (1000 * 60 * 60 * 24)) + 1)
 		}
-		init();
+		init()
 	}, [startDate, endDate])
 	return (
 		<>
@@ -314,24 +318,30 @@ export default function Estimate() {
 							</Box>
 							<Box className={styles.totalCalc} ><span className={styles.text}>合計料金</span><span className={styles.price}>{totalCalc.toLocaleString()}</span><span className={styles.yen}>円</span></Box>
 						</Box>
-						<Box className={styles.btns}>
-							<Box className={styles.wrap}>
-								初めてご利用の方
-								<Link href="/members/registry">
-									<Button variant="contained">
-										会員登録して予約へ進む
-									</Button>
-								</Link>
+						{member.email ? (
+							<Link href="/members/booking">
+								<Button variant="contained" className={styles.bookingBtn }>予約へ進む</Button>
+							</Link>
+						) : (
+							<Box className={styles.btns}>
+								<Box className={styles.wrap}>
+									初めてご利用の方
+									<Link href="/members/registry">
+										<Button variant="contained">
+											会員登録して予約へ進む
+										</Button>
+									</Link>
+								</Box>
+								<Box className={styles.wrap}>
+									会員登録済みの方
+									<Link href="/members/login">
+										<Button variant="contained">
+											ログインして予約へ進む
+										</Button>
+									</Link>
+								</Box>
 							</Box>
-							<Box className={styles.wrap}>
-								会員登録済みの方
-								<Link href="/members/login">
-									<Button variant="contained">
-										ログインして予約へ進む
-									</Button>
-								</Link>
-							</Box>
-						</Box>
+						)}
 					</Box>
 				</Box>
 			</Box>
