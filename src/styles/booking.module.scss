@@ -1,0 +1,52 @@
+.booking{
+	background-color: var(--background);
+	height:100vh;
+	.container{
+		width: 90%;
+		max-width: 1000px;
+		margin:5vh auto;
+		display: flex;
+		>div{
+			padding: 15px;
+			background-color: #fff;
+			border-radius: 4px;
+			&:first-child{
+				margin-right:20px;
+				width:calc(70% - 20px);
+			}
+			&:last-child{
+				margin-right:20px;
+				width:30%;
+			}
+			h2{
+				border-radius: 4px;
+				background-color:#444 ;
+				color: #fff;
+				font-weight: 700;
+				padding:10px;
+				line-height: 1;
+			}
+		}
+		.tr{
+			display: flex;
+			align-items: center;
+			padding:15px;
+			border-bottom: 1px dashed var(--border);
+			.th{
+				width:30%;
+			}
+			.td{
+				.flex{
+					display: flex;
+					justify-content: space-between;
+				}
+				width:70%;
+				.btns{
+				}
+			}
+		}
+		.textarea{
+			width: 100%;
+		}
+	}
+}

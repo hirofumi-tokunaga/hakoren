@@ -2,6 +2,7 @@ import React, { useEffect, useState,useContext } from 'react'
 import Link from 'next/link'
 import { getDb } from 'src/components/api'
 import { LoginMemberContext } from "src/components/loginMember"
+import { useRouter } from 'next/router'
 
 import OutlinedInput from '@mui/material/OutlinedInput'
 import TextField from '@mui/material/TextField'
@@ -18,15 +19,16 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import styles from 'src/styles/member_login.module.scss'
 
-export default function Registry() {
+export default function Login() {
 	const [members, setMembers] = useState([])
 	const [email, setEmail] = useState("")
 	const [pass, setPass] = useState("")
 	const [idOk,setIdOk] = useState(false)
 	const [passOk, setPassOk] = useState(false)
 	const [currentMember, setCurrentMember] = useState({})
+	const router = useRouter()
 
-	const { member, setMember } = useContext(LoginMemberContext)
+	const { member, setMember, booking } = useContext(LoginMemberContext)
 	useEffect(() => {
 		async function init() {
 			setMembers(await getDb('members'))
@@ -44,6 +46,11 @@ export default function Registry() {
 	const handleSubmit = () => {
 		if (idOk && passOk) {
 			setMember(currentMember)
+			if (booking.car) {
+				router.push("/members/booking")
+			} else {
+				router.push("/members/mypage")
+			}
 		}
 	}
 	const handleEmail = (e) => {
@@ -69,8 +76,6 @@ export default function Registry() {
 	const handleMouseDownPassword = (event) => {
 		event.preventDefault()
 	}
-
-	console.log(member)
 	return (
 		<>
 			<Box className={styles.container}>

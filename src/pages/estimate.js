@@ -1,6 +1,5 @@
 import React,{ useEffect, useState ,useContext} from 'react'
 import { getDb } from 'src/components/api'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { LoginMemberContext } from "src/components/loginMember"
 
@@ -92,7 +91,6 @@ export default function Estimate() {
 					Number(item.price * item.num)
 				)
 			})
-			console.log("list", list, addOptList)
 			const sum = list.reduce((prev, current) => {
 				return prev += current;
 			})
@@ -211,16 +209,16 @@ export default function Estimate() {
 	}
 	const handleRegistry = () => {
 		setBooking(setBookingData())
-		// router.push("/members/registry")
-
+		router.push("/members/registry")
 	}
 	const handleBooking = () => {
+		setBooking(setBookingData())
 		router.push("/members/booking")
 	}
 	const handleLogin = () => {
+		setBooking(setBookingData())
 		router.push("/members/login")
 	}
-	console.log("current", addOptList,booking)
 
 	return (
 		<>

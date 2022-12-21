@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { getDb , addData} from 'src/components/api'
-import Link from 'next/link'
+import React, { useEffect, useState ,useContext} from 'react'
+import { getDb, addData } from 'src/components/api'
+import { LoginMemberContext } from "src/components/loginMember"
 import { useRouter } from 'next/router'
 import { init, send } from 'emailjs-com'
 
@@ -23,13 +23,15 @@ export default function Registry() {
 	const [tel, setTel] = useState("")
 	const [email, setEmail] = useState("")
 	const [pass, setPass] = useState("")
+	const router = useRouter()
+	const {setMember, booking } = useContext(LoginMemberContext)
+
 	useEffect(() => {
 		async function init() {
 			setMembers(await getDb('members'))
 		}
 		init()
 	}, [])
-	console.log(members)
 	const handleInput = (e) => {
 		let name = e.target.name
 		let value = e.target.value
@@ -96,7 +98,15 @@ export default function Registry() {
 			pass:pass
 		}
 		await addData('members', object).
-			then(() => { alert('登録しました') })
+			then(() => {
+				alert('登録しました')
+				setMember(object)
+				if (booking.car) {
+					router.push("/members/booking")
+				} else {
+					router.push("/members/mypage")
+				}
+			})
 			.catch(() => { alert('登録に失敗しました') })
 	}
 	return (

@@ -9,6 +9,8 @@ export const LoginMemberProvider = props => {
 	return (
 		<LoginMemberContext.Provider value={{ member, setMember,booking,setBooking }} >
 			{children}
+			{console.log("booking", booking)}
+			{console.log("member", member)}
 		</LoginMemberContext.Provider>
 	)
 }
