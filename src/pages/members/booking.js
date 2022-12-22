@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { LoginMemberContext } from "src/components/loginMember"
-import { addData } from 'src/components/api'
+import { addData ,getBookingDb} from 'src/components/api'
 import Link from 'next/link'
 
 import Button from '@mui/material/Button'
@@ -30,6 +30,8 @@ export default function Booking() {
 	const [checked, setChecked] = useState(false)
 	const [confirm, setConfirm] = useState(false)
 	const [carId, setCarId] = useState("")
+	const [bookingInfo, setBookingInfo] = useState([])
+
 	const prefectures = [
 		'北海道',
 		'青森県',
@@ -111,11 +113,11 @@ export default function Booking() {
 			setNameKanaB(member.nameKanaB)
 			setTel(member.tel)
 			setEmail(member.email)
-
+			await setBookingInfo(getBookingDb("bookinginfo"))
 		}
 		init()
 	}, [])
-
+	console.log(bookingInfo)
 	const handleConfirm = () => {
 		if (
 			nameA &&

@@ -27,7 +27,7 @@ export default function CarList() {
 	const [editName, setEditName] = useState()
 	const [editNumberA, setEditNumberA] = useState()
 	const [editNumberB, setEditNumberB] = useState()
-	const [editClass, setEditClass] = useState()
+	const [classId, setClassId] = useState()
 	const [sortSw, setSortSw] = useState([false, false, false, false, false])
 	const [newPost,setNewPost] = useState(false)
 	const [order, setOrder] = useState("")
@@ -42,7 +42,7 @@ export default function CarList() {
 		}
 		init();
 	}, [])
-
+	console.log(classList)
 	// 追加 ----------------------
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -55,7 +55,7 @@ export default function CarList() {
 			name: name,
 			number_a: numberA,
 			number_b: numberB,
-			class: cl
+			classId:cl
 		}
 		setLoading(true)
 		await addData('carlist',object)
@@ -72,7 +72,7 @@ export default function CarList() {
 			name: editName,
 			number_a: editNumberA,
 			number_b: editNumberB,
-			class: editClass
+			classId: classId
 		}
 		await setData("carlist", object, id)
 		setSelectId("")
@@ -89,7 +89,7 @@ export default function CarList() {
 		setEditNumberB(event.target.value)
 	}
 	const handleClassChange = (event) => {
-		setEditClass(event.target.value)
+		setClassId(event.target.value)
 	}
 	// 削除 ----------------------
 	async function handleDelete() {
@@ -173,16 +173,16 @@ export default function CarList() {
 												<FormControl>
 													<InputLabel InputLabelProps={{ shrink: true }}>クラス</InputLabel>
 													<Select
-														value={editClass}
+														value={classId}
 														label="クラス"
 														onChange={handleClassChange}
 														name='classInput'
-														defaultValue={item.class }
+														defaultValue={classList?.filter((item2) => item.classId === item2.id)[0]?.name}
 													>
 														{classList.map((name, index) => (
 															<MenuItem
 																key={index}
-																value={name.name}
+																value={name.id}
 															>
 																{name.name}
 															</MenuItem>
@@ -227,7 +227,7 @@ export default function CarList() {
 									): (
 										<>
 											<div className={styles.td}>
-												{item.class}
+												{classList?.filter((item2) => item.classId === item2.id)[0].name}
 											</div>
 											<div className={styles.td}>
 												{item.name}
@@ -251,7 +251,7 @@ export default function CarList() {
 													{setEditName(item.name)}
 													{setEditNumberA(item.number_a)}
 													{setEditNumberB(item.number_b)}
-													{setEditClass(item.class)}
+													{setClassId(item.classId)}
 												</>
 											) : (
 													<>
@@ -261,7 +261,7 @@ export default function CarList() {
 														{setEditName(item.name)}
 														{setEditNumberA(item.number_a)}
 														{setEditNumberB(item.number_b)}
-														{setEditClass(item.class)}
+														{setClassId(item.classId)}
 													</>
 											)
 										}}

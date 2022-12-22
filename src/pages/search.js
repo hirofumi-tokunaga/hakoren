@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDb } from 'src/components/api'
+import { getDb ,getBookingDate} from 'src/components/api'
 import Link from 'next/link'
 
 import Button from '@mui/material/Button'
@@ -24,7 +24,7 @@ export default function Search() {
 	const [okClass, setOkClass] = useState([])
 	const [classList,setClassList] = useState([])
 	const [isSearch, setIsSearch] = useState(false)
-
+	const [bookingInfo,setBookingInfo] = useState()
 	const transDate = (date) => {
 		var dd = String(date.getDate()).padStart(2, "0")
 		var mm = String(date.getMonth() + 1).padStart(2, "0")
@@ -35,32 +35,11 @@ export default function Search() {
 	const handleDateCheck = async () => {
 		let currentStart = Number(transDate(startDate))
 		let currentEnd = Number(transDate(endDate))
-		await getDb('bookinginfo').then((bookingInfo) => {
-			let okCarList = []
-			carList.forEach((car) => {
-				let carOK = true
-				bookingInfo.forEach((info) => {
-					if (info.carId === car.id) {
-						var startDate = Number(info.startDate)
-						var endDate = Number(info.endDate)
-						if (!((endDate < currentStart)
-							|| (currentEnd < startDate))) {
-							carOK = false
-						}
-					}
-				})
-				if (carOK) {
-					if (okCarList.filter((item) => item === car.class).length < 1) {
-						okCarList.push(
-							car.class
-						)
-					}
-					setScheduleOk(true)
-				}
-			})
-			setOkClass(okCarList)
-		})
+		setBookingInfo(await getBookingDate('bookinginfo', currentStart, currentEnd))
 	}
+	console.log("条件",bookingInfo)
+
+
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist'))

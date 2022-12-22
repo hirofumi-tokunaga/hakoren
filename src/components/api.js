@@ -1,5 +1,5 @@
 import { db, storage } from 'src/components/firebase'
-import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, query, orderBy, updateDoc } from 'firebase/firestore/lite';
+import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, query, orderBy, updateDoc,where } from 'firebase/firestore/lite';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export async function getDb(collectionName, order = null, desc = true) {
@@ -83,4 +83,26 @@ export async function postImage(image = null) {
 		});
 	}
 	return uploadResult
+}
+export async function getBookingDate(collectionName,start,end) {
+	try {
+		const collect = await collection(db, collectionName)
+		let docSet
+		docSet = await getDocs(query(collect, where([["startDate", ">", start], ["endDate", "<", end]])))
+
+		const docList = docSet.docs.map(doc => doc.data())
+		let ids = []
+		docSet.docs.forEach(doc => {
+			ids.push(
+				doc.id
+			)
+		})
+		docList.forEach((item, index) => {
+			item.id = ids[index]
+		})
+		return docList
+	} catch (err) {
+		console.log('~~ getDb ~~')
+		console.log(err)
+	}
 }
