@@ -101,7 +101,7 @@ export default function Registry() {
 			then(() => {
 				alert('登録しました')
 				setMember(object)
-				if (booking.car) {
+				if (booking.classData) {
 					router.push("/members/booking")
 				} else {
 					router.push("/members/mypage")
@@ -142,11 +142,11 @@ export default function Registry() {
 								<Box className={styles.td}>
 									<TextField name="email" onChange={handleInput} value={email} />
 									<Box className={styles.sendTest }>
-										<Button onClick={handleSendMail} variant="contained">
+										{/* <Button onClick={handleSendMail} variant="contained">
 											受信確認メールを送信
-										</Button>
+										</Button> */}
 										<span className={styles.cap }>
-											※このボタンをクリックすると、ご入力いただいたメールアドレス宛てにメールを受信確認メールを送信いたします。
+											※予約のメールが届かない場合は店舗へご連絡ください。
 										</span>
 									</Box>
 								</Box>

@@ -42,11 +42,11 @@ export default function Login() {
 			setPassOk(false)
 		}
 	}, [email])
-	console.log("pass",passOk,email)
+	console.log("pass", pass, currentMember.pass,passOk,email)
 	const handleSubmit = () => {
 		if (idOk && passOk) {
 			setMember(currentMember)
-			if (booking.car) {
+			if (booking.classData) {
 				router.push("/members/booking")
 			} else {
 				router.push("/members/mypage")

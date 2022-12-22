@@ -43,6 +43,9 @@ export default function Estimate() {
 	const query = router.query;
 
 	useEffect(() => {
+		async function getClass() {
+			setClassList(await getDb('class'))
+		}
 		if (router.isReady && query.id) {
 			let sy = query.sd.substr(0, 4)
 			let sm = query.sd.substr(4, 2)
@@ -61,27 +64,35 @@ export default function Estimate() {
 			setEndDate(edate)
 			setEndTime(query.et)
 
+			getClass()
 		}
 	}, [query, router])
 	useEffect(() => {
 		async function init() {
-			setClassList(await getDb('class'))
 			setOptionList(await getDb('option', 'name', true))
+			if (booking.classData && !query.id) {
+				bookingSet()
+			} else {
+			}
 		}
-		init();
+		init()
 	}, [])
 	useEffect(() => {
-		setClassData(classList?.filter((data) => data.id === query.id)[0])
+		if (query.id) {
+			setClassData(classList?.filter((data) => data.id === query.id)[0])
+		}
 	}, [classList])
 	useEffect(() => {
-		if(classData && optionList.length > 0) {
-		setAddOptList(
-				classData?.add_option?.map((item) => {
-					const item3 = optionList?.filter((item2) => item2.id === item)[0]
-					item3['num'] = 0
-					return item3
-				})
-			)
+		if (query.id) {
+			if(classData && optionList.length > 0) {
+				setAddOptList(
+					classData?.add_option?.map((item) => {
+						const item3 = optionList?.filter((item2) => item2.id === item)[0]
+						item3['num'] = 0
+						return item3
+					})
+				)
+			}
 		}
 	}, [classData,optionList])
 	useEffect(() => {
@@ -117,6 +128,30 @@ export default function Estimate() {
 		}
 		init()
 	}, [startDate, endDate])
+
+
+	const bookingSet =  () => {
+		let sy = booking.startDate.substr(0, 4)
+		let sm = booking.startDate.substr(4, 2)
+		let sd = booking.startDate.substr(6, 2)
+		let sday = sy + '.' + sm + '.' + sd
+		let sdate = new Date(sday)
+
+		let ey = booking.endDate.substr(0, 4)
+		let em = booking.endDate.substr(4, 2)
+		let ed = booking.endDate.substr(6, 2)
+		let eday = ey + '.' + em + '.' + ed
+		let edate = new Date(eday)
+		
+		setStartDate(sdate)
+		setStartTime(booking.startTime)
+		setEndDate(edate)
+		setEndTime(booking.endTime)
+
+		setClassData(booking.classData)
+		setAddOptList(booking.addOptList)
+		console.log("booking  22222",booking)
+	}
 
 	const inputCheck = (data) => {
 		if (
@@ -193,14 +228,13 @@ export default function Estimate() {
 			return optionList.filter((item2) => item2.id === item)[0].name
 		})
 		const obj = {
-			car:classData.name,
-			capacity: classData.capacity,
+			classData:classData,
 			startDate: transDate(startDate),
 			startTime: startTime,
 			endDate: transDate(endDate),
 			endTime: endTime,
-			basicOpt: basicOpt,
-			addOpt: addOptList.filter((item) => item.num > 0),
+			basicOpt:basicOpt,
+			addOptList: addOptList,
 			basicCalc: basicCalc,
 			addCalc:optCalc,
 			totalCalc:totalCalc
@@ -301,7 +335,7 @@ export default function Estimate() {
 										<Box className={styles.optSelect}>
 											{item?.name}
 											<Select
-												value={item.num }
+												value={Number(item.num) }
 												onChange={(event) => handleOptionNum(event, i)}
 												className={styles.selectBox }
 											>

@@ -18,14 +18,11 @@ export default function Header() {
 		<header className={styles.wrapper}>
 			<Logo />
 			<Box className={styles.controll }>
-				<Link href="/search">
-					<a>レンタカー検索</a>
-				</Link>
-				<Link href="/estimate">
-					<a>お見積</a>
-				</Link>
 				<Link href="/members/mypage">
 					<a>マイページ</a>
+				</Link>
+				<Link href="/search">
+					<a>レンタカー検索</a>
 				</Link>
 				<Link href="/members/registry">
 					<a>会員情報変更</a>

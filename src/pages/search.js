@@ -120,9 +120,9 @@ export default function Search() {
 				{isSearch && (okClass?.map((item,i) => {
 					const classData = classList?.filter((data) => data.name === item)[0]
 					return (
-						<>
+						<Box key={i} >
 							{classData && (
-								<Box key={i} className={styles.cardata}>
+								<Box className={styles.cardata}>
 									<Box className={styles.left}>
 										<Box className={styles.c_name}>
 											{classData.name}クラス
@@ -161,8 +161,6 @@ export default function Search() {
 									<Box className={styles.right}>
 										<Box className={styles.price_title}>当日料金</Box>
 										<Box className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</Box>
-										{console.log(classData
-										)}
 										<Link href={{
 											pathname: '/estimate',
 											query: { id: classData.id, sd: transDate(startDate), st: startTime, ed: transDate(endDate), et: endTime },
@@ -176,7 +174,7 @@ export default function Search() {
 									</Box>
 								</Box>
 							)}
-						</>
+						</Box>
 					)
 				}
 				))}
