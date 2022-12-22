@@ -25,21 +25,63 @@ export default function Search() {
 	const [classList,setClassList] = useState([])
 	const [isSearch, setIsSearch] = useState(false)
 	const [bookingInfo,setBookingInfo] = useState()
-	const transDate = (date) => {
+	const transDate = (date,calc = 0) => {
+		
 		var dd = String(date.getDate()).padStart(2, "0")
-		var mm = String(date.getMonth() + 1).padStart(2, "0")
+		var mm = String(date.getMonth()).padStart(2, "0")
 		var yyyy = date.getFullYear()
+		var dt = new Date(yyyy , mm , dd,0,0,0)
+
+		dt.setDate(dt.getDate() + calc)
+		var dd = String(dt.getDate()).padStart(2, "0")
+		var mm = String(dt.getMonth()+1 ).padStart(2, "0")
+		var yyyy = dt.getFullYear()
 		return yyyy + mm + dd
 	}
 
 	const handleDateCheck = async () => {
-		let currentStart = Number(transDate(startDate))
-		let currentEnd = Number(transDate(endDate))
-		setBookingInfo(await getBookingDate('bookinginfo', currentStart, currentEnd))
+
+		let currentStart = transDate(startDate,-20)
+		console.log("start",currentStart)
+		setBookingInfo(await getBookingDate('bookinginfo', currentStart))
 	}
 	console.log("条件",bookingInfo)
-
-
+	useEffect(() => {
+		let currentStart = transDate(startDate)
+		let currentEnd = transDate(endDate)
+		let dateNg = bookingInfo?.filter((item) => 
+			(item.startDate <= currentStart &&
+			item.endDate >= currentStart) ||
+			(item.startDate <= currentEnd &&
+				item.endDate >= currentEnd))
+		const ngCarList = dateNg?.map((item) => {
+			return item.carId
+		})
+		let okClass = carList?.map((item) => {
+			const existing = ngCarList.some((v) => v === item.id)
+			if(!existing) {
+				return item.classId
+			}else{
+				return ""
+			}
+		})
+		let okClassList = classList?.map((item) => {			
+			const existing = okClass.some((v) => v === item.id)
+			if(existing) {
+				return item
+			}else{
+				return ""
+			}
+		})
+		if(okClassList.length > 0){
+			setScheduleOk(true)
+		}
+		setOkClass(okClassList)
+		console.log("DATE_NG=",dateNg)
+		console.log("NG_CARLIST=",ngCarList)
+		console.log("OK_CLASS=",okClass)
+		console.log("OK_CLASS_LIST=",okClassList)
+	}, [bookingInfo])
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist'))
@@ -97,26 +139,25 @@ export default function Search() {
 			</Box>
 			<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "条件に一致する在庫がありません")}</p>
 				{isSearch && (okClass?.map((item,i) => {
-					const classData = classList?.filter((data) => data.name === item)[0]
+					
 					return (
 						<Box key={i} >
-							{classData && (
 								<Box className={styles.cardata}>
 									<Box className={styles.left}>
 										<Box className={styles.c_name}>
-											{classData.name}クラス
+											{item.name}クラス
 										</Box>
 										<Box className={styles.c_image}>
-											<img src={classData.image}/>
+											<img src={item.image}/>
 										</Box>
 										<Box className={styles.c_info}>
 											<Box className="flex">
 												<Box>車型</Box>
-												<Box>{classData.car}</Box>
+												<Box>{item.car}</Box>
 											</Box>
 											<Box className="flex">
 												<Box>定員</Box>
-												<Box>{classData.capacity} 名</Box>
+												<Box>{item.capacity} 名</Box>
 											</Box>
 										</Box>
 									</Box>
@@ -124,25 +165,25 @@ export default function Search() {
 										<Box className={styles.option}>
 											<Box>標準装備</Box>
 											<Box>
-												{classData.basic_option.map((item,i2) => {
+												{item.basic_option.map((item2,ii) => {
 													return (
-														<span key={ i2 }>
-															{optionList.filter((item2) => item2.id === item)[0]?.name}
+														<span key={ ii}>
+															{optionList.filter((item3) => item3.id === item2)[0]?.name}
 														</span>
 													)
 												})}
 											</Box>
 										</Box>
 										<Box className={styles.text}>
-											{classData.text}
+											{item.text}
 										</Box>
 									</Box>
 									<Box className={styles.right}>
 										<Box className={styles.price_title}>当日料金</Box>
-										<Box className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(classData.price).toLocaleString()}</span>円～（税込）</Box>
+										<Box className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(item.price).toLocaleString()}</span>円～（税込）</Box>
 										<Link href={{
 											pathname: '/estimate',
-											query: { id: classData.id, sd: transDate(startDate), st: startTime, ed: transDate(endDate), et: endTime },
+											query: { id: item.id, sd: transDate(startDate), st: startTime, ed: transDate(endDate), et: endTime },
 										}}>
 											<Button
 												variant="contained"
@@ -152,7 +193,6 @@ export default function Search() {
 										</Link>
 									</Box>
 								</Box>
-							)}
 						</Box>
 					)
 				}

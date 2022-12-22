@@ -84,11 +84,11 @@ export async function postImage(image = null) {
 	}
 	return uploadResult
 }
-export async function getBookingDate(collectionName,start,end) {
+export async function getBookingDate(collectionName,start) {
 	try {
 		const collect = await collection(db, collectionName)
 		let docSet
-		docSet = await getDocs(query(collect, where([["startDate", ">", start], ["endDate", "<", end]])))
+		docSet = await getDocs(query(collect, where("startDate", ">=", start)))
 
 		const docList = docSet.docs.map(doc => doc.data())
 		let ids = []

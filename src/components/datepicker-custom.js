@@ -33,7 +33,6 @@ export default function DatePicker_Custom({ date,setDate}) {
 						{`<`}
 					</button>
 					<select
-						onClose={false}
 						value={getYear(date)}
 						onChange={({ target: { value } }) => changeYear(value)}
 					>
@@ -44,7 +43,6 @@ export default function DatePicker_Custom({ date,setDate}) {
 						))}
 					</select>
 					<select
-						onClose={false}
 						value={getMonth(date)}
 						onChange={({ target: { value } }) => changeMonth(value)}
 					>

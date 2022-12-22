@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { LoginMemberContext } from "src/components/loginMember"
-import { addData ,getBookingDb} from 'src/components/api'
+import { addData ,getBookingDate} from 'src/components/api'
 import Link from 'next/link'
 
 import Button from '@mui/material/Button'
@@ -113,7 +113,7 @@ export default function Booking() {
 			setNameKanaB(member.nameKanaB)
 			setTel(member.tel)
 			setEmail(member.email)
-			await setBookingInfo(getBookingDb("bookinginfo"))
+			await setBookingInfo(getBookingDate("bookinginfo",booking.startDate))
 		}
 		init()
 	}, [])

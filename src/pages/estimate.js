@@ -84,7 +84,7 @@ export default function Estimate() {
 	}, [classList])
 	useEffect(() => {
 		if (query.id) {
-			if(classData && optionList.length > 0) {
+			if(classData && addOptList.length > 0) {
 				setAddOptList(
 					classData?.add_option?.map((item) => {
 						const item3 = optionList?.filter((item2) => item2.id === item)[0]
@@ -94,7 +94,7 @@ export default function Estimate() {
 				)
 			}
 		}
-	}, [classData,optionList])
+	}, [classData,addOptList])
 	useEffect(() => {
 		if (addOptList.length > 0) {
 			const list = addOptList.map((item) => {
@@ -328,7 +328,7 @@ export default function Estimate() {
 							</Box>
 						</Box>
 						<h3>オプション選択</h3>
-						{addOptList.map((item, i) => {
+						{addOptList?.map((item, i) => {
 							return (
 								<React.Fragment key={ i }>
 									{Number(item?.max) > 0 && (
