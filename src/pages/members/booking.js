@@ -134,7 +134,7 @@ export default function Booking() {
 	}
 	const handleSubmit = async () => {
 		let object = {
-			carId:"",
+			carId:booking.carId,
 			classId:booking.classData.id,
 			startDate: booking.startDate,
 			startTime: booking.startTime,

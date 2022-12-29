@@ -1,5 +1,5 @@
 import React,{ useEffect, useState ,useContext} from 'react'
-import { getDb } from 'src/components/api'
+import { getDb,getBookingDate } from 'src/components/api'
 import { useRouter } from 'next/router'
 import { LoginMemberContext } from "src/components/loginMember"
 
@@ -24,6 +24,7 @@ export default function Estimate() {
 	const [endTime, setEndTime] = useState("20:30")
 	const [loading, setLoading] = useState(false)
 	const [scheduleOk, setScheduleOk] = useState(false)
+	const [carId,setCarId] = useState("")
 	const [carList, setCarList] = useState([])
 	const [classList, setClassList] = useState([])
 	const [selectCarId, setSelectCarId] = useState()
@@ -35,7 +36,7 @@ export default function Estimate() {
 	const [optCalc, setOptCalc] = useState(0)
 	const [totalCalc, setTotalCalc] = useState(0)
 	const [addOptList, setAddOptList] = useState([])
-
+	const [bookingInfo,setBookingInfo] = useState([])
 
 
 	const { member,booking,setBooking } = useContext(LoginMemberContext)
@@ -142,7 +143,7 @@ export default function Estimate() {
 		let ed = booking.endDate.substr(6, 2)
 		let eday = ey + '.' + em + '.' + ed
 		let edate = new Date(eday)
-		
+
 		setStartDate(sdate)
 		setStartTime(booking.startTime)
 		setEndDate(edate)
@@ -178,36 +179,49 @@ export default function Estimate() {
 		var yyyy = date.getFullYear()
 		return yyyy + str + mm + str + dd
 	}
+	const transDate2 = (date, calc = 0) => {
 
-	const handleDateCheck = async () => {
-		let currentStart = Number(transDate(startDate))
-		let currentEnd = Number(transDate(endDate))
-		await getDb('bookinginfo').then((bookingInfo) => {
-			let okCarList = []
-			let newItems = []
-			carList.forEach((car) => {
-				let carOK = true
-				bookingInfo.forEach((info) => {
-					if (info.carId === car.id) {
-						var startDate = Number(info.startDate)
-						var endDate = Number(info.endDate)
-						if (!((endDate < currentStart)
-							|| (currentEnd < startDate))) {
-							carOK = false
-						}
-					}
-				})
-				if (carOK) {
-					if (okCarList.filter((item) => item === car.class).length < 1) {
-						okCarList.push(
-							car.class
-						)
-					}
-					setScheduleOk(true)
-				}
-			})
-		})
+		var dd = String(date.getDate()).padStart(2, "0")
+		var mm = String(date.getMonth()).padStart(2, "0")
+		var yyyy = date.getFullYear()
+		var dt = new Date(yyyy, mm, dd, 0, 0, 0)
+
+		dt.setDate(dt.getDate() + calc)
+		var dd = String(dt.getDate()).padStart(2, "0")
+		var mm = String(dt.getMonth() + 1).padStart(2, "0")
+		var yyyy = dt.getFullYear()
+		return yyyy + mm + dd
 	}
+	const dateCheck = () => {
+	
+	}
+	const handleDateCheck = async () => {
+
+		let currentStart = transDate2(startDate, -20)
+		console.log("start", currentStart)
+		setBookingInfo(await getBookingDate('bookinginfo', currentStart))
+	}
+	useEffect(() => {
+		let currentStart = transDate2(startDate)
+		let currentEnd = transDate2(endDate)
+		let cars = carList?.filter((item) => item.classId === classData?.id)
+		let ngCarList = cars.map((item) => {
+			let ngCar = bookingInfo?.filter((item2) =>
+				((item2.startDate <= currentStart &&
+					item2.endDate >= currentStart) ||
+				(item2.startDate <= currentEnd &&
+					item2.endDate >= currentEnd)) &&
+				item2.carId === item.id)[0]?.carId
+			return ngCar
+		})
+		cars.map((item) => {
+			const existing = ngCarList.some((v) => v === item.id)
+			if (!existing) {
+				setCarId(item.id)
+			}
+		})
+	}, [bookingInfo])
+
 	const handleOptionNum = (e, index) => {
 		setAddOptList((prevState) =>
 			prevState.map((value, i) => (i === index ? {
@@ -228,6 +242,7 @@ export default function Estimate() {
 			return optionList.filter((item2) => item2.id === item)[0].name
 		})
 		const obj = {
+			carId:carId,
 			classData:classData,
 			startDate: transDate(startDate),
 			startTime: startTime,
@@ -307,9 +322,9 @@ export default function Estimate() {
 						<h3>レンタカーご利用基本条件</h3>
 						<Box className={styles.schedule} >
 							<Box className={styles.box}>
-								<FormControl className={styles.day}>
+								<FormControl className={styles.day} onClick={dateCheck }>
 									<InputLabel className="input-label" shrink={true} name="startDate">出発日</InputLabel>
-									<DatePicker_Custom date={startDate} setDate={setStartDate} />
+									<DatePicker_Custom date={startDate} setDate={setStartDate} checkDate={endDate} setCheckDate={setEndDate} start/>
 								</FormControl>
 								<FormControl className={styles.time} >
 									<InputLabel className="input-label" shrink={true} name="startTime">出発時刻</InputLabel>
@@ -319,7 +334,7 @@ export default function Estimate() {
 							<Box className={styles.box}>
 								<FormControl className={styles.day} >
 									<InputLabel className="input-label" shrink={true} name="endDate">返却日</InputLabel>
-									<DatePicker_Custom date={endDate} setDate={setEndDate} />
+									<DatePicker_Custom date={endDate} setDate={setEndDate} checkDate={startDate} setCheckDate={setStartDate} />
 								</FormControl>
 								<FormControl className={styles.time}>
 									<InputLabel className="input-label" shrink={true} name="endTime">返却時刻</InputLabel>

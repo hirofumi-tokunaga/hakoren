@@ -38,7 +38,7 @@ export default function CarList() {
 		async function init() {
 			setCarList(await getDb('carlist','number_b',true))
 			setClassList(await getDb('class'))
-			setSelectClass(await classList[0]?.name)
+			setSelectClass(await classList[0]?.id)
 		}
 		init();
 	}, [])
@@ -177,7 +177,7 @@ export default function CarList() {
 														label="クラス"
 														onChange={handleClassChange}
 														name='classInput'
-														defaultValue={classList?.filter((item2) => item.classId === item2.id)[0]?.name}
+														defaultValue={classList?.filter((item2) => item.classId === item2.id)[0].id}
 													>
 														{classList.map((name, index) => (
 															<MenuItem
@@ -227,7 +227,7 @@ export default function CarList() {
 									): (
 										<>
 											<div className={styles.td}>
-												{classList?.filter((item2) => item.classId === item2.id)[0].name}
+												{classList?.filter((item2) => item.classId === item2.id)[0]?.name}
 											</div>
 											<div className={styles.td}>
 												{item.name}

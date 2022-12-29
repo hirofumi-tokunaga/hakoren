@@ -26,7 +26,7 @@ export default function Search() {
 	const [isSearch, setIsSearch] = useState(false)
 	const [bookingInfo,setBookingInfo] = useState()
 	const transDate = (date,calc = 0) => {
-		
+
 		var dd = String(date.getDate()).padStart(2, "0")
 		var mm = String(date.getMonth()).padStart(2, "0")
 		var yyyy = date.getFullYear()
@@ -40,16 +40,13 @@ export default function Search() {
 	}
 
 	const handleDateCheck = async () => {
-
 		let currentStart = transDate(startDate,-20)
-		console.log("start",currentStart)
 		setBookingInfo(await getBookingDate('bookinginfo', currentStart))
 	}
-	console.log("条件",bookingInfo)
 	useEffect(() => {
 		let currentStart = transDate(startDate)
 		let currentEnd = transDate(endDate)
-		let dateNg = bookingInfo?.filter((item) => 
+		let dateNg = bookingInfo?.filter((item) =>
 			(item.startDate <= currentStart &&
 			item.endDate >= currentStart) ||
 			(item.startDate <= currentEnd &&
@@ -65,7 +62,7 @@ export default function Search() {
 				return ""
 			}
 		})
-		let okClassList = classList?.map((item) => {			
+		let okClassList = classList?.map((item) => {
 			const existing = okClass.some((v) => v === item.id)
 			if(existing) {
 				return item
@@ -73,14 +70,15 @@ export default function Search() {
 				return ""
 			}
 		})
-		if(okClassList.length > 0){
+		let okClassList2 = okClassList.filter((item) => item !== "")
+		if(okClassList2.length > 0){
 			setScheduleOk(true)
 		}
-		setOkClass(okClassList)
-		console.log("DATE_NG=",dateNg)
-		console.log("NG_CARLIST=",ngCarList)
-		console.log("OK_CLASS=",okClass)
-		console.log("OK_CLASS_LIST=",okClassList)
+		setOkClass(okClassList2)
+		// console.log("DATE_NG=",dateNg)
+		// console.log("NG_CARLIST=",ngCarList)
+		// console.log("OK_CLASS=",okClass)
+		// console.log("OK_CLASS_LIST=",okClassList)
 	}, [bookingInfo])
 	useEffect(() => {
 		async function init() {
@@ -97,7 +95,6 @@ export default function Search() {
 		}
 		init();
 	}, [startDate, endDate])
-	console.log(startDate)
 	return (
 		<Box className={styles.container}>
 			<Box className={styles.outline}>
@@ -107,7 +104,7 @@ export default function Search() {
 						<Box className={styles.box}>
 							<FormControl className={styles.day}>
 								<InputLabel className="input-label" shrink={true} name="startDate">出発日</InputLabel>
-								<DatePicker_Custom date={startDate} setDate={setStartDate} />
+								<DatePicker_Custom date={startDate} setDate={setStartDate} checkDate={endDate} setCheckDate={setEndDate} start/>
 							</FormControl>
 							<FormControl className={styles.time} >
 								<InputLabel className="input-label" shrink={true} name="startTime">出発時刻</InputLabel>
@@ -117,7 +114,7 @@ export default function Search() {
 						<Box className={styles.box}>
 							<FormControl className={styles.day} >
 								<InputLabel className="input-label" shrink={true} name="endDate">返却日</InputLabel>
-								<DatePicker_Custom date={endDate} setDate={setEndDate} />
+								<DatePicker_Custom date={endDate} setDate={setEndDate} checkDate={startDate} setCheckDate={setStartDate} />
 							</FormControl>
 							<FormControl className={styles.time}>
 								<InputLabel className="input-label" shrink={true} name="endTime">返却時刻</InputLabel>
@@ -139,7 +136,7 @@ export default function Search() {
 			</Box>
 			<p style={scheduleOk ? { color: "#0000ff" } : { color: "#ff0000" }}>{isSearch && (scheduleOk ? "以下の在庫が在ります" : "条件に一致する在庫がありません")}</p>
 				{isSearch && (okClass?.map((item,i) => {
-					
+
 					return (
 						<Box key={i} >
 								<Box className={styles.cardata}>

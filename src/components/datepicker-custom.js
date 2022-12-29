@@ -8,14 +8,28 @@ import "react-datepicker/dist/react-datepicker.css"
 const years = _.range(getYear(new Date()), getYear(new Date()) + 2, 1)
 const months = Array.from(Array(12).keys())
 
-export default function DatePicker_Custom({ date,setDate}) {
+export default function DatePicker_Custom({ date,setDate,checkDate,setCheckDate,start}) {
 	registerLocale('ja', ja);
+	const inputDateCheck = () => {
+
+	}
 	return (
 		<DatePicker
 			dateFormat="yyyy年MM月dd日"
 			locale="ja"
 			selected={ date}
-			onChange={selectedDate => { setDate(selectedDate || Today) }}
+			onChange={selectedDate => {
+				if (start) {
+					if (selectedDate > checkDate) {
+						setCheckDate(selectedDate)
+					}
+				} else {
+					if (selectedDate < checkDate) {
+						setCheckDate(selectedDate)
+					}
+				}
+				setDate(selectedDate || Today)
+			}}
 			renderCustomHeader={({
 				date,
 				changeYear,
