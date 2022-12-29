@@ -37,7 +37,7 @@ export default function Estimate() {
 	const [totalCalc, setTotalCalc] = useState(0)
 	const [addOptList, setAddOptList] = useState([])
 	const [bookingInfo,setBookingInfo] = useState([])
-
+	const [carsNon,setCarsNon] = useState([false])
 
 	const { member,booking,setBooking } = useContext(LoginMemberContext)
 	const router = useRouter()
@@ -193,7 +193,7 @@ export default function Estimate() {
 		return yyyy + mm + dd
 	}
 	const dateCheck = () => {
-	
+
 	}
 	const handleDateCheck = async () => {
 
@@ -205,21 +205,32 @@ export default function Estimate() {
 		let currentStart = transDate2(startDate)
 		let currentEnd = transDate2(endDate)
 		let cars = carList?.filter((item) => item.classId === classData?.id)
-		let ngCarList = cars.map((item) => {
-			let ngCar = bookingInfo?.filter((item2) =>
-				((item2.startDate <= currentStart &&
-					item2.endDate >= currentStart) ||
-				(item2.startDate <= currentEnd &&
-					item2.endDate >= currentEnd)) &&
-				item2.carId === item.id)[0]?.carId
-			return ngCar
-		})
-		cars.map((item) => {
-			const existing = ngCarList.some((v) => v === item.id)
+
+		let ngCarId = cars.map((item2) => {
+			return bookingInfo?.filter((item) => (
+				(((item.startDate <= currentStart) &&
+						(item.endDate >= currentStart)) ||
+						((item.startDate <= currentEnd) &&
+							(item.endDate >= currentEnd)) ||
+						((item.startDate >= currentStart) &&
+							(item.endDate <= currentEnd)) ||
+						((item.startDate <= currentStart) &&
+							(item.endDate >= currentEnd))) &&
+						(item.carId === item2.id)))[0]?.carId
+			}
+		)
+		let flag = cars.map((item) => {
+			const existing = ngCarId.some((v) => v === item.id)
 			if (!existing) {
 				setCarId(item.id)
+				return true
 			}
 		})
+		if (flag.some((v) => v === true)) {
+			setCarsNon(false)
+		} else {
+			setCarsNon(true)
+		}
 	}, [bookingInfo])
 
 	const handleOptionNum = (e, index) => {
@@ -341,6 +352,9 @@ export default function Estimate() {
 									<TimePicker time={endTime} setTime={setEndTime} />
 								</FormControl>
 							</Box>
+							{carsNon && (
+								<Box className={styles.carsNon }>ご指定の期間に在庫はございません</Box>
+							)}
 						</Box>
 						<h3>オプション選択</h3>
 						{addOptList?.map((item, i) => {
@@ -408,24 +422,28 @@ export default function Estimate() {
 							</Box>
 							<Box className={styles.totalCalc} ><span className={styles.text}>合計料金</span><span className={styles.price}>{totalCalc.toLocaleString()}</span><span className={styles.yen}>円</span></Box>
 						</Box>
-						{member.email ? (
-							<Button variant="contained" className={styles.bookingBtn} onClick={handleBooking}>予約へ進む</Button>
-						) : (
-							<Box className={styles.btns}>
-								<Box className={styles.wrap}>
-									初めてご利用の方
-									<Button variant="contained" onClick={handleRegistry}>
-										会員登録して予約へ進む
-									</Button>
-								</Box>
-								<Box className={styles.wrap}>
-									会員登録済みの方
-									<Button variant="contained" onClick={handleLogin}>
-										ログインして予約へ進む
-									</Button>
+						{!carsNon && (
+							<>
+								{member.email ? (
+									<Button variant="contained" className={styles.bookingBtn} onClick={handleBooking}>予約へ進む</Button>
+								) : (
+									<Box className={styles.btns}>
+										<Box className={styles.wrap}>
+											初めてご利用の方
+											<Button variant="contained" onClick={handleRegistry}>
+												会員登録して予約へ進む
+											</Button>
+										</Box>
+										<Box className={styles.wrap}>
+											会員登録済みの方
+											<Button variant="contained" onClick={handleLogin}>
+												ログインして予約へ進む
+											</Button>
 
-								</Box>
-							</Box>
+										</Box>
+									</Box>
+								)}
+							</>
 						)}
 					</Box>
 				</Box>

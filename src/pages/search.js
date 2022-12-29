@@ -50,6 +50,10 @@ export default function Search() {
 			(item.startDate <= currentStart &&
 			item.endDate >= currentStart) ||
 			(item.startDate <= currentEnd &&
+				item.endDate >= currentEnd) ||
+			(item.startDate >= currentStart &&
+				item.endDate <= currentEnd) ||
+			(item.startDate <= currentStart &&
 				item.endDate >= currentEnd))
 		const ngCarList = dateNg?.map((item) => {
 			return item.carId

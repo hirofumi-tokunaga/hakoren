@@ -133,35 +133,61 @@ export default function Booking() {
 		}
 	}
 	const handleSubmit = async () => {
-		let object = {
-			carId:booking.carId,
-			classId:booking.classData.id,
-			startDate: booking.startDate,
-			startTime: booking.startTime,
-			endDate: booking.endDate,
-			endTime: booking.endTime,
-			nameA: nameA,
-			nameB: nameB,
-			nameKanaA: nameKanaA,
-			nameKanaB: nameKanaB,
-			tel: tel,
-			email: email,
-			prefectures: selectPref,
-			send: checked,
-			people: selectPeople,
-			purpose: purpose,
-			text: text,
-			basicCalc:booking.basicCalc,
-			addCalc: booking.addCalc,
-			totalCalc: booking.totalCalc
+		let currentStart = transDate2(startDate)
+		let currentEnd = transDate2(endDate)
+		let cars = carList?.filter((item) => item.classId === classData?.id)
+		let ngCarId = cars.map((item2) => {
+			return bookingInfo?.filter((item) => (
+				(((item.startDate <= currentStart) &&
+					(item.endDate >= currentStart)) ||
+					((item.startDate <= currentEnd) &&
+						(item.endDate >= currentEnd)) ||
+					((item.startDate >= currentStart) &&
+						(item.endDate <= currentEnd)) ||
+					((item.startDate <= currentStart) &&
+						(item.endDate >= currentEnd))) &&
+				(item.carId === item2.id)))[0]?.carId
+		}
+		)
+		let flag = cars.map((item) => {
+			const existing = ngCarId.some((v) => v === item.id)
+			if (!existing) {
+				return true
+			}
+		})
+		if (flag.some((v) => v === true)) {
+			let object = {
+				carId:booking.carId,
+				classId:booking.classData.id,
+				startDate: booking.startDate,
+				startTime: booking.startTime,
+				endDate: booking.endDate,
+				endTime: booking.endTime,
+				nameA: nameA,
+				nameB: nameB,
+				nameKanaA: nameKanaA,
+				nameKanaB: nameKanaB,
+				tel: tel,
+				email: email,
+				prefectures: selectPref,
+				send: checked,
+				people: selectPeople,
+				purpose: purpose,
+				text: text,
+				basicCalc:booking.basicCalc,
+				addCalc: booking.addCalc,
+				totalCalc: booking.totalCalc
+			}
+			await addData('bookinginfo', object).
+				then(() => {
+					alert('予約が完了しました')
+				})
+				.catch(() => { alert('登録に失敗しました') })
+		} else {
+			alert('予約が重複しました。大変お手数ですが再度検索下さい。')
 		}
 
 
-		await addData('bookinginfo', object).
-			then(() => {
-
-			})
-			.catch(() => { alert('登録に失敗しました') })
 	}
 	return (
 		<Box className={styles.booking }>
