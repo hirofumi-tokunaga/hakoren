@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { LoginMemberContext } from "src/components/loginMember"
 import { addData ,getBookingDate} from 'src/components/api'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import Button from '@mui/material/Button'
@@ -29,8 +30,8 @@ export default function Booking() {
 	const [text, setText] = useState("")
 	const [checked, setChecked] = useState(false)
 	const [confirm, setConfirm] = useState(false)
-	const [carId, setCarId] = useState("")
 	const [bookingInfo, setBookingInfo] = useState([])
+	const router = useRouter()
 
 	const prefectures = [
 		'北海道',
@@ -105,6 +106,20 @@ export default function Booking() {
 	let ed = booking.endDate.substr(6, 2)
 	const eday = ey + '年' + em + '月' + ed + '日'
 
+
+	const transDate = (date,calc = 0) => {
+
+		var dd = String(date.getDate()).padStart(2, "0")
+		var mm = String(date.getMonth()).padStart(2, "0")
+		var yyyy = date.getFullYear()
+		var dt = new Date(yyyy , mm , dd,0,0,0)
+
+		dt.setDate(dt.getDate() + calc)
+		var dd = String(dt.getDate()).padStart(2, "0")
+		var mm = String(dt.getMonth()+1 ).padStart(2, "0")
+		var yyyy = dt.getFullYear()
+		return yyyy + mm + dd
+	}
 	useEffect(() => {
 		async function init() {
 			setNameA(member.nameA)
@@ -113,11 +128,12 @@ export default function Booking() {
 			setNameKanaB(member.nameKanaB)
 			setTel(member.tel)
 			setEmail(member.email)
-			await setBookingInfo(getBookingDate("bookinginfo",booking.startDate))
+			let dt = new Date(sy , sm - 1 , sd,0,0,0)
+			let currentStart = transDate(dt,-20)
+			setBookingInfo(await getBookingDate("bookinginfo",currentStart))
 		}
 		init()
 	}, [])
-	console.log(bookingInfo)
 	const handleConfirm = () => {
 		if (
 			nameA &&
@@ -132,30 +148,22 @@ export default function Booking() {
 			alert('入力内容が不足しています')
 		}
 	}
+	
 	const handleSubmit = async () => {
-		let currentStart = transDate2(startDate)
-		let currentEnd = transDate2(endDate)
-		let cars = carList?.filter((item) => item.classId === classData?.id)
-		let ngCarId = cars.map((item2) => {
-			return bookingInfo?.filter((item) => (
-				(((item.startDate <= currentStart) &&
-					(item.endDate >= currentStart)) ||
-					((item.startDate <= currentEnd) &&
-						(item.endDate >= currentEnd)) ||
-					((item.startDate >= currentStart) &&
-						(item.endDate <= currentEnd)) ||
-					((item.startDate <= currentStart) &&
-						(item.endDate >= currentEnd))) &&
-				(item.carId === item2.id)))[0]?.carId
-		}
-		)
-		let flag = cars.map((item) => {
-			const existing = ngCarId.some((v) => v === item.id)
-			if (!existing) {
-				return true
-			}
-		})
-		if (flag.some((v) => v === true)) {
+		let currentStart = booking.startDate
+		let currentEnd = booking.endDate
+		let carId = booking.carId
+		let ngCar = bookingInfo?.filter((item) => (
+			(((item.startDate <= currentStart) &&
+			(item.endDate >= currentStart)) ||
+			((item.startDate <= currentEnd) &&
+			(item.endDate >= currentEnd)) ||
+			((item.startDate >= currentStart) &&
+			(item.endDate <= currentEnd)) ||
+			((item.startDate <= currentStart) &&
+			(item.endDate >= currentEnd))) &&
+			(item.carId === carId)))[0]?.carId
+		if (!ngCar?.length) {
 			let object = {
 				carId:booking.carId,
 				classId:booking.classData.id,
@@ -181,6 +189,7 @@ export default function Booking() {
 			await addData('bookinginfo', object).
 				then(() => {
 					alert('予約が完了しました')
+					router.push("/members/mypage")
 				})
 				.catch(() => { alert('登録に失敗しました') })
 		} else {

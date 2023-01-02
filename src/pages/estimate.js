@@ -198,8 +198,8 @@ export default function Estimate() {
 	const handleDateCheck = async () => {
 
 		let currentStart = transDate2(startDate, -20)
-		console.log("start", currentStart)
 		setBookingInfo(await getBookingDate('bookinginfo', currentStart))
+		console.log("bookingInfo", currentStart)
 	}
 	useEffect(() => {
 		let currentStart = transDate2(startDate)
