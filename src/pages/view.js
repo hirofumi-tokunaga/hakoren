@@ -51,7 +51,7 @@ const calcDateToNum = (dateStr, calcNum) => {
 
 export default function View() {
 	const daySpan = 10
-	const baseHeight = 63
+	const baseHeight = 62
 	const [loading, setLoading] = useState(false)
 	const [carList, setCarList] = useState([])
 	const [scheduleList,setScheduleList] = useState([])
@@ -77,7 +77,7 @@ export default function View() {
 		}
 	}
 	const onControlledDrag = (e, position, itemId) => {
-		const hit1 = posData.filter((item) => item.y === position.y)
+		const hit1 = posData.filter((item) => item.y === position.y )
 		const hit2 = hit1.filter((item) => item.id !== itemId)
 		const hit3 = hit2.map((item) => {
 			return(item.id)
@@ -103,7 +103,7 @@ export default function View() {
 	}
 	async function onDrop(e,id){
 		alert("予約データ更新");
-		const carIndex = posData?.filter((item) => item.id === id)[0]?.y / baseHeight
+		const carIndex = posData?.filter((item) => item.id === id)[0]?.y / baseHeight 
 
 		console.log(carIndex)
 		await upDate("bookinginfo",id,"carId",carList[carIndex].id)
@@ -211,7 +211,7 @@ export default function View() {
 												position={
 													{
 														x: 0 ,
-														y: posData?.filter((item2) => item2.id === item.id)[0]?.y
+														y: posData?.filter((item2) => item2.id === item.id)[0]?.y 
 													}
 												}
 												onDrag={(e, position) => {
