@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { getDb, deleteData, setData, addData } from 'src/components/api'
-import { fireauth } from 'src/components/firebase'
 
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'

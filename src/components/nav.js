@@ -47,13 +47,10 @@ export default function Nav() {
 				</li>
 				<li>
 					<Link href="/search">
-						<a>コーポレートサイトの検索フォーム</a>
-					</Link>
-					<Link href="/search">
-						<a>検索フォーム</a>
+						<a>予約車両検索フォーム</a>
 					</Link>
 					<Link href="/post_put">
-						<a>テスト送信フォーム</a>
+						<a>予約登録</a>
 					</Link>
 					<Link href="/members/registry">
 						<a>新規会員登録</a>

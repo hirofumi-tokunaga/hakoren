@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import Switch from '@mui/material/Switch';
+import Switch from '@mui/material/Switch'
 
 import styles from 'src/styles/booking.module.scss'
 
@@ -175,6 +175,7 @@ export default function Booking() {
 				nameB: nameB,
 				nameKanaA: nameKanaA,
 				nameKanaB: nameKanaB,
+				memberId:member.id,
 				tel: tel,
 				email: email,
 				prefectures: selectPref,
@@ -199,7 +200,7 @@ export default function Booking() {
 
 	}
 	return (
-		<Box className={styles.booking }>
+		<Box className={styles.booking}>
 			{confirm ? (
 				<h1>ご予約内容確認</h1>
 			) : (

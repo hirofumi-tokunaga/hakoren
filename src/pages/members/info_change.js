@@ -1,30 +1,25 @@
-import React, { useEffect, useState ,useContext} from 'react'
-import { getDb, addData } from 'src/components/api'
+import { useEffect, useState, useContext } from 'react'
+import { getDb,setData} from 'src/components/api'
 import { LoginMemberContext } from "src/components/loginMember"
 import { useRouter } from 'next/router'
-import { init, send } from 'emailjs-com'
 
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel'
-import FormControl from '@mui/material/FormControl'
-
 
 import styles from 'src/styles/registry.module.scss'
 
 export default function Registry() {
 	const [confirm, setConfirm] = useState(false)
 	const [members,setMembers] = useState([])
-	const [nameA, setNameA] = useState("")
-	const [nameB, setNameB] = useState("")
-	const [nameKanaA, setNameKanaA] = useState("")
-	const [nameKanaB, setNameKanaB] = useState("")
-	const [tel, setTel] = useState("")
-	const [email, setEmail] = useState("")
-	const [pass, setPass] = useState("")
+	const {member,setMember, booking } = useContext(LoginMemberContext)
+	const [nameA, setNameA] = useState(member.nameA)
+	const [nameB, setNameB] = useState(member.nameB)
+	const [nameKanaA, setNameKanaA] = useState(member.nameKanaA)
+	const [nameKanaB, setNameKanaB] = useState(member.nameKanaB)
+	const [tel, setTel] = useState(member.tel)
+	const [pass, setPass] = useState(member.pass)
 	const router = useRouter()
-	const {setMember, booking } = useContext(LoginMemberContext)
 
 	useEffect(() => {
 		async function init() {
@@ -40,7 +35,6 @@ export default function Registry() {
 		name === 'nameKanaA' ? setNameKanaA(value) : ""
 		name === 'nameKanaB' ? setNameKanaB(value) : ""
 		name === 'tel' ? setTel(value) : ""
-		name === 'email' ? setEmail(value) : ""
 		name === 'pass' ? setPass(value) : ""
 	}
 	const handleConfirm = () => {
@@ -50,13 +44,8 @@ export default function Registry() {
 			nameKanaA &&
 			nameKanaB &&
 			tel &&
-			email &&
 			pass) {
-			if (members.filter((item) => item.email === email)[0]) {
-				alert(`(${email})メールアドレスは既に登録されています`)
-			} else {
-				setConfirm(true)
-			}
+			setConfirm(true)
 		} else {
 			alert('入力内容が不足しています')
 		}
@@ -64,55 +53,34 @@ export default function Registry() {
 	const handleBack = () => {
 		setConfirm(false)
 	}
-	const handleSendMail = () => {
-		// emailjsのUser_IDを使って初期化
-		const PublicKey = "1haj4SXf6QFkzxOWH"
-		init(PublicKey)
-
-		// 環境変数からService_IDとTemplate_IDを取得する。
-		const emailjsServiceId = 'service_0hbt7kp'
-		const emailjsTemplateId = 'template_iwpkhd4'
-
-		// emailjsのテンプレートに渡すパラメータを宣言
-		const templateParams = {
-			email: email,
-		}
-
-		// ServiceId,Template_ID,テンプレートに渡すパラメータを引数にemailjsを呼び出し
-		send(emailjsServiceId, emailjsTemplateId, templateParams).
-			then(() => {
-				alert('確認メールを送信しました')
-			}).
-			catch((error) => {
-				alert('確認メールの送信に失敗しました',error)
-			})
-	}
+	
 	const handleSubmit = async () => {
 		let object = {
 			nameA: nameA,
 			nameB: nameB,
 			nameKanaA: nameKanaA,
 			nameKanaB: nameKanaB,
+			email: member.email,
 			tel: tel,
-			email: email,
 			pass:pass
 		}
-		await addData('members', object).
+		// setMember(object)
+		await setData('members', object,member.id).
 			then(() => {
-				alert('登録しました')
-				setMember(object)
+				alert('変更しました。次回ログイン時より有効になります')
+				// setMember(object)
 				if (booking.classData) {
 					router.push("/members/booking")
 				} else {
 					router.push("/members/mypage")
 				}
 			})
-			.catch(() => { alert('登録に失敗しました') })
+			.catch(() => { alert('変更に失敗しました') })
 	}
 	return (
 		<>
 			<Box className={styles.container}>
-				<h2 className={styles.pageTitle }>新規会員登録</h2>
+				<h2 className={styles.pageTitle }>会員情報変更</h2>
 				{!confirm ? (
 					<Box className={styles.registryInfo}>
 						<h2>お客様情報</h2>
@@ -135,20 +103,6 @@ export default function Registry() {
 								<Box className={styles.th}>携帯電話番号</Box>
 								<Box className={styles.td}>
 									<TextField name="tel" onChange={handleInput} value={tel} />
-								</Box>
-							</Box>
-							<Box className={`${styles.email} ${styles.tr}`}>
-								<Box className={styles.th}>メールアドレス</Box>
-								<Box className={styles.td}>
-									<TextField name="email" onChange={handleInput} value={email} />
-									<Box className={styles.sendTest }>
-										{/* <Button onClick={handleSendMail} variant="contained">
-											受信確認メールを送信
-										</Button> */}
-										<span className={styles.cap }>
-											※予約のメールが届かない場合は店舗へご連絡ください。
-										</span>
-									</Box>
 								</Box>
 							</Box>
 							<Box className={styles.tr}>
@@ -180,12 +134,6 @@ export default function Registry() {
 								<Box className={styles.th} name="tel">携帯電話番号</Box>
 								<Box className={styles.td}>
 									{tel}
-								</Box>
-							</Box>
-							<Box className={styles.tr}>
-								<Box className={styles.th}>メールアドレス</Box>
-								<Box className={styles.td}>
-									{email}
 								</Box>
 							</Box>
 							<Box className={styles.tr}>

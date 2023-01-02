@@ -1,0 +1,33 @@
+.container{
+	h1{
+		text-align: center;
+	}
+	width:90%;
+	margin:10vh auto;
+	max-width:1000px;
+	.table{
+		margin-bottom: 20px;
+		border: 2px solid #666;
+		border-radius:4px ;
+		padding: 20px;
+		.tr{
+			display: flex;
+			align-items: center;
+			min-height: 40px;
+			.th{
+				width: 100px;
+				margin-right:10px;
+			}
+			img{
+				width:100px;
+				display: block;
+			}
+		}
+		.btn{
+			margin-top: 10px;	
+		}
+		.sendBtn{
+			margin-left: 20px;;	
+		}
+	}
+}

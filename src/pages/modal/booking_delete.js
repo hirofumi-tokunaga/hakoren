@@ -3,8 +3,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import styles from "src/styles/modal.module.scss"
 
-export default function DeleteModal({
-	name,
+export default function BookingDelete({
 	open,
 	setOpen,
 	submit
@@ -20,9 +19,8 @@ export default function DeleteModal({
 			aria-describedby="modal-modal-description"
 		>
 			<Box className={styles.box}>
-				<h2 id="child-modal-title">名称 : {name}</h2>
 				<p id="child-modal-description">
-					削除しますか？
+					予約を取り消しますか？
 				</p>
 				<Box className={styles.btns}>
 					<Button className="btn" onClick={handleClose} variant="outlined">Cancel</Button>

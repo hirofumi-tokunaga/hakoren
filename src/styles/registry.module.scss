@@ -24,7 +24,7 @@
 				display: flex;
 				align-items: center;
 				margin:20px 0;
-				&:nth-child(4){
+				&.email{
 					align-items: flex-start;
 					padding-top: 10px;
 				}

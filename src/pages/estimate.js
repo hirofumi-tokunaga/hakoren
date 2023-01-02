@@ -23,12 +23,9 @@ export default function Estimate() {
 	const [startTime, setStartTime] = useState("08:30")
 	const [endTime, setEndTime] = useState("20:30")
 	const [loading, setLoading] = useState(false)
-	const [scheduleOk, setScheduleOk] = useState(false)
 	const [carId,setCarId] = useState("")
 	const [carList, setCarList] = useState([])
 	const [classList, setClassList] = useState([])
-	const [selectCarId, setSelectCarId] = useState()
-	const [isSearch, setIsSearch] = useState(false)
 	const [classData, setClassData] = useState()
 	const [optionList, setOptionList] = useState([])
 	const [daysNum, setDaysNum] = useState()
@@ -154,25 +151,6 @@ export default function Estimate() {
 		console.log("booking  22222",booking)
 	}
 
-	const inputCheck = (data) => {
-		if (
-			data.get('firstName') &&
-			data.get('familyName') &&
-			data.get('firstNameKana') &&
-			data.get('familyNameKana') &&
-			data.get('tel') &&
-			data.get('gender') &&
-			transDate(startDate) &&
-			startTime &&
-			transDate(endDate) &&
-			endTime &&
-			selectCarId
-		) {
-			return true
-		} else {
-			return false
-		}
-	}
 	const transDate = (date,str = "") => {
 		var dd = String(date.getDate()).padStart(2, "0")
 		var mm = String(date.getMonth() + 1).padStart(2, "0")

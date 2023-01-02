@@ -90,14 +90,14 @@ export default function Search() {
 			setClassList(await getDb('class'))
 			setOptionList(await getDb('option'))
 		}
-		init();
+		init()
 	}, [])
 	useEffect(() => {
 		async function init() {
 			setCarList(await getDb('carlist'))
 			handleDateCheck()
 		}
-		init();
+		init()
 	}, [startDate, endDate])
 	return (
 		<Box className={styles.container}>
