@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import Link from 'next/link'
 import Logo from './logo'
+import { KEYS, removeItem } from "src/components/LocalStorage"
 import styles from 'src/styles/memberHeader.module.scss'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -13,6 +14,7 @@ export default function Header() {
 	console.log(member)
 
 	const handleSignout = () => {
+		removeItem(KEYS.MEMBER)
 		setMember({})
 		router.push("/members/login")
 	}
@@ -30,7 +32,7 @@ export default function Header() {
 						</Link>
 					</>
 				)}
-				<Link href="/search">
+				<Link href="/members/search">
 					<a>レンタカー検索</a>
 				</Link>
 				<Link href="/members/registry">

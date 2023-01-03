@@ -36,7 +36,11 @@ function MyApp({ Component, pageProps, router }) {
 	})
 	const login = useAuthState()
 	useEffect(() => {
-		if (router.pathname === "/login" || router.pathname === "/search") return; // pathnameが"/login"の場合には処理を行わない
+		if (router.pathname === "/login" || router.pathname === "/members/search" 
+		|| router.pathname === "/members/estimate" || router.pathname === "/members/registry" 
+		|| router.pathname === "/members/login" || router.pathname === "/members/mypage" 
+		|| router.pathname === "/members/booking" || router.pathname === "/members/info_change") 
+		return; // pathnameが"/login"の場合には処理を行わない
 		// ここに処理を書く
 		if (!login.isSignedIn && !login.isLoading) {
 			router.push("/login")
@@ -44,15 +48,18 @@ function MyApp({ Component, pageProps, router }) {
 	}, [login.isLoading])
 	return (
 		<>
-			{(router.pathname === "/login" || router.pathname === "/search" || login.isSignedIn) && (
+			{/* {(router.pathname === "/login" || router.pathname === "/members/search" 
+			|| router.pathname === "/members/estimate" || router.pathname === "/members/registry" 
+			|| router.pathname === "/members/login" || router.pathname === "/members/mypage" || router.pathname === "/members/booking" 
+			|| router.pathname === "/members/info_change" || login.isSignedIn) && ( */}
 				<ThemeProvider theme={theme}>
 					<Layout>
 						< Component {...pageProps } />
 					</Layout>
 				</ThemeProvider>
 
-				)
-			}
+				{/* ) */}
+			{/* } */}
 		</>
 	)
 }

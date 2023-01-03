@@ -7,7 +7,7 @@ import Button from '@mui/material/Button'
 import styles from 'src/styles/mypage.module.scss'
 
 import DeleteModal from 'src/pages/modal/booking_delete'
-import { alertClasses } from '@mui/material'
+
 
 export default function Mypage() {
 	const { member } = useContext(LoginMemberContext)
@@ -17,13 +17,13 @@ export default function Mypage() {
 	const [open, setOpen] = useState(false)
 
 	useEffect(() => {
-		async function init() {
-			let bookingInfo = await getDb('bookinginfo','startDate')
-			setBookingInfo(bookingInfo?.filter((item) => item.memberId === member.id))
-			setClassList(await getDb('class')) 
-		}
 		init()
 	},[])
+	useEffect(() => {
+		if(member.id){
+			init()
+		}
+	},[member])
 	const transDate = (date) => {
 		let y = date.substr(0, 4)
 		let m = date.substr(4, 2)
@@ -31,21 +31,21 @@ export default function Mypage() {
 		const day = y + '年' + m + '月' + d + '日'
 		return day
 	}
-	console.log(bookingInfo,classList)
 	async function handleDelete() {
 		await deleteData("bookinginfo", selectId)
 		setOpen(false)
 		alert('予約を削除しました')
-		let bookingInfo = await getDb('bookinginfo','startDate')
-		setBookingInfo(bookingInfo?.filter((item) => item.memberId === member.id))		
+		init()
 	}
+
 	async function send(i) {
 		await upDate("bookinginfo",bookingInfo[i].id,'send',!bookingInfo[i].send)
-		async function init() {
-			let bookingInfo = await getDb('bookinginfo','startDate')
-			setBookingInfo(bookingInfo?.filter((item) => item.memberId === member.id))
-		}
 		init()
+	}
+	async function init(){
+		let bookingInfo = await getDb('bookinginfo','bookingDateTime')
+		setBookingInfo(bookingInfo?.filter((item) => item.memberId === member.id))
+		setClassList(await getDb('class')) 
 	}
 	return (
 		<Box className={styles.mypage }>
@@ -56,6 +56,18 @@ export default function Mypage() {
 					{bookingInfo?.map((item,i) => {
 						return(
 							<Box key={i} className={styles.table}>
+								<Box className={styles.tr}>
+									<Box className={styles.th}>予約ID</Box>
+									<Box className={styles.class}>
+										{item.id}
+									</Box>
+								</Box>
+								<Box className={styles.tr}>
+									<Box className={styles.th}>予約日時</Box>
+									<Box className={styles.bookingDateTime}>
+										{item.bookingDateTime}
+									</Box>
+								</Box>
 								<Box className={styles.tr}>
 									<Box className={styles.th}>クラス</Box>
 									<Box className={styles.class}>

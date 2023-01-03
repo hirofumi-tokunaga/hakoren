@@ -31,6 +31,8 @@ export default function Booking() {
 	const [checked, setChecked] = useState(false)
 	const [confirm, setConfirm] = useState(false)
 	const [bookingInfo, setBookingInfo] = useState([])
+	const [sday, setSday] = useState("")
+	const [eday, setEday] = useState("")
 	const router = useRouter()
 
 	const prefectures = [
@@ -96,16 +98,7 @@ export default function Booking() {
 		'10名'
 	]
 
-	let sy = booking.startDate.substr(0, 4)
-	let sm = booking.startDate.substr(4, 2)
-	let sd = booking.startDate.substr(6, 2)
-	const sday = sy + '年' + sm + '月' + sd + '日'
-
-	let ey = booking.endDate.substr(0, 4)
-	let em = booking.endDate.substr(4, 2)
-	let ed = booking.endDate.substr(6, 2)
-	const eday = ey + '年' + em + '月' + ed + '日'
-
+	
 
 	const transDate = (date,calc = 0) => {
 
@@ -128,12 +121,57 @@ export default function Booking() {
 			setNameKanaB(member.nameKanaB)
 			setTel(member.tel)
 			setEmail(member.email)
-			let dt = new Date(sy , sm - 1 , sd,0,0,0)
-			let currentStart = transDate(dt,-20)
-			setBookingInfo(await getBookingDate("bookinginfo",currentStart))
+			if(booking.startDate){
+				let sy = booking.startDate.substr(0, 4)
+				let sm = booking.startDate.substr(4, 2)
+				let sd = booking.startDate.substr(6, 2)
+				let sdate = sy + '年' + sm + '月' + sd + '日'
+				setSday(sdate)
+	
+				let ey = booking.endDate.substr(0, 4)
+				let em = booking.endDate.substr(4, 2)
+				let ed = booking.endDate.substr(6, 2)
+				let edate = ey + '年' + em + '月' + ed + '日' 
+				setEday(edate)
+
+				let dt = new Date(sy , sm - 1 , sd,0,0,0)
+				let currentStart = transDate(dt,-20)
+				setBookingInfo(await getBookingDate("bookinginfo",currentStart))
+			}
+
 		}
 		init()
 	}, [])
+	useEffect(() => {
+		if(booking.carId){
+			async function init() {
+				setNameA(member.nameA)
+				setNameB(member.nameB)
+				setNameKanaA(member.nameKanaA)
+				setNameKanaB(member.nameKanaB)
+				setTel(member.tel)
+				setEmail(member.email)
+				if(booking.startDate){
+					let sy = booking.startDate.substr(0, 4)
+					let sm = booking.startDate.substr(4, 2)
+					let sd = booking.startDate.substr(6, 2)
+					let sdate = sy + '年' + sm + '月' + sd + '日'
+					setSday(sdate)
+		
+					let ey = booking.endDate.substr(0, 4)
+					let em = booking.endDate.substr(4, 2)
+					let ed = booking.endDate.substr(6, 2)
+					let edate = ey + '年' + em + '月' + ed + '日' 
+					setEday(edate)
+	
+					let dt = new Date(sy , sm - 1 , sd,0,0,0)
+					let currentStart = transDate(dt,-20)
+					setBookingInfo(await getBookingDate("bookinginfo",currentStart))
+				}
+			}
+			init()
+		}
+	}, [booking])
 	const handleConfirm = () => {
 		if (
 			nameA &&
@@ -185,7 +223,8 @@ export default function Booking() {
 				text: text,
 				basicCalc:booking.basicCalc,
 				addCalc: booking.addCalc,
-				totalCalc: booking.totalCalc
+				totalCalc: booking.totalCalc,
+				bookingDateTime:new Date().toLocaleString()
 			}
 			await addData('bookinginfo', object).
 				then(() => {
@@ -196,7 +235,6 @@ export default function Booking() {
 		} else {
 			alert('予約が重複しました。大変お手数ですが再度検索下さい。')
 		}
-
 
 	}
 	return (
@@ -424,71 +462,73 @@ export default function Booking() {
 								onChange={(event) => setText(event.target.value) }
 							/>
 							<Box className={styles.btns}>
-								<Link href={'/estimate'}>
+								<Link href={'/members/estimate'}>
 									<Button variant="outlined">詳細へ戻る</Button>
 								</Link>
 								<Button variant="contained" onClick={handleConfirm}>予約内容の確認へ進む</Button>
 							</Box>
 						</Box>
 					)}
+				{booking.classData && (
 
-				<Box>
-					<h2>ご予約内容</h2>
-					<Box className={styles.table}>
-						<Box className={styles.tr}>
-							<Box className={styles.th}>車型</Box>
-							<Box className={styles.td}>{booking.classData.car}</Box>
-						</Box>
-						<Box className={styles.tr}>
-							<Box className={styles.th}>定員</Box>
-							<Box className={styles.td}>{booking.classData.capacity}</Box>
-						</Box>
-						<Box className={styles.tr}>
-							<Box className={styles.th}>標準装備</Box>
-							<Box className={styles.td}>
-								{booking.basicOpt.map((item,i) => {
-									return (
-										<Box key={i}>
-											{item}
-										</Box>
-									)
-								})}
+					<Box>
+						<h2>ご予約内容</h2>
+						<Box className={styles.table}>
+							<Box className={styles.tr}>
+								<Box className={styles.th}>車型</Box>
+								<Box className={styles.td}>{booking.classData.car}</Box>
+							</Box>
+							<Box className={styles.tr}>
+								<Box className={styles.th}>定員</Box>
+								<Box className={styles.td}>{booking.classData.capacity}</Box>
+							</Box>
+							<Box className={styles.tr}>
+								<Box className={styles.th}>標準装備</Box>
+								<Box className={styles.td}>
+									{booking.basicOpt.map((item,i) => {
+										return (
+											<Box key={i}>
+												{item}
+											</Box>
+										)
+									})}
+								</Box>
 							</Box>
 						</Box>
+						<h3>基本料金</h3>
+						<Box className={styles.tr}>
+							<Box className={styles.th}>貸出日時</Box>
+							<Box className={styles.td}>{sday} {booking.startTime }</Box>
+						</Box>
+						<Box className={styles.tr}>
+							<Box className={styles.th}>返却日時</Box>
+							<Box className={styles.td}>{eday} {booking.endTime}</Box>
+						</Box>
+						<Box className={styles.price}>
+							<Box className={styles}>
+								{booking.basicCalc.toLocaleString()}
+							</Box>円
+						</Box>
+						<h3>オプション料金</h3>
+						{booking.addOptList.map((item,i) => {
+							return (
+								<Box className={styles.tr} key={i }>
+									<Box className={styles.th}>{`${item.name} (${item.num})`}</Box>
+									<Box className={styles.td}>{(item.num * item.price).toLocaleString()} 円</Box>
+								</Box>
+							)
+						})}
+						<Box className={styles.price}>
+							<Box>
+								{booking.addCalc.toLocaleString()}
+							</Box>円
+						</Box>
+						<Box className={styles.total}>
+							<Box>合計料金</Box>
+							<Box><span>{booking.totalCalc.toLocaleString()}</span> 円</Box>
+						</Box>
 					</Box>
-					<h3>基本料金</h3>
-					<Box className={styles.tr}>
-						<Box className={styles.th}>貸出日時</Box>
-						<Box className={styles.td}>{sday} {booking.startTime }</Box>
-					</Box>
-					<Box className={styles.tr}>
-						<Box className={styles.th}>返却日時</Box>
-						<Box className={styles.td}>{eday} {booking.endTime}</Box>
-					</Box>
-					<Box className={styles.price}>
-						<Box className={styles}>
-							{booking.basicCalc.toLocaleString()}
-						</Box>円
-					</Box>
-					<h3>オプション料金</h3>
-					{booking.addOptList.map((item,i) => {
-						return (
-							<Box className={styles.tr} key={i }>
-								<Box className={styles.th}>{`${item.name} (${item.num})`}</Box>
-								<Box className={styles.td}>{(item.num * item.price).toLocaleString()} 円</Box>
-							</Box>
-						)
-					})}
-					<Box className={styles.price}>
-						<Box>
-							{booking.addCalc.toLocaleString()}
-						</Box>円
-					</Box>
-					<Box className={styles.total}>
-						<Box>合計料金</Box>
-						<Box><span>{booking.totalCalc.toLocaleString()}</span> 円</Box>
-					</Box>
-				</Box>
+				)}
 			</Box>
 		</Box>
 	)

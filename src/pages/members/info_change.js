@@ -80,7 +80,7 @@ export default function Registry() {
 	return (
 		<>
 			<Box className={styles.container}>
-				<h2 className={styles.pageTitle }>会員情報変更</h2>
+				<h1 className={styles.pageTitle }>会員情報変更</h1>
 				{!confirm ? (
 					<Box className={styles.registryInfo}>
 						<h2>お客様情報</h2>

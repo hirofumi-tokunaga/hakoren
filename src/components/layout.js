@@ -10,7 +10,10 @@ import {LoginMemberProvider } from "src/components/loginMember"
 export default function Layout({ children}) {
 	const url = useRouter()
 	return (
-		url.pathname === "/search" || url.pathname === "/login" || url.pathname === "/estimate" || url.pathname === "/members/registry" || url.pathname === "/members/login" || url.pathname === "/members/mypage" || url.pathname === "/members/booking" || url.pathname === "/members/info_change" ? (
+		url.pathname === "/members/search" || url.pathname === "/login" ||
+		url.pathname === "/members/estimate" || url.pathname === "/members/registry" ||
+		url.pathname === "/members/login" || url.pathname === "/members/mypage" || 
+		url.pathname === "/members/booking" || url.pathname === "/members/info_change" ? (
 			<LoginMemberProvider>
 				<MemberHeader />
 				{children}

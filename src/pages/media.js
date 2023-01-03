@@ -1,7 +1,7 @@
-
+import MainHead from 'src/components/mainhead'
 
 export default function Media() {
 	return (
-		<p>メディアファイル管理</p>
+		<MainHead title="メディアファイル管理" />
 	)
 }

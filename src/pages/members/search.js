@@ -183,7 +183,7 @@ export default function Search() {
 										<Box className={styles.price_title}>当日料金</Box>
 										<Box className={styles.price_wrap}><span className={styles.bunner}>WEB価格</span><span className={styles.price}>{Number(item.price).toLocaleString()}</span>円～（税込）</Box>
 										<Link href={{
-											pathname: '/estimate',
+											pathname: '/members/estimate',
 											query: { id: item.id, sd: transDate(startDate), st: startTime, ed: transDate(endDate), et: endTime },
 										}}>
 											<Button
