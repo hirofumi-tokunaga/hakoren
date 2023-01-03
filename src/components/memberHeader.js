@@ -12,7 +12,6 @@ export default function Header() {
 	const { member, setMember } = useContext(LoginMemberContext)
 	const router = useRouter()
 	console.log(member)
-
 	const handleSignout = () => {
 		removeItem(KEYS.MEMBER)
 		setMember({})
