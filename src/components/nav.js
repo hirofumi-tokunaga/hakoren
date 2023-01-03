@@ -58,9 +58,6 @@ export default function Nav() {
 					<Link href="/members/login">
 						<a>メンバーログイン</a>
 					</Link>
-					<Link href="/generator">
-						<a>PDFジェネレータ</a>
-					</Link>
 				</li>
 
 			</ul>
