@@ -6,7 +6,7 @@ export const LoginMemberProvider = props => {
 	const { children } = props
 	const [member, setMember] = useState({})
 	const [booking, setBooking] = useState({})
-    // テキストボックスの値をLocalStorageに保存する
+  
 	useEffect(() => {
 		if(member.id) {
 			setItem(KEYS.MEMBER,member)
