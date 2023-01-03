@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import Link from 'next/link'
 import Logo from './logo'
-import { KEYS, removeItem } from "src/components/LocalStorage"
+import { KEYS, removeItem } from "src/components/localStorage"
 import styles from 'src/styles/memberHeader.module.scss'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
