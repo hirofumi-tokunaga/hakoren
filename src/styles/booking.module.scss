@@ -36,6 +36,7 @@
 				.tr:nth-child(3) .th:after,
 				.tr:nth-child(4) .th:after,
 				.tr:nth-child(5) .th:after,
+				.tr:nth-child(7) .th:after,
 				.tr:nth-child(8) .th:after{
 					content:"必須";
 					text-align: center;
@@ -133,6 +134,7 @@
 			.tr:nth-child(3) .th:after,
 			.tr:nth-child(4) .th:after,
 			.tr:nth-child(5) .th:after,
+			.tr:nth-child(7) .th:after,
 			.tr:nth-child(8) .th:after{
 				display: none;
 			}

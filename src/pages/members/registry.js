@@ -64,29 +64,7 @@ export default function Registry() {
 	const handleBack = () => {
 		setConfirm(false)
 	}
-	const handleSendMail = () => {
-		// emailjsのUser_IDを使って初期化
-		const PublicKey = "1haj4SXf6QFkzxOWH"
-		init(PublicKey)
 
-		// 環境変数からService_IDとTemplate_IDを取得する。
-		const emailjsServiceId = 'service_0hbt7kp'
-		const emailjsTemplateId = 'template_iwpkhd4'
-
-		// emailjsのテンプレートに渡すパラメータを宣言
-		const templateParams = {
-			email: email,
-		}
-
-		// ServiceId,Template_ID,テンプレートに渡すパラメータを引数にemailjsを呼び出し
-		send(emailjsServiceId, emailjsTemplateId, templateParams).
-			then(() => {
-				alert('確認メールを送信しました')
-			}).
-			catch((error) => {
-				alert('確認メールの送信に失敗しました',error)
-			})
-	}
 	const handleSubmit = async () => {
 		let object = {
 			nameA: nameA,

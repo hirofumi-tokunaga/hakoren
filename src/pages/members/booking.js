@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { LoginMemberContext } from "src/components/loginMember"
-import { addData ,getBookingDate} from 'src/components/api'
+import { addData ,getBookingDate,getDb} from 'src/components/api'
 import { useRouter } from 'next/router'
+import { init, send } from 'emailjs-com'
 import Link from 'next/link'
 
 import Button from '@mui/material/Button'
@@ -18,6 +19,7 @@ import styles from 'src/styles/booking.module.scss'
 
 export default function Booking() {
 	const { member, booking } = useContext(LoginMemberContext)
+	const [classList,setClassList] = useState("")
 	const [selectPref, setSelectPref] = useState("")
 	const [nameA, setNameA] = useState("")
 	const [nameB, setNameB] = useState("")
@@ -33,6 +35,7 @@ export default function Booking() {
 	const [bookingInfo, setBookingInfo] = useState([])
 	const [sday, setSday] = useState("")
 	const [eday, setEday] = useState("")
+	const [sendMail,setSendMail] = useState(false)
 	const router = useRouter()
 
 	const prefectures = [
@@ -136,7 +139,8 @@ export default function Booking() {
 
 				let dt = new Date(sy , sm - 1 , sd,0,0,0)
 				let currentStart = transDate(dt,-20)
-				setBookingInfo(await getBookingDate("bookinginfo",currentStart))
+				setBookingInfo(await getBookingDate('bookinginfo',currentStart))
+				setClassList(await getDb('class'))
 			}
 
 		}
@@ -188,6 +192,7 @@ export default function Booking() {
 	}
 	
 	const handleSubmit = async () => {
+		let bookingDT = new Date().toLocaleString()
 		let currentStart = booking.startDate
 		let currentEnd = booking.endDate
 		let carId = booking.carId
@@ -224,19 +229,58 @@ export default function Booking() {
 				basicCalc:booking.basicCalc,
 				addCalc: booking.addCalc,
 				totalCalc: booking.totalCalc,
-				bookingDateTime:new Date().toLocaleString()
+				bookingDateTime:bookingDT
 			}
 			await addData('bookinginfo', object).
 				then(() => {
-					alert('予約が完了しました')
-					router.push("/members/mypage")
+					alert('予約が完了しました。')
+					setSendMail(true)
+					// router.push("/members/mypage")
 				})
 				.catch(() => { alert('登録に失敗しました') })
 		} else {
 			alert('予約が重複しました。大変お手数ですが再度検索下さい。')
 		}
-
 	}
+	useEffect(() => {
+		if(sendMail){
+			// emailjsのUser_IDを使って初期化
+			const PublicKey = "1haj4SXf6QFkzxOWH"
+			init(PublicKey)
+		
+			// 環境変数からService_IDとTemplate_IDを取得する。
+			const emailjsServiceId = 'service_0hbt7kp'
+			const emailjsTemplateId = 'template_iwpkhd4'
+		
+			// emailjsのテンプレートに渡すパラメータを宣言
+			const templateParams = {
+				classCar:	classList?.filter((item2) => item2.id === booking.classData.id)[0]?.car,
+				startDate: sday,
+				startTime: booking.startTime,
+				endDate: eday,
+				endTime: booking.endTime,
+				nameA:nameA,
+				nameB:nameB,
+				tel:tel,
+				email: email,
+				send:checked ? ("要"): ("不要"),
+				people: selectPeople,
+				text: text,
+			}
+		
+			// ServiceId,Template_ID,テンプレートに渡すパラメータを引数にemailjsを呼び出し
+			send(emailjsServiceId, emailjsTemplateId, templateParams).
+				then(() => {
+					alert('完了メールを送信しました。')
+					router.push("/members/mypage")
+				}).
+				catch((error) => {
+					alert('完了メールの送信に失敗しました。',error)
+				})
+
+		}
+		
+	},[sendMail])
 	return (
 		<Box className={styles.booking}>
 			{confirm ? (

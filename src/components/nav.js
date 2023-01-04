@@ -46,7 +46,7 @@ export default function Nav() {
 					</Link>
 				</li>
 				<li>
-					<Link href="/search">
+					<Link href="/members/search">
 						<a>予約車両検索フォーム</a>
 					</Link>
 					<Link href="/post_put">
