@@ -101,7 +101,7 @@ export default function Booking() {
 		'10名'
 	]
 
-	
+
 
 	const transDate = (date,calc = 0) => {
 
@@ -130,11 +130,11 @@ export default function Booking() {
 				let sd = booking.startDate.substr(6, 2)
 				let sdate = sy + '年' + sm + '月' + sd + '日'
 				setSday(sdate)
-	
+
 				let ey = booking.endDate.substr(0, 4)
 				let em = booking.endDate.substr(4, 2)
 				let ed = booking.endDate.substr(6, 2)
-				let edate = ey + '年' + em + '月' + ed + '日' 
+				let edate = ey + '年' + em + '月' + ed + '日'
 				setEday(edate)
 
 				let dt = new Date(sy , sm - 1 , sd,0,0,0)
@@ -161,13 +161,13 @@ export default function Booking() {
 					let sd = booking.startDate.substr(6, 2)
 					let sdate = sy + '年' + sm + '月' + sd + '日'
 					setSday(sdate)
-		
+
 					let ey = booking.endDate.substr(0, 4)
 					let em = booking.endDate.substr(4, 2)
 					let ed = booking.endDate.substr(6, 2)
-					let edate = ey + '年' + em + '月' + ed + '日' 
+					let edate = ey + '年' + em + '月' + ed + '日'
 					setEday(edate)
-	
+
 					let dt = new Date(sy , sm - 1 , sd,0,0,0)
 					let currentStart = transDate(dt,-20)
 					setBookingInfo(await getBookingDate("bookinginfo",currentStart))
@@ -190,7 +190,7 @@ export default function Booking() {
 			alert('入力内容が不足しています')
 		}
 	}
-	
+
 	const handleSubmit = async () => {
 		let bookingDT = new Date().toLocaleString()
 		let currentStart = booking.startDate
@@ -247,11 +247,11 @@ export default function Booking() {
 			// emailjsのUser_IDを使って初期化
 			const PublicKey = "1haj4SXf6QFkzxOWH"
 			init(PublicKey)
-		
+
 			// 環境変数からService_IDとTemplate_IDを取得する。
 			const emailjsServiceId = 'service_0hbt7kp'
 			const emailjsTemplateId = 'template_iwpkhd4'
-		
+
 			// emailjsのテンプレートに渡すパラメータを宣言
 			const templateParams = {
 				classCar:	classList?.filter((item2) => item2.id === booking.classData.id)[0]?.car,
@@ -267,7 +267,7 @@ export default function Booking() {
 				people: selectPeople,
 				text: text,
 			}
-		
+
 			// ServiceId,Template_ID,テンプレートに渡すパラメータを引数にemailjsを呼び出し
 			send(emailjsServiceId, emailjsTemplateId, templateParams).
 				then(() => {
@@ -279,7 +279,7 @@ export default function Booking() {
 				})
 
 		}
-		
+
 	},[sendMail])
 	return (
 		<Box className={styles.booking}>

@@ -45,7 +45,7 @@ export default function Mypage() {
 	async function init(){
 		let bookingInfo = await getDb('bookinginfo','bookingDateTime')
 		setBookingInfo(bookingInfo?.filter((item) => item.memberId === member.id))
-		setClassList(await getDb('class')) 
+		setClassList(await getDb('class'))
 	}
 	return (
 		<Box className={styles.mypage }>
@@ -69,10 +69,10 @@ export default function Mypage() {
 									</Box>
 								</Box>
 								<Box className={styles.tr}>
-									<Box className={styles.th}>クラス</Box>
+									<Box className={styles.th}>車種</Box>
 									<Box className={styles.class}>
 										<img src={classList?.filter((item2) => item2.id === item.classId)[0]?.image}/>
-										{classList?.filter((item2) => item2.id === item.classId)[0]?.name}
+										{classList?.filter((item2) => item2.id === item.classId)[0]?.car}
 									</Box>
 								</Box>
 								<Box className={styles.tr}>
@@ -113,8 +113,8 @@ export default function Mypage() {
 									{item.text}
 								</Box>
 								<Button
-									className={styles.btn} 
-									variant="contained" 
+									className={styles.btn}
+									variant="contained"
 									onClick={() => {
 										setOpen(true)
 										setSelectId(bookingInfo[i].id)
